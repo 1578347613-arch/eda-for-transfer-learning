@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from data_loader import get_data_and_scalers
 from models.mlp import MLP
 from models.dual_head_mlp import DualHeadMLP, copy_from_single_head_to_dualhead, l2sp_regularizer
-
+from models.align_hetero import AlignHeteroMLP
 from losses.loss_function import heteroscedastic_nll, batch_r2, coral_loss
 import config
 
