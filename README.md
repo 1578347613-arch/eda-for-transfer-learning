@@ -320,6 +320,8 @@ python src/inverse_mdn.py --opamp 5t_opamp \
                           --batch-size 128 \
                           --epochs 60 \
                           --lr 1e-3
+
+
 1.2 采样模式
 在采样模式下，用户提供一个目标 y_target，工具将基于已训练的 MDN 模型生成多个候选输入 x_scaled，这些输入能够使得模型的输出接近目标 y_target。
 
