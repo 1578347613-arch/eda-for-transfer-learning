@@ -308,14 +308,7 @@ cmrr            MSE=...  MAE=...  R2=...
 
 用法：
 
-python src/inverse_mdn.py --opamp 5t_opamp \
-                          --save results/mdn_5t.pth \
-                          --components 10 \
-                          --hidden 256 \
-                          --layers 4 \
-                          --batch-size 128 \
-                          --epochs 60 \
-                          --lr 1e-3
+python -m inverse_mdn   --opamp 5t_opamp   --components 10 --hidden 256 --layers 4   --batch-size 128 --epochs 60 --lr 1e-3
 
 
 1.2 采样模式
@@ -323,11 +316,12 @@ python src/inverse_mdn.py --opamp 5t_opamp \
 
 用法：
 
-python src/inverse_mdn.py --sample \
-                          --model results/mdn_5t.pth \
-                          --y-target "2.5e8,200,1.5e6,65,20000" \
-                          --n 64 \
-                          --out results/inverse/init_64.npy
+python -m inverse_mdn --sample \
+  --model ../results/mdn_5t_opamp.pth \
+  --y-target "2.5e8,200,1.5e6,65,20000" \
+  --n 64 \
+  --out ../results/inverse/init_64.npy
+
 
 
 2. 反向优化（inverse_opt.py）
@@ -337,21 +331,47 @@ python src/inverse_mdn.py --sample \
 在反向优化过程中，工具会使用多个初始点对输入 x 进行优化，最终得到一个最优的输入 x_scaled，使得其预测输出 y_scaled 达到给定目标。优化结果将保存在指定的目录中。
 
 用法：
+align hetero直接优化：
+python -m inverse_opt \
+  --opamp 5t_opamp \
+  --ckpt ../results/5t_opamp_align_hetero_lambda0.050.pth \
+  --model-type align_hetero \
+  --y-target "2.5e8,200,1.5e6,65,20000" \
+  --goal "min,min,range,range,min" \
+  --ugf-band "8.0e5:2.0e6" \
+  --pm-band "60:75" \
+  --weights "0.05,0.40,0.90,0.10,0.65" \
+  --prior 1e-3 \
+  --n-init 512 --steps 800 --lr 0.002 \
+  --finish-lbfgs 80 \
+  --save-dir ../results/inverse/run_align
 
-python src/inverse_opt.py --opamp 5t_opamp \
-                          --ckpt results/5t_opamp_align_hetero_lambda0.050.pth \
-                          --model-type align_hetero \
-                          --y-target "2.5e8,200,1.5e6,65,20000" \
-                          --goal "min,min,range,range,min" \
-                          --ugf-band "8.0e5:2.0e6" \
-                          --pm-band "60:75" \
-                          --weights "0.05,0.40,0.90,0.10,0.65" \
-                          --prior 1e-3 \
-                          --init-npy results/inverse/init_1024.npy \
-                          --n-init 1024 --steps 900 --lr 0.002 \
-                          --finish-lbfgs 80 \
-                          --save-dir results/inverse/try_hybrid_constrained_scaled_v2
----
+
+  
+搭配mdn初值（hybrid）
+python -m inverse_opt \
+  --opamp 5t_opamp \
+  --ckpt ../results/5t_opamp_align_hetero_lambda0.050.pth \
+  --model-type align_hetero \
+  --y-target "2.5e8,200,1.5e6,65,20000" \
+  --goal "min,min,range,range,min" \
+  --ugf-band "8.0e5:2.0e6" \
+  --pm-band "60:75" \
+  --weights "0.05,0.40,0.90,0.10,0.65" \
+  --prior 1e-3 \
+  --n-init 512 --steps 800 --lr 0.002 \
+  --finish-lbfgs 80 \
+  --save-dir ../results/inverse/run_align
+
+使用dualhead
+
+python -m inverse_opt \
+  --opamp 5t_opamp \
+  --ckpt ../results/5t_opamp_dualhead_finetuned.pth \
+  --model-type dualhead_b \
+  --y-target "2.5e8,200,1.5e6,65,20000" \
+  --goal "min,min,range,range,min"
+
 
 ## 🧭 常见问题（FAQ / Troubleshooting）
 
