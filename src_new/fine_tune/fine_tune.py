@@ -6,7 +6,9 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from data_loader import get_data_and_scalers
-from models import MLP, DualHeadMLP
+from models.mlp import MLP
+from models.dual_head_mlp import DualHeadMLP, copy_from_single_head_to_dualhead, l2sp_regularizer
+
 import config
 
 # 微调模型的训练过程

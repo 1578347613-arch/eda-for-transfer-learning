@@ -4,19 +4,19 @@ inverse_opt.py
 反向设计（在“标准化空间”直接优化 x，使预测 y 满足目标/区间约束）
 
 功能要点：
-1) 利用 data_loader 的预处理边界（真实物理 min/max），并在优化中做“物理盒约束投影”；
-2) 约束损失在“标准化空间(z-score)”计算，稳定不爆梯度：
+1) 利用 data_loader 的真实分布边界，并做“物理盒约束投影”；
+2) 约束损失在“标准化空间(z-score)”计算（稳定不爆梯度）：
    - 支持 goal: min/max/target/range（逐维）
    - 支持 UGF/PM 区间（物理单位→自动换算到 z-score）
-3) x 的 L2 先验（信赖域）可开关，帮助收敛回数据主体；
-4) 可选 LBFGS 精修（收敛更细致）；
-5) 自带目标“可达性诊断”（看目标是否远超分布边界）；
-6) 兼容 align_hetero / dualhead_b 等模型类型；权重加载更健壮(strict=False)。
+3) x 的 L2 先验（信赖域）可开关；
+4) 可选 LBFGS 精修；
+5) 目标“可达性诊断”（看目标是否远超分布边界）；
+6) 兼容 align_hetero / dualhead_b / mlp；权重加载更健壮(strict=False)。
 
-使用示例（与上文建议一致）：
-python src/inverse_opt.py \
+示例：
+python -m src_new.inverse_opt \
   --opamp 5t_opamp \
-  --ckpt results/5t_opamp_align_hetero_lambda0.050.pth \
+  --ckpt ../results/5t_opamp_align_hetero_lambda0.050.pth \
   --model-type align_hetero \
   --y-target "2.5e8,200,1.5e6,65,20000" \
   --goal "min,min,range,range,min" \
@@ -24,48 +24,52 @@ python src/inverse_opt.py \
   --pm-band "60:75" \
   --weights "0.05,0.40,0.90,0.10,0.65" \
   --prior 1e-3 \
-  --init-npy results/inverse/init_1024.npy \
+  --init-npy ../results/inverse/init_1024.npy \
   --n-init 1024 --steps 900 --lr 0.002 \
   --finish-lbfgs 80 \
-  --save-dir results/inverse/try_hybrid_constrained_scaled_v2
+  --save-dir ../results/inverse/try_hybrid_constrained_scaled_v2
 """
 
+from __future__ import annotations
 import os
-import sys
 import math
 import json
 import argparse
+from pathlib import Path
+from typing import Tuple, Optional
+
 import numpy as np
 import torch
 
-# ==== 常量（按你仓库定义） ====
-X_DIM = 7
-Y_DIM = 5
-# y 的第 2、4 维（0-based）是 log1p 域：ugf(2), cmrr(4)
-Y_LOG1P_INDEX = [2, 4]
+# —— 与 src_new 同级的 results 目录 ——
+PROJECT_DIR = Path(__file__).resolve().parent.parent   # .../src_new
+RESULTS_DIR = PROJECT_DIR / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+# ==== 常量（名称保持一致，维度动态获取） ====
+Y_LOG1P_INDEX = [2, 4]  # ugf(2), cmrr(4)
 Y_NAMES = ["slewrate_pos", "dc_gain", "ugf", "phase_margin", "cmrr"]
-X_NAMES = ["w1","w2","w3","l1","l2","l3","ibias"]
+X_NAMES = ["w1", "w2", "w3", "l1", "l2", "l3", "ibias"]
 
 
-# ==== 工具函数 ====
+# ==== 通用工具 ====
 def parse_floats(csv_str, n=None):
     arr = [float(x.strip()) for x in csv_str.split(",")]
     if (n is not None) and (len(arr) != n):
         raise ValueError(f"需要 {n} 个数值，实际 {len(arr)}: {csv_str}")
     return np.asarray(arr, dtype=np.float64)
 
-
 def fmt_arr(a):
     return "[" + " ".join([f"{v:.6g}" for v in a]) + "]"
 
-
-def ensure_dir(d):
-    os.makedirs(d, exist_ok=True)
-    return d
+def ensure_dir(d: Path | str) -> str:
+    p = Path(d)
+    p.mkdir(parents=True, exist_ok=True)
+    return str(p)
 
 
 # ==== 数据与边界 ====
-def get_all_scaled_X(opamp_type):
+def get_all_scaled_X(opamp_type: str) -> np.ndarray:
     """从 data_loader 拉取全部（已标准化）的 X（A+B），用于边界估计。"""
     from data_loader import get_data_and_scalers
     data = get_data_and_scalers(opamp_type=opamp_type)
@@ -76,13 +80,8 @@ def get_all_scaled_X(opamp_type):
         xs.append(data["target_val"][0])
     return np.vstack(xs).astype(np.float64)
 
-
 def get_bounds_and_scalers(opamp_type, x_scaler, device):
-    """基于 data_loader 的标准化数据，得到：
-       - 标准化空间的 min/max（直接对 X_scaled 取 min/max）
-       - 物理空间的 min/max（先 inverse 回物理单位，再取 min/max）
-       并返回 torch 张量与 x 的 mean/scale（用于往返）
-    """
+    """返回物理/标准化边界与 mean/scale 的 torch 张量。"""
     X_scaled = get_all_scaled_X(opamp_type)
     x_min_scaled = X_scaled.min(axis=0)
     x_max_scaled = X_scaled.max(axis=0)
@@ -91,36 +90,47 @@ def get_bounds_and_scalers(opamp_type, x_scaler, device):
     x_min_phys = X_phys.min(axis=0)
     x_max_phys = X_phys.max(axis=0)
 
-    x_min_phys_t = torch.from_numpy(x_min_phys.astype(np.float32)).to(device)
-    x_max_phys_t = torch.from_numpy(x_max_phys.astype(np.float32)).to(device)
-    x_min_scaled_t = torch.from_numpy(x_min_scaled.astype(np.float32)).to(device)
-    x_max_scaled_t = torch.from_numpy(x_max_scaled.astype(np.float32)).to(device)
-    mean_t = torch.from_numpy(x_scaler.mean_.astype(np.float32)).to(device)
-    scale_t = torch.from_numpy(x_scaler.scale_.astype(np.float32)).to(device)
-
-    return x_min_phys_t, x_max_phys_t, x_min_scaled_t, x_max_scaled_t, mean_t, scale_t
+    to_t = lambda a: torch.from_numpy(a.astype(np.float32)).to(device)
+    return (
+        to_t(x_min_phys), to_t(x_max_phys),
+        to_t(x_min_scaled), to_t(x_max_scaled),
+        to_t(x_scaler.mean_), to_t(x_scaler.scale_),
+    )
 
 
-# ==== 模型加载 ====
-def build_model(model_type: str, input_dim=X_DIM, output_dim=Y_DIM,
-                hidden_dim=512, num_layers=6, dropout=0.1):
-    from models import MLP, DualHeadMLP, AlignHeteroMLP
+# ==== 模型构建 / 加载 ====
+def build_model(model_type: str, input_dim: int, output_dim: int):
+    """按当前工程接口创建模型：AlignHeteroMLP(input_dim, output_dim) 等。"""
     mt = model_type.lower()
     if mt == "align_hetero":
-        return AlignHeteroMLP(input_dim, output_dim, hidden_dim=hidden_dim, num_layers=num_layers, dropout_rate=dropout)
+        # 你的 AlignHeteroMLP 构造只接收 (input_dim, output_dim)，隐藏结构走 config
+        from models.align_hetero import AlignHeteroMLP
+        return AlignHeteroMLP(input_dim, output_dim)
     elif mt == "dualhead_b":
-        # DualHeadMLP 前向返回 (y_a, y_b)，我们只会取 b 头
-        return DualHeadMLP(input_dim, output_dim, hidden_dim=hidden_dim, num_layers=num_layers, dropout_rate=dropout)
+        from models.dual_head_mlp import DualHeadMLP
+        import config
+        return DualHeadMLP(
+            input_dim, output_dim,
+            hidden_dim=getattr(config, "HIDDEN_DIM", 256),
+            num_layers=getattr(config, "NUM_LAYERS", 4),
+            dropout_rate=getattr(config, "DROPOUT_RATE", 0.1),
+        )
     elif mt == "mlp":
-        return MLP(input_dim, output_dim, hidden_dim=hidden_dim, num_layers=num_layers, dropout_rate=dropout)
+        from models.mlp import MLP
+        import config
+        return MLP(
+            input_dim, output_dim,
+            hidden_dim=getattr(config, "HIDDEN_DIM", 256),
+            num_layers=getattr(config, "NUM_LAYERS", 4),
+            dropout_rate=getattr(config, "DROPOUT_RATE", 0.1),
+        )
     else:
         raise ValueError(f"未知 model_type: {model_type}")
 
-
-def load_model_from_ckpt(ckpt_path, model_type, device,
-                         hidden_dim=512, num_layers=6, dropout=0.1):
-    model = build_model(model_type, hidden_dim=hidden_dim, num_layers=num_layers, dropout=dropout)
-    ckpt = torch.load(ckpt_path, map_location=device)
+def load_model_from_ckpt(ckpt_path: Path | str, model_type: str, device: torch.device,
+                         input_dim: int, output_dim: int) -> torch.nn.Module:
+    model = build_model(model_type, input_dim, output_dim).to(device)
+    ckpt = torch.load(str(ckpt_path), map_location=device)
     # 兼容多种保存格式
     if isinstance(ckpt, dict):
         state = ckpt.get("state_dict") or ckpt.get("model_state_dict") or ckpt
@@ -129,7 +139,7 @@ def load_model_from_ckpt(ckpt_path, model_type, device,
     missing, unexpected = model.load_state_dict(state, strict=False)
     if missing or unexpected:
         print("[load warning] missing keys:", len(missing), "unexpected keys:", len(unexpected))
-    model.to(device).eval()
+    model.eval()
     return model
 
 
@@ -195,9 +205,9 @@ def optimize_x_multi_start(
     # 目标 y（标准化张量）
     y_t = torch.from_numpy(y_target_scaled.astype(np.float32)).to(device_t).view(1, -1)
 
-    # 权重（标准化空间）
+    # 权重
     if weights is None:
-        w = torch.ones(Y_DIM, dtype=torch.float32, device=device_t)
+        w = torch.ones(y_t.shape[1], dtype=torch.float32, device=device_t)
     else:
         w = torch.from_numpy(weights.astype(np.float32)).to(device_t)
     w = w.view(1, -1)
@@ -227,8 +237,9 @@ def optimize_x_multi_start(
     best_x = None
     best_y = None
 
-    # === 标准化空间的不等式/区间损失（稳定） ===
+    # === 目标解析 ===
     goal_list = [g.strip().lower() for g in goal.split(",")]
+    Y_DIM = y_t.shape[1]
     if len(goal_list) != Y_DIM:
         raise ValueError(f"--goal 需要 {Y_DIM} 个，用逗号分隔；收到 {len(goal_list)} 个。")
 
@@ -253,8 +264,6 @@ def optimize_x_multi_start(
     def scaled_constraint_loss(y_pred_scaled: torch.Tensor) -> torch.Tensor:
         # y_pred_scaled 是 z-score
         total = 0.0
-
-        # 展开目标（z-score）
         y_t_scaled = y_t.expand_as(y_pred_scaled)
 
         for j in range(Y_DIM):
@@ -290,17 +299,20 @@ def optimize_x_multi_start(
 
         return total
 
-    # === 训练循环 ===
+    # === 优化循环 ===
     for t in range(steps):
         opt.zero_grad(set_to_none=True)
-        y_pred = model(x)
-        if model_type.lower() == "align_hetero":
-            if isinstance(y_pred, (list, tuple)):
-                y_pred = y_pred[0]  # 取 mu
-        elif model_type.lower() == "dualhead_b":
-            if isinstance(y_pred, (list, tuple)):
-                y_pred = y_pred[-1]  # 取 B 头
-        # 损失
+
+        # 正确的前向：
+        mt = model_type.lower()
+        if mt == "align_hetero":
+            out = model(x)
+            y_pred = out[0] if isinstance(out, (tuple, list)) else out  # 取 mu
+        elif mt == "dualhead_b":
+            y_pred = model(x, domain='B')
+        else:  # mlp
+            y_pred = model(x)
+
         loss = scaled_constraint_loss(y_pred)
         loss.backward()
         if grad_clip is not None and grad_clip > 0:
@@ -327,12 +339,14 @@ def optimize_x_multi_start(
 
         def closure():
             lbfgs.zero_grad(set_to_none=True)
-            y_pred2 = model(x_lb)
-            if model_type.lower() == "align_hetero" and isinstance(y_pred2, (list, tuple)):
-                y_pred2 = y_pred2[0]
-            elif model_type.lower() == "dualhead_b" and isinstance(y_pred2, (list, tuple)):
-                y_pred2 =                 y_pred2[-1]
-            loss2 = scaled_constraint_loss(y_pred2)
+            mt = model_type.lower()
+            if mt == "align_hetero":
+                out2 = model(x_lb); y2 = out2[0] if isinstance(out2, (tuple, list)) else out2
+            elif mt == "dualhead_b":
+                y2 = model(x_lb, domain='B')
+            else:
+                y2 = model(x_lb)
+            loss2 = scaled_constraint_loss(y2)
             loss2.backward()
             return loss2
 
@@ -343,16 +357,18 @@ def optimize_x_multi_start(
             x_lb.copy_((x_phys - mean_t) / scale_t)
 
         with torch.no_grad():
-            y_pred2 = model(x_lb)
-            if model_type.lower() == "align_hetero" and isinstance(y_pred2, (list, tuple)):
-                y_pred2 = y_pred2[0]
-            elif model_type.lower() == "dualhead_b" and isinstance(y_pred2, (list, tuple)):
-                y_pred2 = y_pred2[-1]
-            loss2 = float(scaled_constraint_loss(y_pred2).detach().cpu().item())
+            mt = model_type.lower()
+            if mt == "align_hetero":
+                out2 = model(x_lb); y2 = out2[0] if isinstance(out2, (tuple, list)) else out2
+            elif mt == "dualhead_b":
+                y2 = model(x_lb, domain='B')
+            else:
+                y2 = model(x_lb)
+            loss2 = float(scaled_constraint_loss(y2).detach().cpu().item())
             if loss2 <= best_loss:
                 best_loss = loss2
                 best_x = x_lb.detach().clone()
-                best_y = y_pred2.detach().clone()
+                best_y = y2.detach().clone()
 
     return best_x.cpu().numpy(), best_y.cpu().numpy(), best_loss
 
@@ -366,20 +382,17 @@ def main():
     ap.add_argument("--model-type", type=str, default="align_hetero",
                     choices=["align_hetero", "dualhead_b", "mlp"])
     ap.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
-    ap.add_argument("--hidden-dim", type=int, default=512)
-    ap.add_argument("--num-layers", type=int, default=6)
-    ap.add_argument("--dropout", type=float, default=0.1)
 
     ap.add_argument("--y-target", type=str, required=True,
-                    help="物理单位目标，逗号分隔 5 项（slewrate_pos,dc_gain,ugf,phase_margin,cmrr）")
+                    help="物理单位目标，逗号分隔（slewrate_pos,dc_gain,ugf,phase_margin,cmrr）")
     ap.add_argument("--weights", type=str, default=None,
-                    help="逐指标权重（标准化空间），逗号分隔 5 项；缺省为全1")
+                    help="逐指标权重（标准化空间），逗号分隔；缺省为全1")
     ap.add_argument("--goal", type=str, default="min,min,range,range,min",
-                    help="逐维目标: min/max/target/range（与 y 的 5 维顺序一致）")
+                    help="逐维目标: min/max/target/range（与 y 的维度顺序一致）")
     ap.add_argument("--ugf-band", type=str, default="1.2e6:3.0e6",
-                    help="UGF 的物理区间(Hz)，格式 lower:upper（仅当该维 goal=range 时生效）")
+                    help="UGF 的物理区间，格式 lower:upper（仅当该维 goal=range 生效）")
     ap.add_argument("--pm-band", type=str, default="60:75",
-                    help="PM 的物理区间(度)，格式 lower:upper（仅当该维 goal=range 时生效）")
+                    help="PM 的物理区间，格式 lower:upper（仅当该维 goal=range 生效）")
 
     ap.add_argument("--n-init", type=int, default=256)
     ap.add_argument("--steps", type=int, default=700)
@@ -392,37 +405,31 @@ def main():
 
     ap.add_argument("--init-npy", type=str, default=None,
                     help="初值（标准化空间）.npy；若为空将从边界内均匀采样")
-    ap.add_argument("--save-dir", type=str, default="results/inverse/run",
-                    help="保存输出的目录")
+    ap.add_argument("--save-dir", type=str, default=str(RESULTS_DIR / "inverse" / "run"),
+                    help="保存输出目录（默认 ../results/inverse/run）")
 
     args = ap.parse_args()
-
     device = torch.device(args.device)
 
-    # 载入 scaler（直接从 results/ 目录；若你另存了路径，可做成参数）
-    # 为了稳妥起见，尽量使用 data_loader 保存的同名 scaler 文件
-    # 约定命名：results/{opamp}_x_scaler.gz / results/{opamp}_y_scaler.gz
-    try:
-        import joblib
-        xs_path = f"results/{args.opamp}_x_scaler.gz"
-        ys_path = f"results/{args.opamp}_y_scaler.gz"
-        x_scaler = joblib.load(xs_path)
-        y_scaler = joblib.load(ys_path)
-    except Exception as e:
-        print("[warn] 无法从 results/ 加载 scaler，退回 data_loader 计算的 scaler。", e)
-        # 直接从 data_loader 重新拟合（与训练一致：仅在 A域拟合）
-        from data_loader import get_data_and_scalers
-        _ = get_data_and_scalers(opamp_type=args.opamp)  # 该函数会在 results/ 保存 scaler
-        import joblib
-        xs_path = f"results/{args.opamp}_x_scaler.gz"
-        ys_path = f"results/{args.opamp}_y_scaler.gz"
-        x_scaler = joblib.load(xs_path)
-        y_scaler = joblib.load(ys_path)
+    # —— 加载 scaler（../results 下） ——
+    xs_path = RESULTS_DIR / f"{args.opamp}_x_scaler.gz"
+    ys_path = RESULTS_DIR / f"{args.opamp}_y_scaler.gz"
+    if not xs_path.exists() or not ys_path.exists():
+        raise FileNotFoundError(f"未找到标准化器：{xs_path} 或 {ys_path}")
+    import joblib
+    x_scaler = joblib.load(xs_path)
+    y_scaler = joblib.load(ys_path)
+
+    # 维度（动态）
+    X_DIM = int(x_scaler.mean_.shape[0])
+    Y_DIM = int(y_scaler.mean_.shape[0])
 
     # 目标（物理 → log1p 某些维 → 标准化）
     y_target_phys = parse_floats(args.y_target, Y_DIM)
     y_target_log = y_target_phys.copy()
-    y_target_log[Y_LOG1P_INDEX] = np.log1p(y_target_log[Y_LOG1P_INDEX])
+    for idx in Y_LOG1P_INDEX:
+        if idx < Y_DIM:
+            y_target_log[idx] = np.log1p(y_target_log[idx])
     y_target_scaled = (y_target_log - y_scaler.mean_) / y_scaler.scale_
 
     # 权重
@@ -433,13 +440,25 @@ def main():
     if args.init_npy and os.path.isfile(args.init_npy):
         init_points_scaled = np.load(args.init_npy)
 
-    # 模型
+    # 模型（按当前接口构建+加载）
+    ckpt_path = Path(args.ckpt)
+    if not ckpt_path.exists():
+        # 允许只给文件名时到 ../results 查找
+        alt = RESULTS_DIR / ckpt_path.name
+        if alt.exists():
+            ckpt_path = alt
+        else:
+            raise FileNotFoundError(f"未找到 ckpt：{args.ckpt}")
+
     model = load_model_from_ckpt(
-        args.ckpt, args.model_type, device,
-        hidden_dim=args.hidden_dim, num_layers=args.num_layers, dropout=args.dropout
+        ckpt_path=ckpt_path,
+        model_type=args.model_type,
+        device=device,
+        input_dim=X_DIM,
+        output_dim=Y_DIM,
     )
 
-    # 目标可达性诊断（一次性打印，便于判断是否离群）
+    # 目标可达性诊断
     diagnose_target_feasibility(args.opamp, y_scaler, y_target_phys)
 
     # 优化
@@ -460,7 +479,7 @@ def main():
         opamp_type=args.opamp,
         goal=args.goal,
         ugf_band=args.ugf_band,
-        pm_band=args.pm_band,      # ← 注意：现在 pm_band 有显式参数，不会再“找不到”
+        pm_band=args.pm_band,
         prior=args.prior,
         finish_lbfgs=args.finish_lbfgs,
     )
@@ -475,37 +494,39 @@ def main():
     best_y_log = best_y_scaled[0] * y_scale + y_mean
     best_y_phys = best_y_log.copy()
     for idx in Y_LOG1P_INDEX:
-        best_y_phys[idx] = np.expm1(best_y_phys[idx])
+        if idx < Y_DIM:
+            best_y_phys[idx] = np.expm1(best_y_phys[idx])
 
     # 打印结果
+    ynames = Y_NAMES[:Y_DIM] if len(Y_NAMES) >= Y_DIM else [f"y{i}" for i in range(Y_DIM)]
+    xnames = X_NAMES[:X_DIM] if len(X_NAMES) >= X_DIM else [f"x{i}" for i in range(X_DIM)]
+
     print("\n===== 反向设计结果 =====")
-    print(f"目标 y（物理单位，{Y_NAMES}）:")
+    print(f"目标 y（物理单位，{ynames}）:")
     print(fmt_arr(y_target_phys))
-    print(f"预测 y（物理单位，{Y_NAMES}）:")
+    print(f"预测 y（物理单位，{ynames}）:")
     print(fmt_arr(best_y_phys))
-    print(f"建议 x（物理单位，顺序 {X_NAMES}）:")
+    print(f"建议 x（物理单位，顺序 {xnames}）:")
     print(fmt_arr(best_x_phys))
     print(f"最终约束损失（标准化空间）: {best_loss:.6f}")
 
     # 保存
-    save_dir = ensure_dir(args.save_dir)
-    np.save(os.path.join(save_dir, "best_x_scaled.npy"), best_x_scaled)
-    np.save(os.path.join(save_dir, "best_y_scaled.npy"), best_y_scaled)
-    np.save(os.path.join(save_dir, "best_x_phys.npy"), best_x_phys)
-    np.save(os.path.join(save_dir, "best_y_phys.npy"), best_y_phys)
+    save_dir = Path(args.save_dir)
+    ensure_dir(save_dir)
+    np.save(save_dir / "best_x_scaled.npy", best_x_scaled)
+    np.save(save_dir / "best_y_scaled.npy", best_y_scaled)
+    np.save(save_dir / "best_x_phys.npy",  best_x_phys)
+    np.save(save_dir / "best_y_phys.npy",  best_y_phys)
 
-    with open(os.path.join(save_dir, "summary.txt"), "w", encoding="utf-8") as f:
+    with open(save_dir / "summary.txt", "w", encoding="utf-8") as f:
         f.write("===== 反向设计结果 =====\n")
-        f.write(f"目标 y（物理单位，{Y_NAMES}）:\n{fmt_arr(y_target_phys)}\n")
-        f.write(f"预测 y（物理单位，{Y_NAMES}）:\n{fmt_arr(best_y_phys)}\n")
-        f.write(f"建议 x（物理单位，顺序 {X_NAMES}）:\n{fmt_arr(best_x_phys)}\n")
+        f.write(f"目标 y（物理单位，{ynames}）:\n{fmt_arr(y_target_phys)}\n")
+        f.write(f"预测 y（物理单位，{ynames}）:\n{fmt_arr(best_y_phys)}\n")
+        f.write(f"建议 x（物理单位，顺序 {xnames}）:\n{fmt_arr(best_x_phys)}\n")
         f.write(f"最终约束损失（标准化空间）: {best_loss:.6f}\n")
 
-    print(f"\n结果已保存到：{save_dir}")
+    print(f"\n结果已保存到：{save_dir.resolve()}")
 
 
 if __name__ == "__main__":
     main()
-
-
-

@@ -4,7 +4,7 @@ import torch
 import copy
 from torch.utils.data import DataLoader, TensorDataset
 from data_loader import get_data_and_scalers
-from models import MLP
+from models.mlp import MLP
 import config
 
 # --- 1. 使用配置文件中的超参数 ---

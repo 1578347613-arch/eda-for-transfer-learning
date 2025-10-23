@@ -1,4 +1,3 @@
-# config.py
 import torch
 
 # 基本设置
@@ -25,7 +24,7 @@ MDN_LAYERS = 4
 MDN_BATCH_SIZE = 128
 MDN_LR = 1e-3
 
-# 权重设置
+# 权重 / 优化设置
 LAMBDA_CORAL = 0.05
 ALPHA_R2 = 1.0
 L2SP_LAMBDA = 1e-4
@@ -33,3 +32,15 @@ LR_BIAS = 3e-4
 LR_HEAD = 1e-4
 LR_UNFREEZE = 5e-5
 WEIGHT_DECAY = 1e-4
+
+# A/B 域 DataLoader 的 batch size
+BATCH_B = 128  # target data B
+BATCH_A = 128  # source data A
+
+# ====== 新增：微调阶段的 epoch 数 ======
+# 第一阶段：只调 B 头的 bias
+EPOCHS_BIAS = 10          # 你可以按需调大/调小
+# 第二阶段：训练 B 头全部参数（配合 L2-SP）
+EPOCHS_HEAD = 40
+# 第三阶段：解冻主干最后一层 + B 头
+EPOCHS_UNFREEZE = 20

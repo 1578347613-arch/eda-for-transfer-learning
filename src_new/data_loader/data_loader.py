@@ -12,10 +12,10 @@ def load_data(opamp_type: str = "5t_opamp"):
     返回: X_source, y_source, X_target, y_target (pandas.DataFrame)
     """
     print(f"--- 开始为 {opamp_type} 加载数据 ---")
-    source_features_path = f"data/01_train_set/{opamp_type}/source/pretrain_design_features.csv"
-    source_targets_path  = f"data/01_train_set/{opamp_type}/source/pretrain_targets.csv"
-    target_features_path = f"data/01_train_set/{opamp_type}/target/target_design_features.csv"
-    target_targets_path  = f"data/01_train_set/{opamp_type}/target/target_targets.csv"
+    source_features_path = f"../data/01_train_set/{opamp_type}/source/pretrain_design_features.csv"
+    source_targets_path  = f"../data/01_train_set/{opamp_type}/source/pretrain_targets.csv"
+    target_features_path = f"../data/01_train_set/{opamp_type}/target/target_design_features.csv"
+    target_targets_path  = f"../data/01_train_set/{opamp_type}/target/target_targets.csv"
 
     X_source = pd.read_csv(source_features_path)
     y_source = pd.read_csv(source_targets_path)
