@@ -115,6 +115,17 @@ def load_backbone_from_trained_mlp(trained_mlp: nn.Module, align_model: AlignHet
         # head_B_logvar = 0 初始化（学到不确定度）
         nn.init.zeros_(align_model.head_B_logvar.weight)
         nn.init.zeros_(align_model.head_B_logvar.bias)
+# src/models.py (追加)
+def build_model(model_type: str, input_dim=7, output_dim=5, hidden_dim=512, num_layers=6, dropout_rate=0.1):
+    model_type = model_type.lower()
+    if model_type == "mlp":
+        return MLP(input_dim, output_dim, hidden_dim, num_layers, dropout_rate)
+    if model_type in ["target_only_hetero", "align_hetero"]:
+        # 返回 AlignHeteroMLP（输出 mu, logvar；可选 return_features）
+        return AlignHeteroMLP(input_dim, output_dim, hidden_dim, num_layers, dropout_rate)
+    if model_type in ["dualhead_b", "dualhead"]:
+        return DualHeadMLP(input_dim, output_dim, hidden_dim, num_layers, dropout_rate)
+    raise ValueError(f"unknown model_type={model_type}")
 
 if __name__ == '__main__':
     # 测试模型是否能正常工作

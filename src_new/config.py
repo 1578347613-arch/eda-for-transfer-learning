@@ -1,0 +1,35 @@
+# config.py
+import torch
+
+# 基本设置
+OPAMP_TYPE = '5t_opamp'
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# 训练设置
+EPOCHS = 60
+PATIENCE = 10
+LEARNING_RATE = 1e-3
+BATCH_SIZE = 128
+
+# 模型设置
+HIDDEN_DIM = 256
+NUM_LAYERS = 4
+DROPOUT_RATE = 0.1
+COMPONENTS = 10
+
+# 反向设计（MDN）
+MDN_EPOCHS = 60
+MDN_COMPONENTS = 10
+MDN_HIDDEN = 256
+MDN_LAYERS = 4
+MDN_BATCH_SIZE = 128
+MDN_LR = 1e-3
+
+# 权重设置
+LAMBDA_CORAL = 0.05
+ALPHA_R2 = 1.0
+L2SP_LAMBDA = 1e-4
+LR_BIAS = 3e-4
+LR_HEAD = 1e-4
+LR_UNFREEZE = 5e-5
+WEIGHT_DECAY = 1e-4
