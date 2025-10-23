@@ -102,7 +102,8 @@ python -m inference.infer_ensemble
 ```
 src_new/
 ├── config.py                 # 统一管理超参数&设备
-│
+│---inverse_mdn.py
+----inverse_opt.py
 ├── data_loader/
 │   ├── __init__.py           # 暴露 load/preprocess/split/scale 的统一API
 │   ├── cli.py                # 命令行快速验证数据加载
@@ -329,6 +330,8 @@ python src/inverse_mdn.py --sample \
                           --y-target "2.5e8,200,1.5e6,65,20000" \
                           --n 64 \
                           --out results/inverse/init_64.npy
+
+
 2. 反向优化（inverse_opt.py）
 功能：使用反向优化算法，通过优化输入 x 使得模型的输出 y 满足用户指定的目标或约束条件。支持多种目标类型（最小化、最大化、目标值、范围等）和约束条件（如 ugf_band 和 pm_band）。
 
