@@ -5,7 +5,8 @@ OPAMP_TYPE = '5t_opamp'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # 训练设置
-EPOCHS = 60
+EPOCHS_PRETRAIN = 60
+EPOCHS_FINETUNE = 60
 PATIENCE = 10
 LEARNING_RATE = 1e-3
 BATCH_SIZE = 128
