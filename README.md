@@ -64,11 +64,7 @@ for dataloader：
 ## 🚀 TL;DR 快速上手
 
 ```bash
-# 1) 创建环境并安装依赖
-conda create -n opamp python=3.10 -y && conda activate opamp
-pip install -r requirements.txt  # 若无该文件，见下方“依赖清单”
 
-# 2) 校验数据加载是否正常（可选）
 python -m data_loader.cli --opamp 5t_opamp --val-split 0.2 --seed 42
 
 # 3) 训练基线 MLP（保存 baseline 权重）
