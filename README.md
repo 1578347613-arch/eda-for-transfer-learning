@@ -55,137 +55,346 @@ for dataloader：
                 1.  **预训练集**: 处理后的工艺A数据 `(X_source_scaled, y_source_scaled)`。
                 2.  **微调/验证集**: 将处理后的工艺B数据划分为训练集和验证集（例如，80%用于微调训练，20%用于验证）。
 
+
+
+
+
 ---
-for src:
-    <think>
+
+## 🚀 TL;DR 快速上手
+
+```bash
+# 1) 创建环境并安装依赖
+conda create -n opamp python=3.10 -y && conda activate opamp
+pip install -r requirements.txt  # 若无该文件，见下方“依赖清单”
+
+# 2) 校验数据加载是否正常（可选）
+python -m data_loader.cli --opamp 5t_opamp --val-split 0.2 --seed 42
+
+# 3) 训练基线 MLP（保存 baseline 权重）
+python -m training.train
+
+# 4) 训练 AlignHeteroMLP + CORAL（保存 align_hetero 权重）
+python -m training.train_align_coral
+
+# 5) 微调 DualHeadMLP（分阶段训练，保存 dualhead 微调权重）
+python -m fine_tune.fine_tune
+
+# 6) 集成推理 & 指标评估（反标准化到物理单位）
+python -m inference.infer_ensemble
+```
+
+---
+
+## 📦 项目概览
+
+本工程面向模拟电路（如运放）多目标回归，提供：
+
+- **数据管道**：加载、预处理（含 `log1p`、标准化）以及保存/复用 scaler。  
+- **模型库**：`MLP`、`AlignHeteroMLP`（异方差）、`DualHeadMLP`（双头微调）。  
+- **训练脚本**：基线训练、带 CORAL 的跨域对齐训练、分阶段微调（L2-SP 正则）。  
+- **推理脚本**：两模型不确定性感知加权 + MSE 权重融合，自动反标准化与评估。
+
+---
+
+## 🗂 目录结构
+
+```
+src_new/
+├── config.py                 # 统一管理超参数&设备
+│
+├── data_loader/
+│   ├── __init__.py           # 暴露 load/preprocess/split/scale 的统一API
+│   ├── cli.py                # 命令行快速验证数据加载
+│   ├── data_loader.py        # 加载+预处理+划分
+│   └── scaler_utils.py       # 保存/加载 x,y 的 StandardScaler
+│
+├── models/
+│   ├── mlp.py                # 基础 MLP
+│   ├── align_hetero.py       # AlignHeteroMLP（backbone + hetero_head）
+│   └── model_utils.py        # 保存/加载权重，主干迁移工具
+│
+├── training/
+│   ├── train.py              # 训练基线 MLP
+│   └── train_align_coral.py  # AlignHeteroMLP + CORAL 训练
+│
+├── fine_tune/
+│   └── fine_tune.py          # DualHeadMLP 分阶段微调（bias→head→解冻最后层）
+│
+├── inference/
+│   └── infer_ensemble.py     # 集成推理（温度标定+精度/MSE加权），评估MSE/MAE/R²
+│
+└── losses/
+    └── loss_function.py      # heteroscedastic_nll / batch_r2 / coral_loss
+# 注：若你使用 `from losses import x`，请确保 losses/__init__.py 已导出上述函数。
+```
+
+---
+
+## 🔧 安装与依赖
+
+**Python**：建议 3.10  
+**PyTorch**：根据你的 CUDA 版本安装（https://pytorch.org/）  
+
+若无 `requirements.txt`，可使用下列基础依赖（按需增减）：
+
+```txt
+numpy>=1.24
+scikit-learn>=1.3
+joblib>=1.3
+torch>=2.1
+tqdm>=4.66
+```
+
+---
+
+## ⚙️ 配置（`config.py`）
+
+统一管理所有超参数，随用随改，训练脚本自动读取：
+
+```python
+# 关键参数示例（实际以你的 config.py 为准）
+OPAMP_TYPE   = '5t_opamp'
+DEVICE       = 'cuda'  # 自动检测同样可：'cuda' if torch.cuda.is_available() else 'cpu'
+
+# 训练
+EPOCHS       = 50
+PATIENCE     = 10
+LEARNING_RATE= 1e-4
+BATCH_SIZE   = 256
+
+# 模型
+HIDDEN_DIM   = 512
+NUM_LAYERS   = 6
+DROPOUT_RATE = 0.1
+
+# 对齐/微调
+LAMBDA_CORAL = 0.05
+ALPHA_R2     = 1.0
+L2SP_LAMBDA  = 1e-4
+LR_BIAS      = 3e-4
+LR_HEAD      = 1e-4
+LR_UNFREEZE  = 5e-5
+WEIGHT_DECAY = 1e-4
+```
+
+> **建议**：仅通过 `config.py` 改动超参数，避免在脚本内“硬编码”，保证全工程一致。
+
+---
+
+## 🧪 数据与预处理
+
+- **数据入口**：`data_loader.get_data_and_scalers(opamp_type=OPAMP_TYPE)`  
+  返回：
+  ```python
+  {
+    "source": (X_source_scaled, y_source_scaled),
+    "target_train": (X_target_train, y_target_train),
+    "target_val": (X_target_val, y_target_val),
+    "x_scaler": x_scaler,
+    "y_scaler": y_scaler,
+  }
+  ```
+- 预处理包含 `log1p`（对特定目标，如 `ugf`, `cmrr`）和标准化。反标准化与 `expm1` 在推理阶段自动完成。
+
+---
+
+## 🏗 模型与损失（API 速览）
+
+### 模型
+
+```python
+from models import MLP, AlignHeteroMLP, DualHeadMLP
+
+# MLP
+m = MLP(input_dim, output_dim)                 # forward(x) -> y_hat
+
+# AlignHeteroMLP（异方差）
+m = AlignHeteroMLP(input_dim, output_dim)      # forward(x) -> (mu, logvar, features)
+
+# DualHeadMLP（微调双头）
+yB = model(x, domain='B')                      # 指定使用 B 头
+```
+
+### 模型工具
+
+```python
+from models.model_utils import (
+  load_backbone_from_trained_mlp, save_model, load_model
+)
+
+load_backbone_from_trained_mlp(pretrained_mlp, align_model)
+save_model(model, 'results/xxx.pth')
+load_model(model, 'results/xxx.pth')
+```
+
+### 损失函数
+
+```python
+# 若无 __init__.py 导出，请改为：from losses.loss_function import ...
+from losses import heteroscedastic_nll, batch_r2, coral_loss
+```
+
+- `heteroscedastic_nll(mu, logvar, y, reduction='mean')`
+- `batch_r2(y_true, y_pred, eps=1e-8)`
+- `coral_loss(feat_a, feat_b, unbiased=True, eps=1e-6)`
+
+---
+一。正向设计
+## 🏃‍♂️ 训练/微调/推理流程
+
+### 1) 训练基线 MLP
+
+```bash
+python -m training.train
+```
+
+- **输入**：`source` 作为训练集，`target_val` 作为验证集  
+- **输出**：`results/{OPAMP_TYPE}_baseline_model.pth`  
+- **日志**：打印每轮 Train/Val MSE
+
+### 2) 训练 AlignHeteroMLP + CORAL
+
+```bash
+python -m training.train_align_coral
+```
+
+- 载入基线 MLP 作为 **backbone** 初始权重  
+- 目标域 `B` 上训练异方差 NLL + `R²`（转化为损失）+ **CORAL**（跨域特征对齐）  
+- **输出**：`results/{OPAMP_TYPE}_align_hetero_lambda{LAMBDA_CORAL:.3f}.pth`  
+- **验证指标**：val NLL（越小越好）
+
+### 3) 分阶段微调 DualHeadMLP
+
+```bash
+python -m fine_tune.fine_tune
+```
+
+分三阶段（均在目标域 `B`）：
+1. **Bias 校准**：仅训练 `head_B.bias`
+2. **训练 B 头权重**：启用 L2-SP 正则，约束偏离预训练主干
+3. **部分解冻**：解冻主干最后一层 + B 头
+
+**输出**：`results/{OPAMP_TYPE}_dualhead_finetuned.pth`
+
+> 使用到的关键接口：
+> - `run_epoch(model, loader, optimizer, loss_fn, phase, pretrained_state=None)`
+> - `main()`：组织上述三阶段训练与早停
+
+### 4) 集成推理与评估
+
+```bash
+python -m inference.infer_ensemble
+```
+
+做了以下工作：
+- 载入两个异方差模型（示例：`align_hetero` 与 `target_only_hetero`）  
+- **温度标定**（闭式解）校准方差  
+- **样本级精度权重** + **指标级 MSE 权重** 融合  
+- 反标准化 & `expm1`（对 `ugf`, `cmrr`）  
+- 输出每个指标的 **MSE/MAE/R²**
+
+**打印示例**：
+```
+=== Ensemble on B-VAL (物理单位) ===
+slewrate_pos    MSE=...  MAE=...  R2=...
+dc_gain         MSE=...  MAE=...  R2=...
+ugf             MSE=...  MAE=...  R2=...
+phase_margin    MSE=...  MAE=...  R2=...
+cmrr            MSE=...  MAE=...  R2=...
+```
+二. 反向设计（inverse_mdn.py）
+功能：通过训练混合密度网络（MDN）来学习从目标值 y 到输入值 x 的映射关系。支持两种模式：训练模式和采样模式。
+
+1.1 训练模式
+在训练模式下，使用一组标准化的目标数据 y_scaled 和输入数据 x_scaled 来训练一个 MDN 模型。模型将学习从目标输出到输入的映射。训练完成后，模型权重和标准化器（scaler）将被保存到指定路径。
+
+用法：
+
+python src/inverse_mdn.py --opamp 5t_opamp \
+                          --save results/mdn_5t.pth \
+                          --components 10 \
+                          --hidden 256 \
+                          --layers 4 \
+                          --batch-size 128 \
+                          --epochs 60 \
+                          --lr 1e-3
+1.2 采样模式
+在采样模式下，用户提供一个目标 y_target，工具将基于已训练的 MDN 模型生成多个候选输入 x_scaled，这些输入能够使得模型的输出接近目标 y_target。
+
+用法：
+
+python src/inverse_mdn.py --sample \
+                          --model results/mdn_5t.pth \
+                          --y-target "2.5e8,200,1.5e6,65,20000" \
+                          --n 64 \
+                          --out results/inverse/init_64.npy
+2. 反向优化（inverse_opt.py）
+功能：使用反向优化算法，通过优化输入 x 使得模型的输出 y 满足用户指定的目标或约束条件。支持多种目标类型（最小化、最大化、目标值、范围等）和约束条件（如 ugf_band 和 pm_band）。
+
+2.1 反向优化
+在反向优化过程中，工具会使用多个初始点对输入 x 进行优化，最终得到一个最优的输入 x_scaled，使得其预测输出 y_scaled 达到给定目标。优化结果将保存在指定的目录中。
+
+用法：
+
+python src/inverse_opt.py --opamp 5t_opamp \
+                          --ckpt results/5t_opamp_align_hetero_lambda0.050.pth \
+                          --model-type align_hetero \
+                          --y-target "2.5e8,200,1.5e6,65,20000" \
+                          --goal "min,min,range,range,min" \
+                          --ugf-band "8.0e5:2.0e6" \
+                          --pm-band "60:75" \
+                          --weights "0.05,0.40,0.90,0.10,0.65" \
+                          --prior 1e-3 \
+                          --init-npy results/inverse/init_1024.npy \
+                          --n-init 1024 --steps 900 --lr 0.002 \
+                          --finish-lbfgs 80 \
+                          --save-dir results/inverse/try_hybrid_constrained_scaled_v2
+---
+
+## 🧭 常见问题（FAQ / Troubleshooting）
+
+- **找不到 baseline 权重**  
+  先运行：`python -m training.train`，会在 `results/` 下生成 `{OPAMP_TYPE}_baseline_model.pth`。
+
+- **CUDA 不可用/显存不足**  
+  在 `config.py` 将 `DEVICE='cpu'` 或减小 `BATCH_SIZE`/`HIDDEN_DIM`。
+
+- **形状不匹配**  
+  检查 `input_dim = X.shape[1]` 与模型初始化一致；`output_dim = y.shape[1]` 与任务指标数量一致。
+
+- **CORAL 权重设置**  
+  `LAMBDA_CORAL` 过大可能拖慢收敛；可先从 `0.01~0.05` 网格搜索。
+
+- **R² 损失权重**  
+  `ALPHA_R2` 控制 R² 目标；若 NLL 主导不足，可适当上调。
+
+- **losses 导入失败**  
+  若使用 `from losses import ...` 报错，请改用  
+  `from losses.loss_function import heteroscedastic_nll, batch_r2, coral_loss`  
+  或在 `losses/__init__.py` 中显式导出。
+
+---
+
+## 📌 重要输出与约定
+
+- **模型权重**（默认保存在 `results/`）
+  - 基线：`{OPAMP_TYPE}_baseline_model.pth`
+  - 对齐：`{OPAMP_TYPE}_align_hetero_lambda{LAMBDA:.3f}.pth`
+  - 微调：`{OPAMP_TYPE}_dualhead_finetuned.pth`
+- **Scaler**：训练过程中会保存 `x/y` 的 scaler（路径见你的实现，一般在 `results/` 下）
+- **列名约定**：`COLS = ['slewrate_pos', 'dc_gain', 'ugf', 'phase_margin', 'cmrr']`  
+  其中 `ugf`, `cmrr` 在推理评估时会 `expm1` 反变换。
+
+---
+
+## 🧩 开发小贴士
+
+- 已对梯度做 `clip_grad_norm_=1.0`，可提高训练稳定性。  
+- 多卡/混合精度：当前代码未内置，可按需接入 `torch.nn.parallel` / AMP。  
+- 想调参？只改 `config.py`，其余脚本无需改动。  
+- 想自定义指标列：同步修改数据预处理及 `infer_ensemble.py` 中的 `COLS` 列表与反变换逻辑。
 
 
-      - 当前验证集（物理单位）指标（最终一版）：  
-        - `slewrate_pos` R² **0.9839**  
-        - `dc_gain` R² **0.9266**  
-        - `ugf` R² **0.9460**  
-        - `phase_margin` R² **0.9732**  
-        - `cmrr` R² **0.6160**
-      
-      ---
-      
-      # 工程结构（含说明）
-      ```
-      eda-for-transfer-learning-1/
-      ├── 1_EDA_5T_Opamp.ipynb        # EDA与分布可视化
-      ├── README.md                   # 项目说明（可补充今日内容）
-      ├── data/
-      │   ├── 01_train_set/
-      │   │   ├── 5t_opamp/           # 今天主要使用的数据集（A/B）
-      │   │   │   ├── source/         # A工艺：pretrain_design_features.csv / pretrain_targets.csv
-      │   │   │   └── target/         # B工艺：target_design_features.csv / target_targets.csv
-      │   │   └── two_stage_opamp/    # 预留的两级运放同构目录
-      │   └── 02_public_test_set/     # 公测特征（A/B/C/D），后续推理可用
-      ├── notebooks/                  # 笔记本占位
-      ├── results/                    # 训练产物
-      │   ├── 5t_opamp_x_scaler.gz
-      │   ├── 5t_opamp_y_scaler.gz
-      │   ├── 5t_opamp_baseline_model.pth
-      │   ├── 5t_opamp_dualhead_finetuned.pth
-      │   ├── 5t_opamp_align_hetero_lambda0.050.pth
-      │   └── 5t_opamp_target_only_hetero.pth
-      └── src/
-          ├── data_loader.py          # 数据读取/预处理/划分 & 保存scalers
-          ├── models.py               # MLP/DualHead/AlignHeteroMLP 定义
-          ├── losses.py               # hetero NLL / R² / CORAL
-          ├── train.py                # A域基线预训练（MLP）
-          ├── fine_tune.py            # DualHead三阶段B域微调
-          ├── train_align_coral.py    # A↔B特征对齐 + B监督（异方差）
-          ├── train_target_only.py    # 仅B域训练异方差模型（今日新增）
-          ├── infer_ensemble.py       # 两模型动态加权集成（今日增强）
-          └── evaluate.py             # 逆标准化评估（MSE/MAE/R²）
-      ```
-      
-      ---
-      
-      # 各文件内容与接口（简要）
-      
-      ### `src/data_loader.py`
-      - **作用**：加载 A/B 数据 → `log1p`(`ugf, cmrr`) → **仅在A** 上 `StandardScaler.fit`（X/Y 各一套）→ 统一 transform A/B → B 按 80/20 划分。保存 `x_scaler.gz / y_scaler.gz`（在 `results/`）。
-      - **主接口**
-        ```python
-        data = get_data_and_scalers(opamp_type='5t_opamp')
-        # 返回：
-        # data['source']       = (X_A, y_A)
-        # data['target_train'] = (X_B_tr, y_B_tr)
-        # data['target_val']   = (X_B_va, y_B_va)
-        ```
-      
-      ### `src/models.py`
-      - **MLP**：`MLP(input_dim, output_dim, hidden_dim=512, num_layers=6, dropout_rate=0.1)`
-      - **DualHeadMLP**：共享主干 + A/B 两输出头（B域微调用）
-      - **AlignHeteroMLP**：共享主干 + B域 `mu`/`logvar` 双头（异方差）
-      - **常用**：`model(x)` 返回 `(mu, logvar, feat)`；`feat` 为对齐用中间特征。
-      
-      ### `src/losses.py`
-      - `heteroscedastic_nll(mu, logvar, y, reduction='mean')`
-      - `batch_r2(y_true, y_pred, eps=1e-8)`
-      - `coral_loss(feat_a, feat_b, unbiased=True, eps=1e-6)`
-      
-      ### `src/train.py`
-      - **A域基线**（MLP），监控 B 验证，落盘：`../results/5t_opamp_baseline_model.pth`  
-        运行：`python src/train.py`
-      
-      ### `src/fine_tune.py`
-      - **三阶段微调**（DualHead）：Bias-only → Head-only(Huber+L2-SP) → 轻解冻末层。  
-        落盘：`../results/5t_opamp_dualhead_finetuned.pth`  
-        运行：`python src/fine_tune.py`
-      
-      ### `src/train_align_coral.py`
-      - **A↔B特征对齐 + B监督**（AlignHeteroMLP；NLL + α·(1−R²) + λ·CORAL）。  
-        今日已跑 λ=0.050，最佳 `valNLL ≈ -1.1843`。  
-        落盘：`../results/5t_opamp_align_hetero_lambda0.050.pth`  
-        运行：`python src/train_align_coral.py`
-      
-      ### `src/train_target_only.py`（今日新增）
-      - **仅B域**训练异方差模型（AlignHeteroMLP）；早停保存最佳。  
-        落盘：`../results/5t_opamp_target_only_hetero.pth`  
-        运行：`python src/train_target_only.py`
-      
-      ### `src/infer_ensemble.py`（今日增强）
-      - **做法**：  
-        1) 两模型前向得 `mu, logvar`（标准化空间）；  
-        2) **温度标定**（每模型、每指标）修正 `logvar`；  
-        3) **precision** 裁剪（95%分位）避免单边爆权重；  
-        4) **混合加权**：`w = α·precision(样本级) + (1−α)·MSE(维度级)`；  
-        5) 加权融合均值 → 逆标准化（`ugf, cmrr` 再 `expm1`）→ 打印 MSE/MAE/R²。  
-        运行：`python src/infer_ensemble.py`
-      
-      ### `src/evaluate.py`
-      - **用途**：对任意模型输出做逆标准化评估（物理单位的 MSE/MAE/R²）。  
-        运行：`python src/evaluate.py`
-      
-      ---
-      
-      # 典型运行顺序（命令速记）
-      ```bash
-      # 1) A域基线
-      python src/train.py
-      
-      # 2) B域微调（可选）
-      python src/fine_tune.py
-      
-      # 3) 对齐训练（A↔B + NLL + CORAL）
-      python src/train_align_coral.py   # λ=0.05 已完成
-      
-      # 4) 目标域单模型（B-only）
-      python src/train_target_only.py
-      
-      # 5) 集成评估（温度标定 + precision裁剪 + 混合加权）
-      python src/infer_ensemble.py
-      ```
-      
-      ---
-      
-      # 明天可选待办（轻量）
-      - 对齐训练里**去掉 A 分支的 `no_grad`**、加 **λ 预热**（能稳住 `cmrr`）。  
-      - 多跑两份对齐模型（λ=0.02/0.10），在集成里**按指标择优**。  
-      - `losses.py` 增加 **稳定版 NLL（logvar裁剪+惩罚）**，减少“过度自信”。
-      
-      辛苦啦，今天的管线已经从数据→训练→对齐→目标模型→集成→评估全打通 ✅
+
 、
