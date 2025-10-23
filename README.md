@@ -112,6 +112,7 @@ src_new/
 │   └── model_utils.py        # 保存/加载权重，主干迁移工具
 │
 ├── training/
+        train_target_only.py #训练只在b域上的mlp
 │   ├── train.py              # 训练基线 MLP
 │   └── train_align_coral.py  # AlignHeteroMLP + CORAL 训练
 │
@@ -283,7 +284,11 @@ python -m fine_tune.fine_tune
 ```bash
 python -m inference.infer_ensemble
 ```
-
+注意，在跑inference之前最好先跑一下
+```bash
+python -m training.train_target_only.py
+```
+在results文件夹中添加好targetonly的模型文件，方便推理脚本调用
 做了以下工作：
 - 载入两个异方差模型（示例：`align_hetero` 与 `target_only_hetero`）  
 - **温度标定**（闭式解）校准方差  
