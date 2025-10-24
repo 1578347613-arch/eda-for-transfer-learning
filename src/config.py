@@ -6,8 +6,8 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # 训练设置
 EPOCHS_PRETRAIN = 60
-EPOCHS_FINETUNE = 60
-PATIENCE = 10
+EPOCHS_FINETUNE = 1000  # 配合早停
+PATIENCE = 100
 LEARNING_RATE = 1e-3
 BATCH_SIZE = 128
 
