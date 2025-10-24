@@ -30,7 +30,7 @@ python -m train --opamp 5t_opamp --evaluate --epochs_pretrain 60 --epochs 300 --
 - --save_path <str>：模型保存目录，默认 ../results
 - --evaluate：训练完成后在验证集上评估
 - --lr <float>：学习率（默认见 src\config.py）
-- --epochs <int>：微调阶段总轮数（默认见 src\config.py）
+- --epochs_finetune <int>：微调阶段总轮数（默认见 src\config.py）
 - --epochs_pretrain <int>：预训练阶段总轮数（默认见 src\config.py）
 - --batch_a <int>：源域批大小（默认见 src\config.py）
 - --batch_b <int>：目标域批大小（默认见 src\config.py）
