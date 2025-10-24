@@ -34,7 +34,7 @@ def setup_args():
     # <<< 将config中的参数全部移到这里，config的值作为默认值
     parser.add_argument("--lr", type=float,
                         default=config.LEARNING_RATE, help="学习率")
-    parser.add_argument("--epochs", type=int,
+    parser.add_argument("--epochs_finetune", type=int,
                         default=config.EPOCHS_FINETUNE, help="微调阶段的总轮数")
     parser.add_argument("--epochs_pretrain", type=int,
                         default=config.EPOCHS_PRETRAIN, help="预训练阶段的总轮数")
@@ -42,8 +42,10 @@ def setup_args():
                         default=config.BATCH_A, help="源域 Batch Size")
     parser.add_argument("--batch_b", type=int,
                         default=config.BATCH_B, help="目标域 Batch Size")
-    parser.add_argument("--patience", type=int,
-                        default=config.PATIENCE, help="早停的耐心轮数")
+    parser.add_argument("--patience_pretrain", type=int,
+                        default=config.PATIENCE_PRETRAIN, help="预训练早停的耐心轮数")
+    parser.add_argument("--patience_finetune", type=int,
+                        default=config.PATIENCE_FINETUNE, help="微调早停的耐心轮数")
 
     # --- 损失函数权重 ---
     parser.add_argument("--lambda_coral", type=float,
@@ -71,6 +73,9 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     optimizer = torch.optim.AdamW(model.backbone.parameters(), lr=args.lr)
     criterion = torch.nn.MSELoss()
     best_val_loss = float('inf')
+
+    patience = args.patience_pretrain
+    patience_counter = patience  # 使用一个计数器
 
     for epoch in range(args.epochs_pretrain):
         model.train()
@@ -101,7 +106,13 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             torch.save(model.state_dict(), save_path)
+            patience_counter = patience  # 重置计数器
             print(f"  - 预训练模型已保存，验证MSE提升至: {best_val_loss:.6f}")
+        else:
+            patience_counter -= 1
+            if patience_counter == 0:
+                print(f"验证损失连续 {patience} 轮未改善，触发早停。")
+                break
 
     print(f"--- [阶段一] 预训练完成，最佳模型已保存至 {save_path} ---")
 
@@ -119,10 +130,10 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
 
     best_val = float('inf')
 
-    patience = args.patience
+    patience = args.patience_finetune
     patience_counter = patience  # 使用一个计数器
 
-    for epoch in range(args.epochs):
+    for epoch in range(args.epochs_finetune):
         model.train()
         for xb_B, yb_B in dl_B:
             xb_B, yb_B = xb_B.to(device), yb_B.to(device)
@@ -160,7 +171,7 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
         val_loss /= len(dl_val)
 
         print(
-            f"Fine-tune Epoch [{epoch+1}/{args.epochs}], Val NLL: {val_loss:.4f}")
+            f"Fine-tune Epoch [{epoch+1}/{args.epochs_finetune}], Val NLL: {val_loss:.4f}")
 
         if val_loss < best_val:
             print(f"  - 微调验证损失改善 ({best_val:.4f} -> {val_loss:.4f})。保存模型...")

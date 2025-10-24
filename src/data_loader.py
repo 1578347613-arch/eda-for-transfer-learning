@@ -93,13 +93,11 @@ def get_data_and_scalers(
     skewed_cols=SKEWED_COLS_DEFAULT,
 ):
     """
-    一站式：加载 -> 预处理 -> 划分 -> 保存 scaler。
     返回字典：
       - "source": (X_source_scaled, y_source_scaled)
       - "target_train": (X_target_train, y_target_train)
       - "target_val": (X_target_val, y_target_val)
       - "x_scaler", "y_scaler"（显式提供，便于其它模块直接使用）
-      - 同时兼容 "scalers": (x_scaler, y_scaler)
     """
     Xs, ys, Xt, yt = load_data(opamp_type)
     (
