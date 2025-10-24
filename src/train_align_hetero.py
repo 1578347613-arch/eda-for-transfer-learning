@@ -10,50 +10,49 @@ from data_loader import get_data_and_scalers
 from models.align_hetero import AlignHeteroMLP
 from loss_function import heteroscedastic_nll, batch_r2, coral_loss
 from evaluate import calculate_and_print_metrics
-import config
+from config import COMMON_CONFIG, TASK_CONFIGS  # <-- 添加这一行！
 
 # ========== 1. 参数定义与解析 (重构) ==========
-
+# "黄金标准" setup_args 函数
+# 请在 unified_train.py 和 unified_inverse_train.py 中使用它
 
 def setup_args():
-    """设置和解析命令行参数，并将 config.py 中的设置作为默认值"""
-    parser = argparse.ArgumentParser(description="统一的预训练与微调脚本")
+    parser = argparse.ArgumentParser(description="统一训练脚本")
+    parser.add_argument("--opamp", type=str, required=True, choices=TASK_CONFIGS.keys(), help="电路类型")
 
-    # --- 核心参数 ---
-    parser.add_argument("--opamp", type=str,
-                        default=config.OPAMP_TYPE, help="运放类型")
-    parser.add_argument("--device", type=str,
-                        default=config.DEVICE, help="设备 'cuda' or 'cpu'")
-    parser.add_argument("--restart", action='store_true', help="强制重新执行预训练阶段")
-    parser.add_argument("--save_path", type=str,
-                        default="../results", help="预训练模型存放地址")
-    parser.add_argument("--evaluate", action='store_true',
-                        help="训练结束后，加载最佳模型并进行评估")
+    # --- 1. 自动添加所有可能的参数定义 ---
+    # a. 从 COMMON_CONFIG 添加
+    for key, value in COMMON_CONFIG.items():
+        if isinstance(value, bool):
+            if value is False:
+                parser.add_argument(f"--{key}", action="store_true", help=f"启用 '{key}' (开关)")
+            else:
+                parser.add_argument(f"--no-{key}", action="store_false", dest=key, help=f"禁用 '{key}' (开关)")
+        else:
+            parser.add_argument(f"--{key}", type=type(value), help=f"设置 '{key}'")
 
-    # --- 训练超参数 ---
-    # <<< 将config中的参数全部移到这里，config的值作为默认值
-    parser.add_argument("--lr", type=float,
-                        default=config.LEARNING_RATE, help="学习率")
-    parser.add_argument("--epochs_finetune", type=int,
-                        default=config.EPOCHS_FINETUNE, help="微调阶段的总轮数")
-    parser.add_argument("--epochs_pretrain", type=int,
-                        default=config.EPOCHS_PRETRAIN, help="预训练阶段的总轮数")
-    parser.add_argument("--batch_a", type=int,
-                        default=config.BATCH_A, help="源域 Batch Size")
-    parser.add_argument("--batch_b", type=int,
-                        default=config.BATCH_B, help="目标域 Batch Size")
-    parser.add_argument("--patience_pretrain", type=int,
-                        default=config.PATIENCE_PRETRAIN, help="预训练早停的耐心轮数")
-    parser.add_argument("--patience_finetune", type=int,
-                        default=config.PATIENCE_FINETUNE, help="微调早停的耐心轮数")
+    # b. 从 TASK_CONFIGS 添加专属参数
+    all_task_keys = set().union(*(d.keys() for d in TASK_CONFIGS.values()))
+    task_only_keys = all_task_keys - set(COMMON_CONFIG.keys())
+    
+    for key in sorted(list(task_only_keys)):
+        # 简单的类型推断
+        sample_val = TASK_CONFIGS[next(iter(TASK_CONFIGS))][key]
+        parser.add_argument(f"--{key}", type=type(sample_val), help=f"任务参数: {key}")
 
-    # --- 损失函数权重 ---
-    parser.add_argument("--lambda_coral", type=float,
-                        default=config.LAMBDA_CORAL, help="CORAL 损失的权重")
-    parser.add_argument("--alpha_r2", type=float,
-                        default=config.ALPHA_R2, help="R2 损失的权重")
-
+    # --- 2. 应用默认值并最终解析 ---
+    # a. 先应用通用默认值
+    parser.set_defaults(**COMMON_CONFIG)
+    
+    # b. 解析一次，拿到 opamp 类型，再应用任务专属默认值
+    # parse_known_args 不会因为不完整的命令行而报错
+    temp_args, _ = parser.parse_known_args()
+    if temp_args.opamp in TASK_CONFIGS:
+        parser.set_defaults(**TASK_CONFIGS[temp_args.opamp])
+        
+    # c. 最后重新解析，命令行提供的值会覆盖所有默认值
     args = parser.parse_args()
+    
     return args
 
 
@@ -214,6 +213,10 @@ def main():
     # <<< 一次性解析所有参数
     args = setup_args()
     DEVICE = torch.device(args.device)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
     os.makedirs(args.save_path, exist_ok=True)
 
     # 模型存储在../results下
@@ -224,6 +227,9 @@ def main():
 
     data = get_data_and_scalers(opamp_type=args.opamp)
     X_src, y_src = data['source']
+    input_dim = X_src.shape[1]
+    output_dim = y_src.shape[1]
+    print(f"--- 动态检测到 {args.opamp} 的维度: Input={input_dim}, Output={output_dim} ---")
     X_trg_tr, y_trg_tr = data['target_train']
     X_trg_val, y_trg_val = data['target_val']
 
@@ -231,9 +237,14 @@ def main():
     pretrain_loader_val = make_loader(
         X_trg_val, y_trg_val, args.batch_b, shuffle=False)
 
+    # 注意：input_dim 和 output_dim 不在命令行参数里，所以我们从字典里取
+    model_config = TASK_CONFIGS[args.opamp]
     model = AlignHeteroMLP(
-        input_dim=X_src.shape[1],
-        output_dim=y_src.shape[1]
+        input_dim=input_dim,
+        output_dim=output_dim,
+        hidden_dim=args.hidden_dim,
+        num_layers=args.num_layers,
+        dropout_rate=args.dropout_rate
     ).to(DEVICE)
 
     if args.restart or not os.path.exists(pretrained_path):

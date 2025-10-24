@@ -1,17 +1,18 @@
 # models/mlp.py
-import torch.nn as nn
-import config
-HIDDEN_DIM = config.HIDDEN_DIM
-NUM_LAYERS = config.NUM_LAYERS
-DROPOUT_RATE = config.DROPOUT_RATE
 
+import torch.nn as nn
+
+# --- 移除了所有对 config 的依赖 ---
 
 class MLP(nn.Module):
 
-    def __init__(self, input_dim, output_dim,
-                 hidden_dim: int = HIDDEN_DIM,
-                 num_layers: int = NUM_LAYERS,
-                 dropout_rate: float = DROPOUT_RATE):
+    def __init__(self, 
+                 input_dim: int, 
+                 output_dim: int,
+                 hidden_dim: int,    # 变为必需参数
+                 num_layers: int,    # 变为必需参数
+                 dropout_rate: float # 变为必需参数
+                ):
         """
         构造函数，用于初始化 MLP 模型。
 
@@ -45,5 +46,5 @@ class MLP(nn.Module):
         self.network = nn.Sequential(*layers)
 
     def forward(self, x):
-
         return self.network(x)
+
