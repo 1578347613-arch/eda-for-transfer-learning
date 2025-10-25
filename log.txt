@@ -18,3 +18,27 @@ phase_margin    MSE=0.08141  MAE=0.2152  R2=0.9919
 cmrr            MSE=2.305e+05  MAE=115.8  R2=0.8075
 
 Avg  (all dims)   MSE=1.778e+10  MAE=5.115e+04  R2=0.9501
+
+
+
+
+Fine-tune Epoch [9497/100000], Val NLL: -0.9908
+验证损失连续 1000 轮未改善，触发早停。
+--- [阶段二] 微调完成，最佳模型已保存至 ../results\two_stage_opamp_finetuned.pth ---
+
+训练流程全部完成。
+
+--- [评估流程启动] ---
+为评估加载最佳模型权重: ../results\two_stage_opamp_finetuned.pth
+在验证集上生成预测...
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.215e+14  MAE=8.195e+06  R2=0.7168
+dc_gain         MSE=2.295e+07  MAE=1493  R2=0.4108
+ugf             MSE=9.434e+13  MAE=6.353e+06  R2=0.7867
+phase_margin    MSE=160.9  MAE=9.543  R2=0.8598
+cmrr            MSE=8.455e+11  MAE=9.145e+04  R2=0.0239
+
+Avg  (all dims)   MSE=4.333e+13  MAE=2.928e+06  R2=0.5596
