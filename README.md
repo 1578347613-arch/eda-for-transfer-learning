@@ -62,3 +62,4 @@ pip install -r requirements.txt
 - dataloader.py:新增"source_train": (X_source_train, y_source_train),"source_val": (X_source_val, y_source_val)用来预训练
 - train.py:预训练阶段采用新的损失函数：criterion = torch.nn.HuberLoss(delta=1)
 - train.py:微调阶段backbone和head设置不同的学习率
+- train.py:删除了预训练阶段的早停机制
