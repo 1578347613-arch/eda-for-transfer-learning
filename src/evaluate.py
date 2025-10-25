@@ -1,12 +1,14 @@
 # evaluate.py
 
+import config
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from typing import List
 
 # --- 常量定义 ---
 DEFAULT_COLS = ['slewrate_pos', 'dc_gain', 'ugf', 'phase_margin', 'cmrr']
-LOG_TRANSFORMED_COLS = ['ugf', 'cmrr']
+
+LOG_TRANSFORMED_COLS = config.LOG_TRANSFORMED_COLS
 
 
 def calculate_and_print_metrics(

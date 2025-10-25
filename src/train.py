@@ -33,8 +33,10 @@ def setup_args():
 
     # --- 训练超参数 ---
     # <<< 将config中的参数全部移到这里，config的值作为默认值
-    parser.add_argument("--lr", type=float,
-                        default=config.LEARNING_RATE, help="学习率")
+    parser.add_argument("--lr_pretrain", type=float,
+                        default=config.LEARNING_RATE_PRETRAIN, help="学习率")
+    parser.add_argument("--lr_finetune", type=float,
+                        default=config.LEARNING_RATE_FINETUNE, help="微调阶段 head 的学习率")
     parser.add_argument("--epochs_finetune", type=int,
                         default=config.EPOCHS_FINETUNE, help="微调阶段的总轮数")
     parser.add_argument("--epochs_pretrain", type=int,
@@ -71,9 +73,10 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     """在源域数据上仅预训练模型的backbone"""
     print("\n--- [阶段一] 开始 Backbone 预训练 ---")
 
-    optimizer = torch.optim.AdamW(model.backbone.parameters(), lr=args.lr)
+    optimizer = torch.optim.AdamW(
+        model.backbone.parameters(), lr=args.lr_pretrain)
     scheduler = CosineAnnealingWarmRestarts(
-        optimizer, T_0=50, T_mult=1, eta_min=1e-6)
+        optimizer, T_0=250, T_mult=1, eta_min=1e-6)
     criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
 
@@ -127,9 +130,21 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
     """使用复合损失对整个模型进行微调"""
     print("\n--- [阶段二] 开始整体模型微调 ---")
 
-    opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
+    # 为 backbone 和 head 设置不同的学习率
+    optimizer_params = [
+        {
+            "params": model.backbone.parameters(),
+            "lr": args.lr_finetune / 10  # 为 backbone 设置一个非常低的学习率
+        },
+        {
+            "params": model.hetero_head.parameters(),
+            "lr": args.lr_finetune  # 为新 head 设置一个相对较高的学习率
+        }
+    ]
 
-    dl_A, dl_B, dl_val = data_loaders['source'], data_loaders['target_train'], data_loaders['target_val']
+    opt = torch.optim.AdamW(optimizer_params, weight_decay=1e-4)
+
+    dl_A, dl_B, dl_val = data_loaders['source_full'], data_loaders['target_train'], data_loaders['target_val']
     dl_A_iter = iter(dl_A)
 
     best_val = float('inf')

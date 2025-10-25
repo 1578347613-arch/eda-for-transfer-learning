@@ -3,13 +3,22 @@ import torch
 # 基本设置
 OPAMP_TYPE = '5t_opamp'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+LOG_TRANSFORMED_COLS = [
+    "ugf",
+    "cmrr",
+    "dc_gain",
+    "slewrate_pos",
+]
 
 # 训练设置
 EPOCHS_PRETRAIN = 1000
 PATIENCE_PRETRAIN = EPOCHS_PRETRAIN
-EPOCHS_FINETUNE = 1000  # 配合早停
-PATIENCE_FINETUNE = 100
-LEARNING_RATE = 3e-3
+LEARNING_RATE_PRETRAIN = 3e-3
+
+
+EPOCHS_FINETUNE = 100000  # 配合早停
+PATIENCE_FINETUNE = 1000
+LEARNING_RATE_FINETUNE = 1e-4
 BATCH_SIZE = 128
 
 # 模型设置

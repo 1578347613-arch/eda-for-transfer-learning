@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+import config
 
-SKEWED_COLS_DEFAULT = ["ugf", "cmrr"]
+SKEWED_COLS_DEFAULT = config.LOG_TRANSFORMED_COLS
 
 
 def load_data(opamp_type: str = "5t_opamp"):

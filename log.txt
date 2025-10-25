@@ -521,3 +521,29 @@ phase_margin    MSE=0.1661  MAE=0.3066  R2=0.9835
 cmrr            MSE=3.78e+05  MAE=155.9  R2=0.6844
 
 Avg  (all dims)   MSE=3.395e+10  MAE=6.218e+04  R2=0.9204
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=4.342e+10  MAE=1.228e+05  R2=0.9890
+dc_gain         MSE=66.06  MAE=5.596  R2=0.9611
+ugf             MSE=1.993e+11  MAE=2.822e+05  R2=0.9864
+phase_margin    MSE=0.2426  MAE=0.3674  R2=0.9760
+cmrr            MSE=2.578e+05  MAE=130.6  R2=0.7847
+
+Avg  (all dims)   MSE=4.853e+10  MAE=8.102e+04  R2=0.9394
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.388e+10  MAE=6.422e+04  R2=0.9965
+dc_gain         MSE=2.561e+04  MAE=153.8  R2=-14.0797
+ugf             MSE=5.19e+10  MAE=1.351e+05  R2=0.9965
+phase_margin    MSE=0.08311  MAE=0.1914  R2=0.9918
+cmrr            MSE=2.208e+05  MAE=106.8  R2=0.8157
+
+Avg  (all dims)   MSE=1.315e+10  MAE=3.992e+04  R2=-2.0559
+
+slewrate_pos    MSE=1.836e+10  MAE=8.074e+04  R2=0.9954
+dc_gain         MSE=103.3  MAE=7.648  R2=0.9392
+ugf             MSE=6.982e+10  MAE=1.751e+05  R2=0.9952
+phase_margin    MSE=0.1107  MAE=0.2417  R2=0.9890
+cmrr            MSE=2.868e+05  MAE=129.1  R2=0.7606
+
+Avg  (all dims)   MSE=1.764e+10  MAE=5.119e+04  R2=0.9359
