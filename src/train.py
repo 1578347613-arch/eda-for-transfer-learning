@@ -246,6 +246,7 @@ def main():
         source_val_split=0.2,
         target_val_split=0.2
     )
+    X_src, y_src = data['source']
     X_src_train, y_src_train = data['source_train']
     X_src_val, y_src_val = data['source_val']
     X_trg_tr, y_trg_tr = data['target_train']
@@ -271,12 +272,8 @@ def main():
         print(f"--- [阶段一] 跳过预训练，加载已存在的模型: {pretrained_path} ---")
         model.load_state_dict(torch.load(pretrained_path, map_location=DEVICE))
 
-    # 对于CORAL损失，我们需要完整的源域数据分布
-    X_src_full = np.concatenate((X_src_train, X_src_val), axis=0)
-    y_src_full = np.concatenate((y_src_train, y_src_val), axis=0)
-
     finetune_loaders = {
-        'source_full': make_loader(X_src_full, y_src_full, args.batch_a, shuffle=True, drop_last=True),
+        'source_full': make_loader(X_src, y_src, args.batch_a, shuffle=True, drop_last=True),
         'target_train': make_loader(X_trg_tr, y_trg_tr, args.batch_b, shuffle=True),
         'target_val': make_loader(X_trg_val, y_trg_val, args.batch_b, shuffle=False)
     }

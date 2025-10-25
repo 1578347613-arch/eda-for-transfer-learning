@@ -134,6 +134,7 @@ def get_data_and_scalers(
     )
 
     payload = {
+        "source": (Xs_s, ys_s),
         "source_train": (Xa_tr, ya_tr),
         "source_val": (Xa_va, ya_va),
         "target_train": (Xb_tr, yb_tr),
