@@ -101,7 +101,7 @@ python generate_submission.py
     python run_training.py --opamp 5t_opamp
 
     # 同时训练两种电路
-    python run_training.py --opamp 5t_opamp 2stage_opamp
+    python run_training.py --opamp 5t_opamp two_stage_opamp
     ```
 
 *   **仅训练特定类型的模型**:
