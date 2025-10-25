@@ -13,7 +13,7 @@ cd src
 2) 预训练 + 微调 + 验证（示例）
 
 ```bash
-python -m train --opamp 5t_opamp --evaluate --epochs_pretrain 60 --epochs 300 --lambda_coral 0.05 --alpha_r2 1.0
+python train.py --evaluate
 ```
 
 数据与输出
@@ -54,3 +54,11 @@ pip install -r requirements.txt
 - src\evaluate.py：反标准化与指标（MSE/MAE/R²）
 - src\train.py：预训练 + 微调主入口
 - src\models\align_hetero.py, mlp.py, dual_head_mlp.py, model_utils.py
+
+# day1 主要修改：
+- config.py:新增LOG_TRANSFORMED_COLS = ["ugf","cmrr","dc_gain","slewrate_pos"]。同时，dataloader.py:SKEWED_COLS_DEFAULT = config.LOG_TRANSFORMED_COLS；evaluate.py:LOG_TRANSFORMED_COLS = config.LOG_TRANSFORMED_COLS
+- config.py:新增LEARNING_RATE_FINETUNE = 1e-4,分别设置预训练和微调的学习率，set_args函数同步增加可选命令
+- train.py:新增模拟退火和热重启scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=250, T_mult=1, eta_min=1e-6)
+- dataloader.py:新增"source_train": (X_source_train, y_source_train),"source_val": (X_source_val, y_source_val)用来预训练
+- train.py:预训练阶段采用新的损失函数：criterion = torch.nn.HuberLoss(delta=1)
+- train.py:微调阶段backbone和head设置不同的学习率
