@@ -3,14 +3,6 @@
 import torch.nn as nn
 from .mlp import MLP
 
-# --------------------------------------------------
-# --- 删除以下所有对 config 的依赖 ---
-# import config  <- 删除
-# HIDDEN_DIM = config.HIDDEN_DIM  <- 删除
-# NUM_LAYERS = config.NUM_LAYERS  <- 删除
-# DROPOUT_RATE = config.DROPOUT_RATE  <- 删除
-# --------------------------------------------------
-
 
 class AlignHeteroMLP(nn.Module):
     """
@@ -22,15 +14,15 @@ class AlignHeteroMLP(nn.Module):
 
     # --- 修改 __init__ 函数签名 ---
     # 删除依赖于旧config的默认值
-    def __init__(self, 
-                 input_dim: int, 
+    def __init__(self,
+                 input_dim: int,
                  output_dim: int,
-                 hidden_dim: int,    # 不再有默认值，变为必需参数
-                 num_layers: int,    # 不再有默认值，变为必需参数
-                 dropout_rate: float # 不再有默认值，变为必需参数
-                ):
+                 hidden_dim: int,
+                 num_layers: int,
+                 dropout_rate: float
+                 ):
         super().__init__()
-        
+
         # 直接使用传入的参数来初始化子模块
         self.backbone = MLP(
             input_dim=input_dim,

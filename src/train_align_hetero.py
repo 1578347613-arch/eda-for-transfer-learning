@@ -4,55 +4,63 @@ import torch
 import argparse
 import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
+from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 
 # --- 从项目模块中导入 ---
 from data_loader import get_data_and_scalers
 from models.align_hetero import AlignHeteroMLP
 from loss_function import heteroscedastic_nll, batch_r2, coral_loss
 from evaluate import calculate_and_print_metrics
-from config import COMMON_CONFIG, TASK_CONFIGS  # <-- 添加这一行！
+import config
+from config import COMMON_CONFIG, TASK_CONFIGS
 
 # ========== 1. 参数定义与解析 (重构) ==========
 # "黄金标准" setup_args 函数
 # 请在 unified_train.py 和 unified_inverse_train.py 中使用它
 
+
 def setup_args():
     parser = argparse.ArgumentParser(description="统一训练脚本")
-    parser.add_argument("--opamp", type=str, required=True, choices=TASK_CONFIGS.keys(), help="电路类型")
+    parser.add_argument("--opamp", type=str, required=True,
+                        choices=TASK_CONFIGS.keys(), help="电路类型")
 
     # --- 1. 自动添加所有可能的参数定义 ---
     # a. 从 COMMON_CONFIG 添加
     for key, value in COMMON_CONFIG.items():
         if isinstance(value, bool):
             if value is False:
-                parser.add_argument(f"--{key}", action="store_true", help=f"启用 '{key}' (开关)")
+                parser.add_argument(
+                    f"--{key}", action="store_true", help=f"启用 '{key}' (开关)")
             else:
-                parser.add_argument(f"--no-{key}", action="store_false", dest=key, help=f"禁用 '{key}' (开关)")
+                parser.add_argument(
+                    f"--no-{key}", action="store_false", dest=key, help=f"禁用 '{key}' (开关)")
         else:
-            parser.add_argument(f"--{key}", type=type(value), help=f"设置 '{key}'")
+            parser.add_argument(
+                f"--{key}", type=type(value), help=f"设置 '{key}'")
 
     # b. 从 TASK_CONFIGS 添加专属参数
     all_task_keys = set().union(*(d.keys() for d in TASK_CONFIGS.values()))
     task_only_keys = all_task_keys - set(COMMON_CONFIG.keys())
-    
+
     for key in sorted(list(task_only_keys)):
         # 简单的类型推断
         sample_val = TASK_CONFIGS[next(iter(TASK_CONFIGS))][key]
-        parser.add_argument(f"--{key}", type=type(sample_val), help=f"任务参数: {key}")
+        parser.add_argument(
+            f"--{key}", type=type(sample_val), help=f"任务参数: {key}")
 
     # --- 2. 应用默认值并最终解析 ---
     # a. 先应用通用默认值
     parser.set_defaults(**COMMON_CONFIG)
-    
+
     # b. 解析一次，拿到 opamp 类型，再应用任务专属默认值
     # parse_known_args 不会因为不完整的命令行而报错
     temp_args, _ = parser.parse_known_args()
     if temp_args.opamp in TASK_CONFIGS:
         parser.set_defaults(**TASK_CONFIGS[temp_args.opamp])
-        
+
     # c. 最后重新解析，命令行提供的值会覆盖所有默认值
     args = parser.parse_args()
-    
+
     return args
 
 
@@ -69,8 +77,11 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     """在源域数据上仅预训练模型的backbone"""
     print("\n--- [阶段一] 开始 Backbone 预训练 ---")
 
-    optimizer = torch.optim.AdamW(model.backbone.parameters(), lr=args.lr)
-    criterion = torch.nn.MSELoss()
+    optimizer = torch.optim.AdamW(
+        model.backbone.parameters(), lr=args.lr_pretrain)
+    scheduler = CosineAnnealingWarmRestarts(
+        optimizer, T_0=250, T_mult=1, eta_min=1e-6)
+    criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
 
     patience = args.patience_pretrain
@@ -99,14 +110,15 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
                 total_val_loss += loss.item()
 
         avg_val_loss = total_val_loss / len(val_loader)
+        scheduler.step()
         print(
-            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Val MSE: {avg_val_loss:.6f}")
+            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Val HuberLoss: {avg_val_loss:.6f}")
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             torch.save(model.state_dict(), save_path)
             patience_counter = patience  # 重置计数器
-            print(f"  - 预训练模型已保存，验证MSE提升至: {best_val_loss:.6f}")
+            print(f"  - 预训练模型已保存，验证HuberLoss提升至: {best_val_loss:.6f}")
         else:
             patience_counter -= 1
             if patience_counter == 0:
@@ -122,7 +134,19 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
     """使用复合损失对整个模型进行微调"""
     print("\n--- [阶段二] 开始整体模型微调 ---")
 
-    opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
+    # 为 backbone 和 head 设置不同的学习率
+    optimizer_params = [
+        {
+            "params": model.backbone.parameters(),
+            "lr": args.lr_finetune / 10  # 为 backbone 设置一个非常低的学习率
+        },
+        {
+            "params": model.hetero_head.parameters(),
+            "lr": args.lr_finetune  # 为新 head 设置一个相对较高的学习率
+        }
+    ]
+
+    opt = torch.optim.AdamW(optimizer_params, weight_decay=1e-4)
 
     dl_A, dl_B, dl_val = data_loaders['source'], data_loaders['target_train'], data_loaders['target_val']
     dl_A_iter = iter(dl_A)
@@ -219,7 +243,7 @@ def main():
         torch.cuda.manual_seed_all(args.seed)
     os.makedirs(args.save_path, exist_ok=True)
 
-    # 模型存储在../results下
+    # 模型存储在./results下
     pretrained_path = os.path.join(
         args.save_path, f'{args.opamp}_pretrained.pth')
     finetuned_path = os.path.join(
@@ -229,13 +253,19 @@ def main():
     X_src, y_src = data['source']
     input_dim = X_src.shape[1]
     output_dim = y_src.shape[1]
-    print(f"--- 动态检测到 {args.opamp} 的维度: Input={input_dim}, Output={output_dim} ---")
+    print(
+        f"--- 动态检测到 {args.opamp} 的维度: Input={input_dim}, Output={output_dim} ---")
+    X_src_train, y_src_train = data['source_train']
+    X_src_val, y_src_val = data['source_val']
     X_trg_tr, y_trg_tr = data['target_train']
     X_trg_val, y_trg_val = data['target_val']
 
-    pretrain_loader_A = make_loader(X_src, y_src, args.batch_a, shuffle=True)
+    # 预训练的训练集使用 source_train
+    pretrain_loader_A = make_loader(
+        X_src_train, y_src_train, args.batch_a, shuffle=True)
+    # 预训练的验证集使用 source_val (不再是 target_val)
     pretrain_loader_val = make_loader(
-        X_trg_val, y_trg_val, args.batch_b, shuffle=False)
+        X_src_val, y_src_val, args.batch_a, shuffle=False)
 
     # 注意：input_dim 和 output_dim 不在命令行参数里，所以我们从字典里取
     model_config = TASK_CONFIGS[args.opamp]
@@ -253,8 +283,7 @@ def main():
                         pretrain_loader_val, DEVICE, pretrained_path, args)
     else:
         print(f"--- [阶段一] 跳过预训练，加载已存在的模型: {pretrained_path} ---")
-
-    model.load_state_dict(torch.load(pretrained_path, map_location=DEVICE))
+        model.load_state_dict(torch.load(pretrained_path, map_location=DEVICE))
 
     finetune_loaders = {
         'source': make_loader(X_src, y_src, args.batch_a, shuffle=True, drop_last=True),
