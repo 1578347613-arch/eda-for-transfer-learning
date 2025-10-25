@@ -4,6 +4,7 @@ import torch
 import argparse
 import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
+from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 
 # --- 从项目模块中导入 ---
 from data_loader import get_data_and_scalers
@@ -71,7 +72,9 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     print("\n--- [阶段一] 开始 Backbone 预训练 ---")
 
     optimizer = torch.optim.AdamW(model.backbone.parameters(), lr=args.lr)
-    criterion = torch.nn.MSELoss()
+    scheduler = CosineAnnealingWarmRestarts(
+        optimizer, T_0=50, T_mult=1, eta_min=1e-6)
+    criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
 
     patience = args.patience_pretrain
@@ -100,14 +103,15 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
                 total_val_loss += loss.item()
 
         avg_val_loss = total_val_loss / len(val_loader)
+        scheduler.step()
         print(
-            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Val MSE: {avg_val_loss:.6f}")
+            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Val HuberLoss: {avg_val_loss:.6f}")
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             torch.save(model.state_dict(), save_path)
             patience_counter = patience  # 重置计数器
-            print(f"  - 预训练模型已保存，验证MSE提升至: {best_val_loss:.6f}")
+            print(f"  - 预训练模型已保存，验证Val HuberLoss提升至: {best_val_loss:.6f}")
         else:
             patience_counter -= 1
             if patience_counter == 0:
@@ -222,18 +226,26 @@ def main():
     finetuned_path = os.path.join(
         args.save_path, f'{args.opamp}_finetuned.pth')
 
-    data = get_data_and_scalers(opamp_type=args.opamp)
-    X_src, y_src = data['source']
+    data = get_data_and_scalers(
+        opamp_type=args.opamp,
+        source_val_split=0.2,
+        target_val_split=0.2
+    )
+    X_src_train, y_src_train = data['source_train']
+    X_src_val, y_src_val = data['source_val']
     X_trg_tr, y_trg_tr = data['target_train']
     X_trg_val, y_trg_val = data['target_val']
 
-    pretrain_loader_A = make_loader(X_src, y_src, args.batch_a, shuffle=True)
+    # 预训练的训练集使用 source_train
+    pretrain_loader_A = make_loader(
+        X_src_train, y_src_train, args.batch_a, shuffle=True)
+    # 预训练的验证集使用 source_val (不再是 target_val)
     pretrain_loader_val = make_loader(
-        X_trg_val, y_trg_val, args.batch_b, shuffle=False)
+        X_src_val, y_src_val, args.batch_b, shuffle=False)
 
     model = AlignHeteroMLP(
-        input_dim=X_src.shape[1],
-        output_dim=y_src.shape[1]
+        input_dim=X_src_train.shape[1],
+        output_dim=y_src_train.shape[1]
     ).to(DEVICE)
 
     if args.restart or not os.path.exists(pretrained_path):
@@ -242,11 +254,14 @@ def main():
                         pretrain_loader_val, DEVICE, pretrained_path, args)
     else:
         print(f"--- [阶段一] 跳过预训练，加载已存在的模型: {pretrained_path} ---")
+        model.load_state_dict(torch.load(pretrained_path, map_location=DEVICE))
 
-    model.load_state_dict(torch.load(pretrained_path, map_location=DEVICE))
+    # 对于CORAL损失，我们需要完整的源域数据分布
+    X_src_full = np.concatenate((X_src_train, X_src_val), axis=0)
+    y_src_full = np.concatenate((y_src_train, y_src_val), axis=0)
 
     finetune_loaders = {
-        'source': make_loader(X_src, y_src, args.batch_a, shuffle=True, drop_last=True),
+        'source_full': make_loader(X_src_full, y_src_full, args.batch_a, shuffle=True, drop_last=True),
         'target_train': make_loader(X_trg_tr, y_trg_tr, args.batch_b, shuffle=True),
         'target_val': make_loader(X_trg_val, y_trg_val, args.batch_b, shuffle=False)
     }
