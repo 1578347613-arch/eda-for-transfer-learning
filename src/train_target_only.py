@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from typing import Tuple
-import argparse # 导入 argparse
+import argparse
 
 import numpy as np
 import torch
@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from data_loader import get_data_and_scalers
 from loss_function import heteroscedastic_nll, batch_r2
 from models.align_hetero import AlignHeteroMLP
-from config import COMMON_CONFIG, TASK_CONFIGS # 导入配置
+from config import COMMON_CONFIG, TASK_CONFIGS
 
 # --- 路径定义 ---
 SRC_DIR = Path(__file__).resolve().parent
@@ -50,10 +50,11 @@ def run_epoch(model, loader, optimizer, alpha_r2, device, phase="train"):
 
 # --- 主训练函数 ---
 def main():
-    # 使用与 unified_train.py 类似的参数解析
     parser = argparse.ArgumentParser(description="Target-Only 训练脚本")
     parser.add_argument("--opamp", type=str, required=True, choices=TASK_CONFIGS.keys())
-    # 应用默认值
+    parser.add_argument("--restart", action="store_true",
+                        help="忽略已有 checkpoint，删除后从头训练")
+    # 先解析拿到 opamp，再灌入默认值
     temp_args, _ = parser.parse_known_args()
     parser.set_defaults(**COMMON_CONFIG)
     if temp_args.opamp in TASK_CONFIGS:
@@ -63,13 +64,13 @@ def main():
     device = torch.device(args.device)
     set_seed(args.seed)
 
-    # 映射超参数
-    epochs = args.epochs_finetune
-    patience = args.patience_finetune
-    lr = args.lr
-    batch_size = args.batch_b
-    alpha_r2 = args.alpha_r2
-    
+    # 超参映射（lr 优先取 lr_finetune，避免 args.lr 不存在）
+    epochs     = args.epochs_finetune
+    patience   = args.patience_finetune
+    lr         = getattr(args, "lr", None) or getattr(args, "lr_finetune", 1e-4)
+    batch_size = getattr(args, "batch_b", 128)
+    alpha_r2   = args.alpha_r2
+
     data = get_data_and_scalers(opamp_type=args.opamp)
     Xtr, Ytr = data["target_train"]
     Xva, Yva = data["target_val"]
@@ -80,31 +81,54 @@ def main():
         hidden_dim=args.hidden_dim, num_layers=args.num_layers, dropout_rate=args.dropout_rate
     ).to(device)
 
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
-    train_loader = make_loader(Xtr, Ytr, batch_size, shuffle=True, drop_last=True)
-    val_loader = make_loader(Xva, Yva, batch_size, shuffle=False, drop_last=False)
+    optimizer    = torch.optim.AdamW(model.parameters(), lr=lr)
+    train_loader = make_loader(Xtr, Ytr, batch_size, shuffle=True,  drop_last=True)
+    val_loader   = make_loader(Xva, Yva, batch_size, shuffle=False, drop_last=False)
 
-    best_val_nll = float("inf")
-    patience_counter = patience
-    
     ckpt_path = RESULTS_DIR / f"{args.opamp}_target_only.pth"
     print(f"[Target-Only] opamp: {args.opamp}, device: {device}, saving to: {ckpt_path.name}")
 
+    # ========== 默认跳过：存在 ckpt 且未指定 --restart 时直接退出 ==========
+    if ckpt_path.exists() and not args.restart:
+        try:
+            state = torch.load(ckpt_path, map_location=device)
+            state_dict = state.get("state_dict", state)
+            model.load_state_dict(state_dict)
+            va_nll0, _ = run_epoch(model, val_loader, None, alpha_r2, device, "val")
+            print(f"[Target-Only] 检测到已有 ckpt（{ckpt_path.name}）。按默认策略跳过训练并退出。"
+                  f"当前 Val NLL={va_nll0:.4f}")
+        except Exception as e:
+            print(f"[Target-Only] 发现 ckpt 但载入失败（{e}）。将从头训练。")
+        else:
+            return
+
+    # 若指定 --restart，删除旧 ckpt（若存在），然后从头训练
+    if args.restart and ckpt_path.exists():
+        try:
+            ckpt_path.unlink()
+            print("`--restart` 指定：已删除旧 checkpoint，将从头训练。")
+        except Exception as e:
+            print(f"删除旧 checkpoint 失败（忽略继续）：{e}")
+
+    best_val_nll = float("inf")
+    patience_counter = patience
+
     for ep in range(1, epochs + 1):
         tr_nll, tr_r2l = run_epoch(model, train_loader, optimizer, alpha_r2, device, "train")
-        va_nll, va_r2l = run_epoch(model, val_loader, None, alpha_r2, device, "val")
+        va_nll, va_r2l = run_epoch(model, val_loader, None,      alpha_r2, device, "val")
         print(f"[Target-Only][{ep:03d}/{epochs}] Train NLL={tr_nll:.4f} | Val NLL={va_nll:.4f}")
 
         if va_nll < best_val_nll:
             best_val_nll = va_nll
-            torch.save({'state_dict': model.state_dict()}, ckpt_path)
+            torch.save({"state_dict": model.state_dict()}, ckpt_path)
             patience_counter = patience
-            print(f"  -> New best model saved.")
+            print("  -> New best model saved.")
         else:
             patience_counter -= 1
             if patience_counter <= 0:
                 print(f"Early stopping at epoch {ep}.")
                 break
+
     print(f"\n[Target-Only] Finished. Best model at: {ckpt_path}")
 
 if __name__ == "__main__":
