@@ -16,6 +16,4 @@ build/
 # OS
 .DS_Store
 
-# Project artifacts
-results/
 
