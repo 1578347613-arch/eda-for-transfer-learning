@@ -1,6 +1,11 @@
-numpy==1.26.1
-pandas==2.1.1
-scikit-learn==1.3.2
-torch==2.1.0
-joblib==1.3.2
-matplotlib==3.8.0
+# requirements.txt
+
+# --- 核心库 ---
+numpy
+pandas
+scikit-learn
+torch
+joblib
+
+# --- 可选库 (仅用于 LR 范围测试) ---
+matplotlib
