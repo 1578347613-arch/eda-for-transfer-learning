@@ -51,10 +51,17 @@ def setup_args():
                         default=config.PATIENCE_FINETUNE, help="微调早停的耐心轮数")
 
     # --- 损失函数权重 ---
+    parser.add_argument("--lambda_nll", type=float,
+                        default=config.LAMBDA_NLL, help="NLL 损失的权重")
     parser.add_argument("--lambda_coral", type=float,
                         default=config.LAMBDA_CORAL, help="CORAL 损失的权重")
     parser.add_argument("--alpha_r2", type=float,
                         default=config.ALPHA_R2, help="R2 损失的权重")
+
+    parser.add_argument("--t0_pretrain", type=int,
+                        default=config.T0_PRETRAIN, help="预训练调度器的初始周期长度 (T_0)")
+    parser.add_argument("--t_mult_pretrain", type=int,
+                        default=config.T_MULT_PRETRAIN, help="预训练调度器的周期乘法因子 (T_mult)")
 
     args = parser.parse_args()
     return args
@@ -76,14 +83,34 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     optimizer = torch.optim.AdamW(
         model.backbone.parameters(), lr=args.lr_pretrain)
     scheduler = CosineAnnealingWarmRestarts(
-        optimizer, T_0=250, T_mult=1, eta_min=1e-6)
+        optimizer, T_0=args.t0_pretrain, T_mult=args.t_mult_pretrain, eta_min=1e-6)
     criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
 
     patience = args.patience_pretrain
     patience_counter = patience  # 使用一个计数器
 
+    T_0 = args.t0_pretrain
+    T_mult = args.t_mult_pretrain
+    current_T = T_0
+    # 使用列表存储，因为我们需要最后一个元素来计算下一个重启点
+    restart_epochs_list = [current_T]
+    max_cycles = int(np.log(args.epochs_pretrain / T_0) / np.log(T_mult)
+                     ) + 2 if T_mult > 1 else args.epochs_pretrain // T_0
+    for _ in range(max_cycles):
+        current_T *= T_mult
+        next_restart = restart_epochs_list[-1] + current_T
+        if next_restart <= args.epochs_pretrain:
+            restart_epochs_list.append(next_restart)
+        else:
+            break
+
+    # 转换为集合以便在循环中快速查找
+    restart_epochs = set(restart_epochs_list)
+    print(f"优化器将在以下 epoch 结束后重置: {sorted(restart_epochs_list)}")
+
     for epoch in range(args.epochs_pretrain):
+        # ... (循环内部的代码保持不变)
         model.train()
         total_train_loss = 0
         for inputs, labels in train_loader:
@@ -96,6 +123,8 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
             optimizer.step()
             total_train_loss += loss.item()
 
+        avg_train_loss = total_train_loss / len(train_loader)
+
         model.eval()
         total_val_loss = 0
         with torch.no_grad():
@@ -107,19 +136,27 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
 
         avg_val_loss = total_val_loss / len(val_loader)
         scheduler.step()
+
+        current_lr = optimizer.param_groups[0]['lr']
         print(
-            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Val HuberLoss: {avg_val_loss:.6f}")
+            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}, LR: {current_lr:.2e}")
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             torch.save(model.state_dict(), save_path)
-            patience_counter = patience  # 重置计数器
-            print(f"  - 预训练模型已保存，验证Val HuberLoss提升至: {best_val_loss:.6f}")
+            patience_counter = patience
+            print(f"  - 预训练模型已保存，验证损失提升至: {best_val_loss:.6f}")
         else:
             patience_counter -= 1
             if patience_counter == 0:
                 print(f"验证损失连续 {patience} 轮未改善，触发早停。")
                 break
+
+        if (epoch + 1) in restart_epochs and (epoch + 1) < args.epochs_pretrain:
+            print(f"--- Epoch {epoch+1} 是一个重启点。重置 AdamW 优化器状态！ ---")
+            optimizer = torch.optim.AdamW(
+                model.backbone.parameters(), lr=args.lr_pretrain)
+            scheduler.optimizer = optimizer
 
     print(f"--- [阶段一] 预训练完成，最佳模型已保存至 {save_path} ---")
 
@@ -154,6 +191,7 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
 
     for epoch in range(args.epochs_finetune):
         model.train()
+        total_train_loss = 0.0
         for xb_B, yb_B in dl_B:
             xb_B, yb_B = xb_B.to(device), yb_B.to(device)
             try:
@@ -173,12 +211,16 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
             r2_loss = (
                 1.0 - batch_r2(yb_B, mu_B).clamp(min=-1.0, max=1.0)).mean()
             coral = coral_loss(feat_A, feat_B)
-            loss = nll + args.alpha_r2 * r2_loss + args.lambda_coral * coral
+            loss = args.lambda_nll * nll + args.alpha_r2 * \
+                r2_loss + args.lambda_coral * coral
+            total_train_loss += loss.item()
 
             opt.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
+
+        avg_train_loss = total_train_loss / len(dl_B)
 
         model.eval()
         val_loss = 0.0
@@ -190,7 +232,7 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
         val_loss /= len(dl_val)
 
         print(
-            f"Fine-tune Epoch [{epoch+1}/{args.epochs_finetune}], Val NLL: {val_loss:.4f}")
+            f"Fine-tune Epoch [{epoch+1}/{args.epochs_finetune}], Train Loss: {avg_train_loss:.4f}, Val NLL: {val_loss:.4f}")
 
         if val_loss < best_val:
             print(f"  - 微调验证损失改善 ({best_val:.4f} -> {val_loss:.4f})。保存模型...")

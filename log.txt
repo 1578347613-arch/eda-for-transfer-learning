@@ -1,3 +1,6 @@
+--------------------------------------------------------------------------
+lr_pretrain=3e-3 lr_finetune=1e-4
+
 Fine-tune Epoch [17252/100000], Val NLL: -1.9604
 验证损失连续 1000 轮未改善，触发早停。
 --- [阶段二] 微调完成，最佳模型已保存至 ../results\5t_opamp_finetuned.pth ---
@@ -19,26 +22,109 @@ cmrr            MSE=2.305e+05  MAE=115.8  R2=0.8075
 
 Avg  (all dims)   MSE=1.778e+10  MAE=5.115e+04  R2=0.9501
 
+-----------------------------------------------------------------------------------
+更激进的lr_pretrain=3e-2,lr_finetune=1e-4
 
-
-
-Fine-tune Epoch [9497/100000], Val NLL: -0.9908
+Pre-train Epoch [176/1000], Val HuberLoss: 0.021193
+  - 预训练模型已保存，验证Val HuberLoss提升至: 0.021193
+Fine-tune Epoch [17582/100000], Val NLL: -1.5677
 验证损失连续 1000 轮未改善，触发早停。
---- [阶段二] 微调完成，最佳模型已保存至 ../results\two_stage_opamp_finetuned.pth ---
+--- [阶段二] 微调完成，最佳模型已保存至 ../results\5t_opamp_finetuned.pth ---
 
 训练流程全部完成。
 
 --- [评估流程启动] ---
-为评估加载最佳模型权重: ../results\two_stage_opamp_finetuned.pth
+为评估加载最佳模型权重: ../results\5t_opamp_finetuned.pth
 在验证集上生成预测...
 
 --- [评估阶段] 开始计算指标 ---
 
 === 目标域验证集指标（物理单位）===
-slewrate_pos    MSE=1.215e+14  MAE=8.195e+06  R2=0.7168
-dc_gain         MSE=2.295e+07  MAE=1493  R2=0.4108
-ugf             MSE=9.434e+13  MAE=6.353e+06  R2=0.7867
-phase_margin    MSE=160.9  MAE=9.543  R2=0.8598
-cmrr            MSE=8.455e+11  MAE=9.145e+04  R2=0.0239
+slewrate_pos    MSE=2.34e+10  MAE=1.044e+05  R2=0.9941
+dc_gain         MSE=132.2  MAE=9.047  R2=0.9222
+ugf             MSE=1.292e+11  MAE=2.502e+05  R2=0.9912
+phase_margin    MSE=0.2276  MAE=0.3673  R2=0.9775
+cmrr            MSE=4.529e+05  MAE=194  R2=0.6219
 
-Avg  (all dims)   MSE=4.333e+13  MAE=2.928e+06  R2=0.5596
+Avg  (all dims)   MSE=3.052e+10  MAE=7.096e+04  R2=0.9014
+
+
+··········以下为使用lr_finder找到微调阶段的推荐头学习率7.58e-3·············(不可复现)
+
+--- [评估流程启动] ---
+为评估加载最佳模型权重: ../results\5t_opamp_finetuned.pth
+在验证集上生成预测...
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.365e+10  MAE=1.025e+05  R2=0.9940
+dc_gain         MSE=46.6  MAE=4.01  R2=0.9726
+ugf             MSE=1.02e+11  MAE=2.136e+05  R2=0.9930
+phase_margin    MSE=0.1804  MAE=0.3078  R2=0.9821
+cmrr            MSE=1.23e+05  MAE=111.7  R2=0.8973
+
+Avg  (all dims)   MSE=2.513e+10  MAE=6.325e+04  R2=0.9678
+
+---------------------------------------------------------------------------------------
+T0=200 使用LR_finder找到的推荐学习率 ：lr_pretrain=2e-3 lr_finetune=7.85e-3
+
+Pre-train Epoch [176/1000], Val HuberLoss: 0.018
+  - 预训练模型已保存，验证Val HuberLoss提升至: 0.018
+Fine-tune Epoch [3613/100000], Train Loss: -1.9114, Val NLL: -1.9437
+验证损失连续 1000 轮未改善，触发早停。
+
+slewrate_pos    MSE=2.033e+10  MAE=8.671e+04  R2=0.9949
+dc_gain         MSE=31.14  MAE=3.159  R2=0.9817
+ugf             MSE=9.055e+10  MAE=1.873e+05  R2=0.9938
+phase_margin    MSE=0.143  MAE=0.2796  R2=0.9858
+cmrr            MSE=2.452e+05  MAE=111.4  R2=0.7953
+
+Avg  (all dims)   MSE=2.218e+10  MAE=5.483e+04  R2=0.9503
+
+------------------------------------------------------------------------------------------
+T0=200 使用LR_finder找到的推荐学习率 ：lr_pretrain=3e-3 lr_finetune=7.85e-3
+pretrain时每次热重启同时重启adamw优化器
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.148e+10  MAE=1.018e+05  R2=0.9921
+dc_gain         MSE=37.78  MAE=3.404  R2=0.9778
+ugf             MSE=9.843e+10  MAE=2.009e+05  R2=0.9933
+phase_margin    MSE=0.1357  MAE=0.2513  R2=0.9866
+cmrr            MSE=2.957e+05  MAE=124.2  R2=0.7531
+
+Avg  (all dims)   MSE=2.598e+10  MAE=6.056e+04  R2=0.9406
+
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.349e+10  MAE=8.836e+04  R2=0.9941
+dc_gain         MSE=34.73  MAE=3.276  R2=0.9796
+ugf             MSE=9.938e+10  MAE=1.906e+05  R2=0.9932
+phase_margin    MSE=0.1488  MAE=0.2553  R2=0.9853
+cmrr            MSE=2.135e+05  MAE=118.6  R2=0.8218
+
+Avg  (all dims)   MSE=2.457e+10  MAE=5.582e+04  R2=0.9548
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.426e+10  MAE=8.662e+04  R2=0.9939
+dc_gain         MSE=35.23  MAE=3.37  R2=0.9793
+ugf             MSE=7.443e+10  MAE=1.76e+05  R2=0.9949
+phase_margin    MSE=0.1479  MAE=0.2784  R2=0.9854
+cmrr            MSE=1.939e+05  MAE=122.2  R2=0.8381
+
+Avg  (all dims)   MSE=1.974e+10  MAE=5.254e+04  R2=0.9583
+
+----------------------------------------------------------------------------
+batch_B=64 lr_finetune=3.8e-3
+lamda_coral=0.1
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.296e+10  MAE=8.253e+04  R2=0.9942
+dc_gain         MSE=40.43  MAE=3.483  R2=0.9762
+ugf             MSE=7.37e+10  MAE=1.725e+05  R2=0.9950
+phase_margin    MSE=0.1438  MAE=0.2605  R2=0.9858
+cmrr            MSE=1.839e+05  MAE=107.4  R2=0.8464
+
+Avg  (all dims)   MSE=1.933e+10  MAE=5.102e+04  R2=0.9595
+
+

@@ -63,3 +63,10 @@ pip install -r requirements.txt
 - train.py:预训练阶段采用新的损失函数：criterion = torch.nn.HuberLoss(delta=1)
 - train.py:微调阶段backbone和head设置不同的学习率
 - train.py:删除了预训练阶段的早停机制
+
+# day2 主要修改
+- 新建lr_finder.py，通过学习率范围检测，找到最佳学习率。（大致拟合的曲线变化最大的点）
+- 借助lr_finder，确定lr_pretrain=3e-3,lr_finetune=7.6e-3
+- 尝试修改batch_B为64，根据学习率和batchsize的线性缩放规则，lr_finetune=3.8e-3,经过lr_finder检验这种规则的合理性，√
+- 目前cmrr R2稳定在0.8以上
+- day3计划调整batch_A,调整微调阶段的损失函数各部分权重
