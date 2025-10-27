@@ -80,9 +80,9 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     optimizer = torch.optim.AdamW(
         model.backbone.parameters(), lr=args.lr_pretrain)
     scheduler = CosineAnnealingWarmRestarts(
-        optimizer, T_0=200, T_mult=1, eta_min=1e-6)
-    T_0 = 200
-    T_mult = 1
+        optimizer, T_0=args.T_0, T_mult=args.mult, eta_min=1e-6)
+    T_0 = T_0
+    T_mult = T_mult
     current_T = T_0
     criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
@@ -204,7 +204,7 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
             r2_loss = (
                 1.0 - batch_r2(yb_B, mu_B).clamp(min=-1.0, max=1.0)).mean()
             coral = coral_loss(feat_A, feat_B)
-            loss = nll + args.alpha_r2 * r2_loss + args.lambda_coral * coral
+            loss = args.lambda_nll*nll + args.alpha_r2 * r2_loss + args.lambda_coral * coral
 
             opt.zero_grad()
             loss.backward()

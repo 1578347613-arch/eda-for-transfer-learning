@@ -23,20 +23,22 @@ TASK_CONFIGS = {
     '5t_opamp': {
         # 训练设置
         'epochs_pretrain': 1000,
-        'patience_pretrain': 200,
+        'patience_pretrain': 'epochs_pretrain',  # 热重启，无早停
         'lr_pretrain': 3e-3,
+        'T_0': 200,
+        'T_mult': 1,
         'epochs_finetune': 100000,
         'patience_finetune': 1000,
         'lr_finetune': 3.8e-3,
         'batch_a': 128,
         'batch_b': 64,
-        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
         # 模型设置
         'hidden_dim': 256,
         'num_layers': 4,
         'dropout_rate': 0.2,
 
         # 损失函数权重
+        'lambda_null': 1,
         'lambda_coral': 0,
         'alpha_r2': 0,
         # 反向模型
