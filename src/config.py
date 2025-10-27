@@ -37,8 +37,8 @@ TASK_CONFIGS = {
         'dropout_rate': 0.2,
 
         # 损失函数权重
-        'lambda_coral': 0.05,
-        'alpha_r2': 1.0,
+        'lambda_coral': 0,
+        'alpha_r2': 0,
         # 反向模型
         'mdn_components': 20,
         'mdn_hidden_dim': 128,
