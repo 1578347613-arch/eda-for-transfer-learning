@@ -14,6 +14,89 @@ EXPERIMENTS = [
     {
         "name": "baseline",
         "lambda_nll": 1.0,
+        "lambda_coral": 0.0,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.01,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 1.0,
+        "alpha_r2": 0,
+    },
+
+
+
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.0,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.01,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 1.0,
+        "alpha_r2": 0,
+    },
+
+
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.0,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.01,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0,
+    },
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 1.0,
+        "alpha_r2": 0,
+    },
+
+
+
+
+
+
+    {
+        "name": "newbaseline",
+        "lambda_nll": 1.0,
         "lambda_coral": 0.1,
         "alpha_r2": 0.1,
     },
