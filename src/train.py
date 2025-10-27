@@ -70,7 +70,7 @@ def make_loader(x, y, bs, shuffle=True, drop_last=False):
 # ========== 2. 阶段一：Backbone 预训练 ==========
 
 
-def run_pretraining(model, train_loader, val_loader, device, save_path, args, scheduler_config):
+def run_pretraining(model, train_loader, val_loader, device, args, scheduler_config):
     """在源域数据上仅预训练模型的backbone"""
     print(
         f"\n--- [子运行] 使用配置: T_0={scheduler_config['T_0']}, T_mult={scheduler_config['T_mult']} ---")
@@ -92,12 +92,12 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args, sc
     current_T = T_0
     # 使用列表存储，因为我们需要最后一个元素来计算下一个重启点
     restart_epochs_list = [current_T]
-    max_cycles = int(np.log(scheduler_config['epoch_pretrain'] / T_0) / np.log(T_mult)
-                     ) + 2 if T_mult > 1 else scheduler_config['epoch_pretrain'] // T_0
+    max_cycles = int(np.log(scheduler_config['epochs_pretrain'] / T_0) / np.log(T_mult)
+                     ) + 2 if T_mult > 1 else scheduler_config['epochs_pretrain'] // T_0
     for _ in range(max_cycles):
         current_T *= T_mult
         next_restart = restart_epochs_list[-1] + current_T
-        if next_restart <= scheduler_config['epoch_pretrain']:
+        if next_restart <= scheduler_config['epochs_pretrain']:
             restart_epochs_list.append(next_restart)
         else:
             break
@@ -106,7 +106,7 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args, sc
     restart_epochs = set(restart_epochs_list)
     print(f"优化器将在以下 epoch 结束后重置: {sorted(restart_epochs_list)}")
 
-    for epoch in range(scheduler_config['epoch_pretrain']):
+    for epoch in range(scheduler_config['epochs_pretrain']):
         # ... (循环内部的代码保持不变)
         model.train()
         total_train_loss = 0
@@ -136,25 +136,14 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args, sc
 
         current_lr = optimizer.param_groups[0]['lr']
         print(
-            f"Pre-train Epoch [{epoch+1}/{scheduler_config['epoch_pretrain']}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}, LR: {current_lr:.2e}")
+            f"Pre-train Epoch [{epoch+1}/{scheduler_config['epochs_pretrain']}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}, LR: {current_lr:.2e}")
 
-        if avg_val_loss < best_val_loss_this_run:
-            best_val_loss_this_run = avg_val_loss
-            best_state_dict_this_run = copy.deepcopy(model.state_dict())
-            print(f"    - 新的本次运行最佳损失: {best_val_loss_this_run:.6f}")
-        else:
-            patience_counter -= 1
-            if patience_counter == 0:
-                print(f"验证损失连续 {patience} 轮未改善，触发早停。")
-                break
-
-        if (epoch + 1) in restart_epochs and (epoch + 1) < scheduler_config['epoch_pretrain']:
+        if (epoch + 1) in restart_epochs and (epoch + 1) < scheduler_config['epochs_pretrain']:
             print(f"--- Epoch {epoch+1} 是一个重启点。重置 AdamW 优化器状态！ ---")
             optimizer = torch.optim.AdamW(
                 model.backbone.parameters(), lr=args.lr_pretrain)
             scheduler.optimizer = optimizer
 
-    print(f"--- [阶段一] 预训练完成，最佳模型已保存至 {save_path} ---")
     return best_val_loss_this_run, best_state_dict_this_run
 
 
@@ -299,6 +288,7 @@ def main():
         X_src_val, y_src_val, args.batch_b, shuffle=False)
 
     global_best_val_loss = float('inf')
+    best_model_state_dict_overall = None
 
     if args.restart or not os.path.exists(pretrained_path):
         print(f"--- [元优化流程启动] 将执行 {config.RESTART_PRETRAIN} 次独立预训练 ---")
@@ -311,13 +301,13 @@ def main():
             ).to(DEVICE)
 
             if i < len(config.PRETRAIN_SCHEDULER_CONFIGS):
-                scheduler_config = config.PRETRAIN_SCHEDULER_CONFIGS[i]
+                current_scheduler_config = config.PRETRAIN_SCHEDULER_CONFIGS[i]
             else:
                 # 如果配置列表不够长，则复用最后一个
-                scheduler_config = config.PRETRAIN_SCHEDULER_CONFIGS[-1]
+                current_scheduler_config = config.PRETRAIN_SCHEDULER_CONFIGS[-1]
 
             best_loss_this_run, best_state_dict_this_run = run_pretraining(
-                model, pretrain_loader_A, pretrain_loader_val, DEVICE, args, scheduler_config
+                model, pretrain_loader_A, pretrain_loader_val, DEVICE, args, current_scheduler_config
             )
             print(f"--- 人工重启 {i+1} 完成，本次最佳损失: {best_loss_this_run:.6f} ---")
 
@@ -328,6 +318,14 @@ def main():
                 torch.save(best_state_dict_this_run, pretrained_path)
             else:
                 print(f"  -- 本次结果未超越全局最佳 ({global_best_val_loss:.6f})，不保存。")
+
+        if best_model_state_dict_overall:
+            print(
+                f"\n所有重启完成，正在保存全局最佳模型 (损失: {global_best_val_loss:.6f}) 到 {pretrained_path}")
+            torch.save(best_model_state_dict_overall, pretrained_path)
+        else:
+            print("\n所有重启完成，但未能找到任何有效的模型进行保存。")
+
     else:
         print(f"--- [阶段一] 跳过预训练，加载已存在的模型: {pretrained_path} ---")
         model = AlignHeteroMLP(
