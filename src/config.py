@@ -22,8 +22,8 @@ LOG_TRANSFORMED_COLS = [
 TASK_CONFIGS = {
     '5t_opamp': {
         # 训练设置
-        'epochs_pretrain': 1000,
-        'patience_pretrain': 1000,
+        'epochs_pretrain': 250,
+        'patience_pretrain': 250,
         'lr_pretrain': 3e-3,
         'epochs_finetune': 100000,
         'patience_finetune': 1000,
@@ -34,7 +34,7 @@ TASK_CONFIGS = {
         # 模型设置
         'hidden_dim': 256,
         'num_layers': 4,
-        'dropout_rate': 0.1,
+        'dropout_rate': 0.2,
 
         # 损失函数权重
         'lambda_coral': 0.05,

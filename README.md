@@ -100,6 +100,10 @@ python generate_submission.py
     # 仅训练 5t_opamp 的所有模型
     python run_training.py --opamp 5t_opamp
 
+    # 从头开始训练（默认是所有模型，从pretrain到finetune到targetonly再到mdn）
+    python run_training.py --opamp 5t_opamp --restart
+    # 注意，如果你只是想要从头训练一个模型或者多个，那你只需要在results文件夹中把上一次留存的对应的ckpt删除，runtraining脚本检测不到ckpt，就会自动重新训练
+
     # 同时训练两种电路
     python run_training.py --opamp 5t_opamp 2stage_opamp
     ```
@@ -124,7 +128,7 @@ python generate_submission.py
     # 训练迁移模型，并设置 epoch 为 50
     python run_training.py --mode align_hetero --epochs 50
     ```
-
+    
 ### 2. 生成提交文件 (`generate_submission.py`)
 
 该脚本负责利用训练好的模型进行推理，并生成符合比赛要求的四个提交文件。

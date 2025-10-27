@@ -290,8 +290,11 @@ def main():
         'target_train': make_loader(X_trg_tr, y_trg_tr, args.batch_b, shuffle=True),
         'target_val': make_loader(X_trg_val, y_trg_val, args.batch_b, shuffle=False)
     }
-    run_finetuning(model, finetune_loaders, DEVICE, finetuned_path, args)
-
+    if os.path.exists(finetuned_path) and not args.restart:
+        print(f"--- [阶段二] 检测到已有微调模型: {finetuned_path}，跳过微调并直接载入该权重 ---")
+        model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
+    else:
+        run_finetuning(model, finetune_loaders, DEVICE, finetuned_path, args)
     print("\n训练流程全部完成。")
 
     # (可选)测试
