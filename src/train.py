@@ -301,10 +301,10 @@ def main():
     global_best_val_loss = float('inf')
 
     if args.restart or not os.path.exists(pretrained_path):
-        print(f"--- [元优化流程启动] 将执行 {config.NUM_PRETRAIN_RESTARTS} 次独立预训练 ---")
+        print(f"--- [元优化流程启动] 将执行 {config.RESTART_PRETRAIN} 次独立预训练 ---")
 
-        for i in range(config.NUM_PRETRAIN_RESTARTS):
-            print(f"\n{'='*30} 人工重启 {i+1}/{config.NUM_PRETRAIN_RESTARTS} {'='*30}")
+        for i in range(config.RESTART_PRETRAIN):
+            print(f"\n{'='*30} 人工重启 {i+1}/{config.RESTART_PRETRAIN} {'='*30}")
             model = AlignHeteroMLP(
                 input_dim=X_src_train.shape[1],
                 output_dim=y_src_train.shape[1]
