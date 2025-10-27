@@ -23,7 +23,7 @@ TASK_CONFIGS = {
     '5t_opamp': {
         # 训练设置
         'epochs_pretrain': 1000,
-        'patience_pretrain': 'epochs_pretrain',  # 热重启，无早停
+        'patience_pretrain': 1000,  # 热重启，无早停
         'lr_pretrain': 3e-3,
         'T_0': 200,
         'T_mult': 1,
@@ -37,8 +37,10 @@ TASK_CONFIGS = {
         'num_layers': 4,
         'dropout_rate': 0.2,
 
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],  # 集成两个模型
+
         # 损失函数权重
-        'lambda_null': 1,
+        'lambda_nll': 1,
         'lambda_coral': 0,
         'alpha_r2': 0,
         # 反向模型

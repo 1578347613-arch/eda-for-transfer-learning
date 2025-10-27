@@ -80,9 +80,9 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     optimizer = torch.optim.AdamW(
         model.backbone.parameters(), lr=args.lr_pretrain)
     scheduler = CosineAnnealingWarmRestarts(
-        optimizer, T_0=args.T_0, T_mult=args.mult, eta_min=1e-6)
-    T_0 = T_0
-    T_mult = T_mult
+        optimizer, T_0=args.T_0, T_mult=args.T_mult, eta_min=1e-6)
+    T_0 = args.T_0
+    T_mult = args.T_mult
     current_T = T_0
     criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
