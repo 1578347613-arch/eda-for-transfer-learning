@@ -68,26 +68,48 @@ def setup_args():
     args = parser.parse_args()
     return args
 
+# <<< 核心修改：新增一个用于解析结果的函数 >>>
+
+
+def parse_evaluation_results(output_string: str) -> str:
+    """
+    从 train.py 的完整标准输出中，只提取最后的评估指标部分。
+    """
+    # 定义评估结果块的起始标志
+    start_marker = "=== 目标域验证集指标（物理单位）==="
+
+    try:
+        # 找到起始标志在输出字符串中的位置
+        start_index = output_string.rfind(start_marker)
+
+        if start_index == -1:
+            # 如果没有找到标志，说明评估可能未执行或失败
+            return "评估结果未在输出中找到。\n"
+
+        # 从起始标志开始，提取所有剩余的文本
+        return output_string[start_index:]
+
+    except Exception as e:
+        return f"解析输出时发生错误: {e}\n"
+
 
 def main():
     """主执行函数"""
     cli_args = setup_args()
 
-    # 1. 检查预训练模型是否存在，这是脚本运行的前提
+    # 1. 检查预训练模型是否存在
     pretrained_model_path = os.path.join(
         cli_args.results_dir, f"{cli_args.opamp}_pretrained.pth")
     if not os.path.exists(pretrained_model_path):
-        print(f"❌ 错误：预训练模型未找到！")
-        print(f"   脚本期望在以下路径找到模型: {pretrained_model_path}")
-        print("   请先完成预训练，或检查路径。")
+        print(f"❌ 错误：预训练模型未找到！路径: {pretrained_model_path}")
         return
 
     # 2. 创建一个带时间戳的日志文件
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = os.path.join(
-        cli_args.results_dir, f"finetune_log_{timestamp}.txt")
+        cli_args.results_dir, f"finetune_summary_{timestamp}.txt")
     print(f"预训练模型已找到: {pretrained_model_path}")
-    print(f"所有微调实验的输出将被记录到: {log_filename}")
+    print(f"所有实验的总结将被记录到: {log_filename}")
 
     # 3. 依次执行每一个实验
     for i, exp in enumerate(EXPERIMENTS):
@@ -95,54 +117,51 @@ def main():
         header = f"\n\n{'='*35} EXPERIMENT {i+1}/{len(EXPERIMENTS)}: {exp_name} {'='*35}\n"
         params_info = f"Parameters: lambda_nll={exp['lambda_nll']}, lambda_coral={exp['lambda_coral']}, alpha_r2={exp['alpha_r2']}\n"
 
-        print(header + params_info)
+        print(header + params_info.strip())
+        print("正在运行，请稍候...")
 
-        # 将实验标题写入日志文件
-        with open(log_filename, "a", encoding="utf-8") as f:
-            f.write(header)
-            f.write(params_info)
-
-        # 4. 构建要执行的 train.py 命令
-        # 它会自动找到并使用已有的预训练模型
+        # 构建命令 (与之前相同)
         command = [
             "python", "train.py",
             "--opamp", cli_args.opamp,
-            "--save_path", cli_args.results_dir,  # 让 train.py 在默认路径下工作
+            "--save_path", cli_args.results_dir,
             "--lambda_nll", str(exp['lambda_nll']),
             "--lambda_coral", str(exp['lambda_coral']),
             "--alpha_r2", str(exp['alpha_r2']),
             "--evaluate"
         ]
 
-        # 5. 执行命令并将所有输出追加到日志文件
+        # 执行命令并捕获输出
         try:
-            # 使用 subprocess.run，等待命令完成后一次性获取所有输出
             result = subprocess.run(
                 command,
                 capture_output=True,
                 text=True,
-                check=True,  # 如果失败则抛出异常
+                check=True,
                 encoding='utf-8'
             )
 
-            # 将完整的输出写入日志文件
-            with open(log_filename, "a", encoding="utf-8") as f:
-                f.write(result.stdout)
-                if result.stderr:
-                    f.write("\n--- STDERR ---\n")
-                    f.write(result.stderr)
+            # <<< 核心修改：只解析和记录评估结果 >>>
+            evaluation_summary = parse_evaluation_results(result.stdout)
 
-            print(f"✅ 实验 {exp_name} 完成！日志已记录。")
+            # 将实验标题和解析后的结果写入日志文件
+            with open(log_filename, "a", encoding="utf-8") as f:
+                f.write(header)
+                f.write(params_info)
+                f.write(evaluation_summary)
+
+            print(f"✅ 实验 {exp_name} 完成！结果已记录。")
 
         except subprocess.CalledProcessError as e:
-            # 如果命令执行失败，将错误信息也记录下来
-            failure_msg = f"❌ 实验 {exp_name} 执行失败！\n--- STDOUT ---\n{e.stdout}\n--- STDERR ---\n{e.stderr}"
+            failure_msg = f"❌ 实验 {exp_name} 执行失败！\n--- STDERR ---\n{e.stderr}"
             print(failure_msg)
             with open(log_filename, "a", encoding="utf-8") as f:
+                f.write(header)
+                f.write(params_info)
                 f.write(failure_msg)
-            continue  # 继续下一个实验
+            continue
 
-    print(f"\n🎉 所有微调实验已执行完毕！完整日志已保存在: {log_filename}")
+    print(f"\n🎉 所有微调实验已执行完毕！总结报告已保存在: {log_filename}")
 
 
 if __name__ == "__main__":
