@@ -39,6 +39,63 @@ EXPERIMENTS = [
         "alpha_r2": 0.0,
     },
 
+
+    # --- 阶段一：建立基准 (关闭所有辅助损失) ---
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.0,
+        "alpha_r2": 0.0,
+    },
+
+    # --- 阶段二：探索 CORAL 损失的权重 (对数尺度搜索) ---
+    {
+        "name": "coral_search_low",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.01,
+        "alpha_r2": 0.0,
+    },
+    {
+        "name": "coral_search_medium",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.0,
+    },
+    {
+        "name": "coral_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 1.0,
+        "alpha_r2": 0.0,
+    },
+
+
+    # --- 阶段一：建立基准 (关闭所有辅助损失) ---
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.0,
+        "alpha_r2": 0.0,
+    },
+
+    # --- 阶段二：探索 CORAL 损失的权重 (对数尺度搜索) ---
+    {
+        "name": "coral_search_low",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.01,
+        "alpha_r2": 0.0,
+    },
+    {
+        "name": "coral_search_medium",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.0,
+    },
+    {
+        "name": "coral_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 1.0,
+        "alpha_r2": 0.0,
+    },
     # --- 阶段三：在最佳 CORAL 基础上，引入 R2 正则化 ---
 
 
