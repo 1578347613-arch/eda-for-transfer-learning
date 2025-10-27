@@ -31,5 +31,5 @@ DROPOUT_RATE = 0.2
 
 # 权重 / 优化设置
 LAMBDA_NLL = 1.0  # NLL 损失的权重 (主任务)
-LAMBDA_CORAL = 0.2
-ALPHA_R2 = 1.0
+LAMBDA_CORAL = 0
+ALPHA_R2 = 0
