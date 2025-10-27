@@ -80,12 +80,30 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
     optimizer = torch.optim.AdamW(
         model.backbone.parameters(), lr=args.lr_pretrain)
     scheduler = CosineAnnealingWarmRestarts(
-        optimizer, T_0=250, T_mult=1, eta_min=1e-6)
+        optimizer, T_0=200, T_mult=1, eta_min=1e-6)
+    T_0 = 200
+    T_mult = 1
+    current_T = T_0
     criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
 
     patience = args.patience_pretrain
     patience_counter = patience  # 使用一个计数器
+
+    restart_epochs_list = [current_T]
+    max_cycles = int(np.log(args.epochs_pretrain / T_0) / np.log(T_mult)
+                     ) + 2 if T_mult > 1 else args.epochs_pretrain // T_0
+    for _ in range(max_cycles):
+        current_T *= T_mult
+        next_restart = restart_epochs_list[-1] + current_T
+        if next_restart <= args.epochs_pretrain:
+            restart_epochs_list.append(next_restart)
+        else:
+            break
+
+    # 转换为集合以便在循环中快速查找
+    restart_epochs = set(restart_epochs_list)
+    print(f"优化器将在以下 epoch 结束后重置: {sorted(restart_epochs_list)}")
 
     for epoch in range(args.epochs_pretrain):
         model.train()
@@ -111,8 +129,9 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
 
         avg_val_loss = total_val_loss / len(val_loader)
         scheduler.step()
+        current_lr = optimizer.param_groups[0]['lr']
         print(
-            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Val HuberLoss: {avg_val_loss:.6f}")
+            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}, LR: {current_lr:.2e}")
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
@@ -124,6 +143,12 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
             if patience_counter == 0:
                 print(f"验证损失连续 {patience} 轮未改善，触发早停。")
                 break
+
+        if (epoch + 1) in restart_epochs and (epoch + 1) < args.epochs_pretrain:
+            print(f"--- Epoch {epoch+1} 是一个重启点。重置 AdamW 优化器状态！ ---")
+            optimizer = torch.optim.AdamW(
+                model.backbone.parameters(), lr=args.lr_pretrain)
+            scheduler.optimizer = optimizer
 
     print(f"--- [阶段一] 预训练完成，最佳模型已保存至 {save_path} ---")
 

@@ -22,12 +22,12 @@ LOG_TRANSFORMED_COLS = [
 TASK_CONFIGS = {
     '5t_opamp': {
         # 训练设置
-        'epochs_pretrain': 250,
-        'patience_pretrain': 250,
+        'epochs_pretrain': 1000,
+        'patience_pretrain': 200,
         'lr_pretrain': 3e-3,
         'epochs_finetune': 100000,
         'patience_finetune': 1000,
-        'lr_finetune': 1e-4,
+        'lr_finetune': 3.8e-3,
         'batch_a': 128,
         'batch_b': 128,
         'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
