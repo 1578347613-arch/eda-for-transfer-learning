@@ -14,7 +14,7 @@ LOG_TRANSFORMED_COLS = [
 EPOCHS_PRETRAIN = 1000
 PATIENCE_PRETRAIN = EPOCHS_PRETRAIN  # 无早停
 LEARNING_RATE_PRETRAIN = 3e-3
-T0_PRETRAIN = 200      # 第一个重启周期的长度 (epoch)
+T0_PRETRAIN = 125      # 第一个重启周期的长度 (epoch)
 T_MULT_PRETRAIN = 1    # 每个重启周期后，周期长度的乘法因子
 
 

@@ -38,18 +38,6 @@ EXPERIMENTS = [
         "lambda_coral": 1.0,
         "alpha_r2": 0.0,
     },
-    {
-        "name": "coral_search_high",
-        "lambda_nll": 1.0,
-        "lambda_coral": 10.0,
-        "alpha_r2": 0.0,
-    },
-    {
-        "name": "coral_search_high",
-        "lambda_nll": 1.0,
-        "lambda_coral": 100.0,
-        "alpha_r2": 0.0,
-    },
 
     # --- 阶段三：在最佳 CORAL 基础上，引入 R2 正则化 ---
 
