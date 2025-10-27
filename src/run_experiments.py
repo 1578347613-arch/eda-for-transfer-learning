@@ -11,95 +11,201 @@ import argparse
 # 在这里，您可以丰富、修改或删除任何您想尝试的权重组合。
 # 每一个字典代表一次完整的 `train.py` 运行。
 EXPERIMENTS = [
-    # --- 阶段一：建立基准 (关闭所有辅助损失) ---
     {
         "name": "baseline",
         "lambda_nll": 1.0,
-        "lambda_coral": 0.0,
-        "alpha_r2": 0.0,
-    },
-
-    # --- 阶段二：探索 CORAL 损失的权重 (对数尺度搜索) ---
-    {
-        "name": "coral_search_low",
-        "lambda_nll": 1.0,
-        "lambda_coral": 0.01,
-        "alpha_r2": 0.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.1,
     },
     {
-        "name": "coral_search_medium",
+        "name": "r2_search_low",
         "lambda_nll": 1.0,
         "lambda_coral": 0.1,
-        "alpha_r2": 0.0,
+        "alpha_r2": 0.5,
     },
     {
-        "name": "coral_search_high",
+        "name": "r2_search_medium",
         "lambda_nll": 1.0,
-        "lambda_coral": 1.0,
-        "alpha_r2": 0.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 1,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 2,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 5,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 10,
     },
 
 
-    # --- 阶段一：建立基准 (关闭所有辅助损失) ---
+
     {
         "name": "baseline",
         "lambda_nll": 1.0,
-        "lambda_coral": 0.0,
-        "alpha_r2": 0.0,
-    },
-
-    # --- 阶段二：探索 CORAL 损失的权重 (对数尺度搜索) ---
-    {
-        "name": "coral_search_low",
-        "lambda_nll": 1.0,
-        "lambda_coral": 0.01,
-        "alpha_r2": 0.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.1,
     },
     {
-        "name": "coral_search_medium",
+        "name": "r2_search_low",
         "lambda_nll": 1.0,
         "lambda_coral": 0.1,
-        "alpha_r2": 0.0,
+        "alpha_r2": 0.5,
     },
     {
-        "name": "coral_search_high",
+        "name": "r2_search_medium",
         "lambda_nll": 1.0,
-        "lambda_coral": 1.0,
-        "alpha_r2": 0.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 1,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 2,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 5,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 10,
     },
 
 
-    # --- 阶段一：建立基准 (关闭所有辅助损失) ---
+
+
     {
         "name": "baseline",
         "lambda_nll": 1.0,
-        "lambda_coral": 0.0,
-        "alpha_r2": 0.0,
-    },
-
-    # --- 阶段二：探索 CORAL 损失的权重 (对数尺度搜索) ---
-    {
-        "name": "coral_search_low",
-        "lambda_nll": 1.0,
-        "lambda_coral": 0.01,
-        "alpha_r2": 0.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.1,
     },
     {
-        "name": "coral_search_medium",
+        "name": "r2_search_low",
         "lambda_nll": 1.0,
         "lambda_coral": 0.1,
-        "alpha_r2": 0.0,
+        "alpha_r2": 0.5,
     },
     {
-        "name": "coral_search_high",
+        "name": "r2_search_medium",
         "lambda_nll": 1.0,
-        "lambda_coral": 1.0,
-        "alpha_r2": 0.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 1,
     },
-    # --- 阶段三：在最佳 CORAL 基础上，引入 R2 正则化 ---
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 2,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 5,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 10,
+    },
 
 
-    # --- 阶段四：(可选) 探索 NLL 和 CORAL 的平衡 ---
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.1,
+    },
+    {
+        "name": "r2_search_low",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.5,
+    },
+    {
+        "name": "r2_search_medium",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 1,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 2,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 5,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 10,
+    },
+
+
+
+    {
+        "name": "baseline",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.1,
+    },
+    {
+        "name": "r2_search_low",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 0.5,
+    },
+    {
+        "name": "r2_search_medium",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 1,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 2,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 5,
+    },
+    {
+        "name": "r2_search_high",
+        "lambda_nll": 1.0,
+        "lambda_coral": 0.1,
+        "alpha_r2": 10,
+    },
+
+
+
 ]
 
 
