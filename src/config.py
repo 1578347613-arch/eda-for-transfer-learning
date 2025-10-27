@@ -29,7 +29,7 @@ TASK_CONFIGS = {
         'patience_finetune': 1000,
         'lr_finetune': 3.8e-3,
         'batch_a': 128,
-        'batch_b': 128,
+        'batch_b': 64,
         'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
         # 模型设置
         'hidden_dim': 256,

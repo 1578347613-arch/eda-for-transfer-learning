@@ -118,6 +118,8 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
             optimizer.step()
             total_train_loss += loss.item()
 
+        avg_train_loss = total_train_loss / len(train_loader)
+
         model.eval()
         total_val_loss = 0
         with torch.no_grad():
