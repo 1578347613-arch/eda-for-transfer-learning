@@ -293,7 +293,6 @@ def main():
         X_src_val, y_src_val, args.batch_b, shuffle=False)
 
     global_best_val_loss = float('inf')
-    best_model_state_dict_overall = None
 
     if args.restart or not os.path.exists(pretrained_path):
         print(f"--- [元优化流程启动] 将执行 {config.RESTART_PRETRAIN} 次独立预训练 ---")
@@ -323,13 +322,6 @@ def main():
                 torch.save(best_state_dict_this_run, pretrained_path)
             else:
                 print(f"  -- 本次结果未超越全局最佳 ({global_best_val_loss:.6f})，不保存。")
-
-        if best_model_state_dict_overall:
-            print(
-                f"\n所有重启完成，正在保存全局最佳模型 (损失: {global_best_val_loss:.6f}) 到 {pretrained_path}")
-            torch.save(best_model_state_dict_overall, pretrained_path)
-        else:
-            print("\n所有重启完成，但未能找到任何有效的模型进行保存。")
 
     else:
         print(f"--- [阶段一] 跳过预训练，加载已存在的模型: {pretrained_path} ---")
