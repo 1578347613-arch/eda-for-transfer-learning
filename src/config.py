@@ -12,20 +12,22 @@ LOG_TRANSFORMED_COLS = [
 
 # 训练设置
 RESTART_PRETRAIN = 9
-PRETRAIN_SCHEDULER_CONFIGS = [
+PRETRAIN_SCHEDULER_CONFIGS = [  # 重复执行三次元优化
     # --- 策略一：广泛探索 ---
     {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第1次重启：使用较长的周期进行稳定探索
     {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第2次重启：使用更高的学习率进行激进探索
 
     # --- 策略二：精细打磨 ---
-    {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第3次重启：使用较低的学习率进行一次长周期的精细搜索
+    # 第3次重启：使用较低的学习率进行一次长周期的精细搜索
+    {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},
 
     # --- 策略一：广泛探索 ---
     {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第1次重启：使用较长的周期进行稳定探索
     {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第2次重启：使用更高的学习率进行激进探索
 
     # --- 策略二：精细打磨 ---
-    {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第3次重启：使用较低的学习率进行一次长周期的精细搜索
+    # 第3次重启：使用较低的学习率进行一次长周期的精细搜索
+    {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},
 
     # --- 策略一：广泛探索 ---
     {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第1次重启：使用较长的周期进行稳定探索
