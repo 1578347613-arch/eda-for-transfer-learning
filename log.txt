@@ -1,508 +1,9 @@
-(env3.10) PS D:\Repositories\eda-for-transfer-learning\src> python train.py --evaluate --restart 
---- 开始为 5t_opamp 加载数据 ---
-已对列 ['ugf', 'cmrr'] 进行 log1p 变换。
-StandardScaler 已在工艺 A(Source) 上完成 fit。
-A/B 全部数据已完成标准化（基于 A 域的 scaler）。
-工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+day1******************************************************************
+--------------------------------------------------------------------------
+lr_pretrain=3e-3 lr_finetune=1e-4
 
---- [阶段一] 开始 Backbone 预训练 ---
-Pre-train Epoch [1/100], Val MSE: 14.673415
-  - 预训练模型已保存，验证MSE提升至: 14.673415
-Pre-train Epoch [2/100], Val MSE: 14.659894
-  - 预训练模型已保存，验证MSE提升至: 14.659894
-Pre-train Epoch [3/100], Val MSE: 14.486172
-  - 预训练模型已保存，验证MSE提升至: 14.486172
-Pre-train Epoch [4/100], Val MSE: 15.109907
-Pre-train Epoch [5/100], Val MSE: 14.563226
-Pre-train Epoch [6/100], Val MSE: 14.768568
-Pre-train Epoch [7/100], Val MSE: 14.644349
-Pre-train Epoch [8/100], Val MSE: 14.406713
-  - 预训练模型已保存，验证MSE提升至: 14.406713
-Pre-train Epoch [9/100], Val MSE: 14.666913
-Pre-train Epoch [10/100], Val MSE: 14.427439
-Pre-train Epoch [11/100], Val MSE: 14.571854
-Pre-train Epoch [12/100], Val MSE: 14.755086
-Pre-train Epoch [13/100], Val MSE: 14.836209
-Pre-train Epoch [14/100], Val MSE: 14.525182
-Pre-train Epoch [15/100], Val MSE: 14.565531
-Pre-train Epoch [16/100], Val MSE: 14.719518
-Pre-train Epoch [17/100], Val MSE: 14.751020
-Pre-train Epoch [18/100], Val MSE: 14.822671
-Pre-train Epoch [19/100], Val MSE: 14.611018
-Pre-train Epoch [20/100], Val MSE: 14.864529
-Pre-train Epoch [21/100], Val MSE: 14.669763
-Pre-train Epoch [22/100], Val MSE: 14.853889
-Pre-train Epoch [23/100], Val MSE: 14.745819
-Pre-train Epoch [24/100], Val MSE: 14.688264
-Pre-train Epoch [25/100], Val MSE: 14.796216
-Pre-train Epoch [26/100], Val MSE: 14.732207
-Pre-train Epoch [27/100], Val MSE: 14.701629
-Pre-train Epoch [28/100], Val MSE: 14.786692
-Pre-train Epoch [29/100], Val MSE: 14.414200
-Pre-train Epoch [30/100], Val MSE: 14.665303
-Pre-train Epoch [31/100], Val MSE: 14.667161
-Pre-train Epoch [32/100], Val MSE: 14.594750
-Pre-train Epoch [33/100], Val MSE: 14.650789
-Pre-train Epoch [34/100], Val MSE: 14.861157
-Pre-train Epoch [35/100], Val MSE: 14.694740
-Pre-train Epoch [36/100], Val MSE: 14.586482
-Pre-train Epoch [37/100], Val MSE: 14.640950
-Pre-train Epoch [38/100], Val MSE: 14.623599
-Pre-train Epoch [39/100], Val MSE: 14.569356
-Pre-train Epoch [40/100], Val MSE: 14.484381
-Pre-train Epoch [41/100], Val MSE: 14.732793
-Pre-train Epoch [42/100], Val MSE: 14.801781
-Pre-train Epoch [43/100], Val MSE: 14.623827
-Pre-train Epoch [44/100], Val MSE: 14.801778
-Pre-train Epoch [45/100], Val MSE: 14.626244
-Pre-train Epoch [46/100], Val MSE: 14.587656
-Pre-train Epoch [47/100], Val MSE: 14.664737
-Pre-train Epoch [48/100], Val MSE: 14.703310
-Pre-train Epoch [49/100], Val MSE: 14.690682
-Pre-train Epoch [50/100], Val MSE: 14.832543
-Pre-train Epoch [51/100], Val MSE: 14.573191
-Pre-train Epoch [52/100], Val MSE: 14.782597
-Pre-train Epoch [53/100], Val MSE: 14.402731
-  - 预训练模型已保存，验证MSE提升至: 14.402731
-Pre-train Epoch [54/100], Val MSE: 14.830835
-Pre-train Epoch [55/100], Val MSE: 14.527719
-Pre-train Epoch [56/100], Val MSE: 14.709688
-Pre-train Epoch [57/100], Val MSE: 14.702748
-Pre-train Epoch [58/100], Val MSE: 14.621323
-Pre-train Epoch [59/100], Val MSE: 14.566732
-Pre-train Epoch [60/100], Val MSE: 14.750484
-Pre-train Epoch [61/100], Val MSE: 14.668766
-Pre-train Epoch [62/100], Val MSE: 14.721550
-Pre-train Epoch [63/100], Val MSE: 14.646327
-Pre-train Epoch [64/100], Val MSE: 14.843694
-Pre-train Epoch [65/100], Val MSE: 14.682719
-Pre-train Epoch [66/100], Val MSE: 14.801504
-Pre-train Epoch [67/100], Val MSE: 14.697726
-Pre-train Epoch [68/100], Val MSE: 14.643342
-Pre-train Epoch [69/100], Val MSE: 14.603683
-Pre-train Epoch [70/100], Val MSE: 14.633011
-Pre-train Epoch [71/100], Val MSE: 14.606797
-Pre-train Epoch [72/100], Val MSE: 14.823966
-Pre-train Epoch [73/100], Val MSE: 14.719007
-Pre-train Epoch [74/100], Val MSE: 14.565510
-Pre-train Epoch [75/100], Val MSE: 14.794498
-Pre-train Epoch [76/100], Val MSE: 14.657109
-Pre-train Epoch [77/100], Val MSE: 14.762513
-Pre-train Epoch [78/100], Val MSE: 14.676867
-Pre-train Epoch [79/100], Val MSE: 14.710907
-Pre-train Epoch [80/100], Val MSE: 14.755380
-Pre-train Epoch [81/100], Val MSE: 14.597258
-Pre-train Epoch [82/100], Val MSE: 14.675870
-Pre-train Epoch [83/100], Val MSE: 14.697873
-Pre-train Epoch [84/100], Val MSE: 14.552092
-Pre-train Epoch [85/100], Val MSE: 14.709427
-Pre-train Epoch [86/100], Val MSE: 14.674447
-Pre-train Epoch [87/100], Val MSE: 14.585191
-Pre-train Epoch [88/100], Val MSE: 14.745218
-Pre-train Epoch [89/100], Val MSE: 14.762409
-Pre-train Epoch [90/100], Val MSE: 14.647396
-Pre-train Epoch [91/100], Val MSE: 14.736268
-Pre-train Epoch [92/100], Val MSE: 14.549748
-Pre-train Epoch [93/100], Val MSE: 14.636113
-Pre-train Epoch [94/100], Val MSE: 14.571181
-Pre-train Epoch [95/100], Val MSE: 14.653551
-Pre-train Epoch [96/100], Val MSE: 14.668947
-Pre-train Epoch [97/100], Val MSE: 14.748627
-Pre-train Epoch [98/100], Val MSE: 14.761312
-Pre-train Epoch [99/100], Val MSE: 14.580472
-Pre-train Epoch [100/100], Val MSE: 14.656958
---- [阶段一] 预训练完成，最佳模型已保存至 ../results\5t_opamp_pretrained.pth ---
-
---- [阶段二] 开始整体模型微调 ---
-Fine-tune Epoch [1/1000], Val NLL: 2.7635
-  - 微调验证损失改善 (inf -> 2.7635)。保存模型...
-Fine-tune Epoch [2/1000], Val NLL: 1.9051
-  - 微调验证损失改善 (2.7635 -> 1.9051)。保存模型...
-Fine-tune Epoch [3/1000], Val NLL: 1.6672
-  - 微调验证损失改善 (1.9051 -> 1.6672)。保存模型...
-Fine-tune Epoch [4/1000], Val NLL: 1.4255
-  - 微调验证损失改善 (1.6672 -> 1.4255)。保存模型...
-Fine-tune Epoch [5/1000], Val NLL: 1.2509
-  - 微调验证损失改善 (1.4255 -> 1.2509)。保存模型...
-Fine-tune Epoch [6/1000], Val NLL: 1.1439
-  - 微调验证损失改善 (1.2509 -> 1.1439)。保存模型...
-Fine-tune Epoch [7/1000], Val NLL: 1.1601
-Fine-tune Epoch [8/1000], Val NLL: 1.0720
-  - 微调验证损失改善 (1.1439 -> 1.0720)。保存模型...
-Fine-tune Epoch [9/1000], Val NLL: 0.9325
-  - 微调验证损失改善 (1.0720 -> 0.9325)。保存模型...
-Fine-tune Epoch [10/1000], Val NLL: 0.8620
-  - 微调验证损失改善 (0.9325 -> 0.8620)。保存模型...
-Fine-tune Epoch [11/1000], Val NLL: 0.7618
-  - 微调验证损失改善 (0.8620 -> 0.7618)。保存模型...
-Fine-tune Epoch [12/1000], Val NLL: 0.6696
-  - 微调验证损失改善 (0.7618 -> 0.6696)。保存模型...
-Fine-tune Epoch [13/1000], Val NLL: 0.5870
-  - 微调验证损失改善 (0.6696 -> 0.5870)。保存模型...
-Fine-tune Epoch [14/1000], Val NLL: 0.4858
-  - 微调验证损失改善 (0.5870 -> 0.4858)。保存模型...
-Fine-tune Epoch [15/1000], Val NLL: 0.4047
-  - 微调验证损失改善 (0.4858 -> 0.4047)。保存模型...
-Fine-tune Epoch [16/1000], Val NLL: 0.2764
-  - 微调验证损失改善 (0.4047 -> 0.2764)。保存模型...
-Fine-tune Epoch [17/1000], Val NLL: 0.1678
-  - 微调验证损失改善 (0.2764 -> 0.1678)。保存模型...
-Fine-tune Epoch [18/1000], Val NLL: 0.0759
-  - 微调验证损失改善 (0.1678 -> 0.0759)。保存模型...
-Fine-tune Epoch [19/1000], Val NLL: -0.0090
-  - 微调验证损失改善 (0.0759 -> -0.0090)。保存模型...
-Fine-tune Epoch [20/1000], Val NLL: -0.0587
-  - 微调验证损失改善 (-0.0090 -> -0.0587)。保存模型...
-Fine-tune Epoch [21/1000], Val NLL: -0.1241
-  - 微调验证损失改善 (-0.0587 -> -0.1241)。保存模型...
-Fine-tune Epoch [22/1000], Val NLL: -0.1871
-  - 微调验证损失改善 (-0.1241 -> -0.1871)。保存模型...
-Fine-tune Epoch [23/1000], Val NLL: -0.1866
-Fine-tune Epoch [24/1000], Val NLL: -0.2266
-  - 微调验证损失改善 (-0.1871 -> -0.2266)。保存模型...
-Fine-tune Epoch [25/1000], Val NLL: -0.2028
-Fine-tune Epoch [26/1000], Val NLL: -0.3352
-  - 微调验证损失改善 (-0.2266 -> -0.3352)。保存模型...
-Fine-tune Epoch [27/1000], Val NLL: -0.3709
-  - 微调验证损失改善 (-0.3352 -> -0.3709)。保存模型...
-Fine-tune Epoch [28/1000], Val NLL: -0.4289
-  - 微调验证损失改善 (-0.3709 -> -0.4289)。保存模型...
-Fine-tune Epoch [29/1000], Val NLL: -0.4165
-Fine-tune Epoch [30/1000], Val NLL: -0.3532
-Fine-tune Epoch [31/1000], Val NLL: -0.4489
-  - 微调验证损失改善 (-0.4289 -> -0.4489)。保存模型...
-Fine-tune Epoch [32/1000], Val NLL: -0.4901
-  - 微调验证损失改善 (-0.4489 -> -0.4901)。保存模型...
-Fine-tune Epoch [33/1000], Val NLL: -0.4716
-Fine-tune Epoch [34/1000], Val NLL: -0.5045
-  - 微调验证损失改善 (-0.4901 -> -0.5045)。保存模型...
-Fine-tune Epoch [35/1000], Val NLL: -0.5199
-  - 微调验证损失改善 (-0.5045 -> -0.5199)。保存模型...
-Fine-tune Epoch [36/1000], Val NLL: -0.4642
-Fine-tune Epoch [37/1000], Val NLL: -0.5534
-  - 微调验证损失改善 (-0.5199 -> -0.5534)。保存模型...
-Fine-tune Epoch [38/1000], Val NLL: -0.5919
-  - 微调验证损失改善 (-0.5534 -> -0.5919)。保存模型...
-Fine-tune Epoch [39/1000], Val NLL: -0.5950
-  - 微调验证损失改善 (-0.5919 -> -0.5950)。保存模型...
-Fine-tune Epoch [40/1000], Val NLL: -0.5945
-Fine-tune Epoch [41/1000], Val NLL: -0.5577
-Fine-tune Epoch [42/1000], Val NLL: -0.5627
-Fine-tune Epoch [43/1000], Val NLL: -0.5325
-Fine-tune Epoch [44/1000], Val NLL: -0.5711
-Fine-tune Epoch [45/1000], Val NLL: -0.5788
-Fine-tune Epoch [46/1000], Val NLL: -0.5304
-Fine-tune Epoch [47/1000], Val NLL: -0.6458
-  - 微调验证损失改善 (-0.5950 -> -0.6458)。保存模型...
-Fine-tune Epoch [48/1000], Val NLL: -0.5817
-Fine-tune Epoch [49/1000], Val NLL: -0.6542
-  - 微调验证损失改善 (-0.6458 -> -0.6542)。保存模型...
-Fine-tune Epoch [50/1000], Val NLL: -0.6485
-Fine-tune Epoch [51/1000], Val NLL: -0.6599
-  - 微调验证损失改善 (-0.6542 -> -0.6599)。保存模型...
-Fine-tune Epoch [52/1000], Val NLL: -0.6137
-Fine-tune Epoch [53/1000], Val NLL: -0.7161
-  - 微调验证损失改善 (-0.6599 -> -0.7161)。保存模型...
-Fine-tune Epoch [54/1000], Val NLL: -0.6905
-Fine-tune Epoch [55/1000], Val NLL: -0.6681
-Fine-tune Epoch [56/1000], Val NLL: -0.6775
-Fine-tune Epoch [57/1000], Val NLL: -0.6648
-Fine-tune Epoch [58/1000], Val NLL: -0.7430
-  - 微调验证损失改善 (-0.7161 -> -0.7430)。保存模型...
-Fine-tune Epoch [59/1000], Val NLL: -0.6749
-Fine-tune Epoch [60/1000], Val NLL: -0.7773
-  - 微调验证损失改善 (-0.7430 -> -0.7773)。保存模型...
-Fine-tune Epoch [61/1000], Val NLL: -0.8016
-  - 微调验证损失改善 (-0.7773 -> -0.8016)。保存模型...
-Fine-tune Epoch [62/1000], Val NLL: -0.7736
-Fine-tune Epoch [63/1000], Val NLL: -0.7553
-Fine-tune Epoch [64/1000], Val NLL: -0.8315
-  - 微调验证损失改善 (-0.8016 -> -0.8315)。保存模型...
-Fine-tune Epoch [65/1000], Val NLL: -0.8683
-  - 微调验证损失改善 (-0.8315 -> -0.8683)。保存模型...
-Fine-tune Epoch [66/1000], Val NLL: -0.8320
-Fine-tune Epoch [67/1000], Val NLL: -0.7501
-Fine-tune Epoch [68/1000], Val NLL: -0.8179
-Fine-tune Epoch [69/1000], Val NLL: -0.8406
-Fine-tune Epoch [70/1000], Val NLL: -0.8796
-  - 微调验证损失改善 (-0.8683 -> -0.8796)。保存模型...
-Fine-tune Epoch [71/1000], Val NLL: -0.9122
-  - 微调验证损失改善 (-0.8796 -> -0.9122)。保存模型...
-Fine-tune Epoch [72/1000], Val NLL: -0.9467
-  - 微调验证损失改善 (-0.9122 -> -0.9467)。保存模型...
-Fine-tune Epoch [73/1000], Val NLL: -0.9253
-Fine-tune Epoch [74/1000], Val NLL: -0.9119
-Fine-tune Epoch [75/1000], Val NLL: -0.8657
-Fine-tune Epoch [76/1000], Val NLL: -0.9339
-Fine-tune Epoch [77/1000], Val NLL: -0.9622
-  - 微调验证损失改善 (-0.9467 -> -0.9622)。保存模型...
-Fine-tune Epoch [78/1000], Val NLL: -0.9959
-  - 微调验证损失改善 (-0.9622 -> -0.9959)。保存模型...
-Fine-tune Epoch [79/1000], Val NLL: -0.9550
-Fine-tune Epoch [80/1000], Val NLL: -0.9223
-Fine-tune Epoch [81/1000], Val NLL: -1.0528
-  - 微调验证损失改善 (-0.9959 -> -1.0528)。保存模型...
-Fine-tune Epoch [82/1000], Val NLL: -0.9077
-Fine-tune Epoch [83/1000], Val NLL: -1.0400
-Fine-tune Epoch [84/1000], Val NLL: -1.0760
-  - 微调验证损失改善 (-1.0528 -> -1.0760)。保存模型...
-Fine-tune Epoch [85/1000], Val NLL: -1.0016
-Fine-tune Epoch [86/1000], Val NLL: -1.0583
-Fine-tune Epoch [87/1000], Val NLL: -1.0865
-  - 微调验证损失改善 (-1.0760 -> -1.0865)。保存模型...
-Fine-tune Epoch [88/1000], Val NLL: -1.0714
-Fine-tune Epoch [89/1000], Val NLL: -1.1022
-  - 微调验证损失改善 (-1.0865 -> -1.1022)。保存模型...
-Fine-tune Epoch [90/1000], Val NLL: -1.0628
-Fine-tune Epoch [91/1000], Val NLL: -1.0545
-Fine-tune Epoch [92/1000], Val NLL: -1.1041
-  - 微调验证损失改善 (-1.1022 -> -1.1041)。保存模型...
-Fine-tune Epoch [93/1000], Val NLL: -1.1259
-  - 微调验证损失改善 (-1.1041 -> -1.1259)。保存模型...
-Fine-tune Epoch [94/1000], Val NLL: -1.1001
-Fine-tune Epoch [95/1000], Val NLL: -1.0893
-Fine-tune Epoch [96/1000], Val NLL: -1.1061
-Fine-tune Epoch [97/1000], Val NLL: -1.1111
-Fine-tune Epoch [98/1000], Val NLL: -1.1443
-  - 微调验证损失改善 (-1.1259 -> -1.1443)。保存模型...
-Fine-tune Epoch [99/1000], Val NLL: -1.0936
-Fine-tune Epoch [100/1000], Val NLL: -1.1244
-Fine-tune Epoch [101/1000], Val NLL: -1.1483
-  - 微调验证损失改善 (-1.1443 -> -1.1483)。保存模型...
-Fine-tune Epoch [102/1000], Val NLL: -1.1621
-  - 微调验证损失改善 (-1.1483 -> -1.1621)。保存模型...
-Fine-tune Epoch [103/1000], Val NLL: -1.0703
-Fine-tune Epoch [104/1000], Val NLL: -1.1762
-  - 微调验证损失改善 (-1.1621 -> -1.1762)。保存模型...
-Fine-tune Epoch [105/1000], Val NLL: -1.1844
-  - 微调验证损失改善 (-1.1762 -> -1.1844)。保存模型...
-Fine-tune Epoch [106/1000], Val NLL: -1.1123
-Fine-tune Epoch [107/1000], Val NLL: -1.2182
-  - 微调验证损失改善 (-1.1844 -> -1.2182)。保存模型...
-Fine-tune Epoch [108/1000], Val NLL: -1.2092
-Fine-tune Epoch [109/1000], Val NLL: -1.0851
-Fine-tune Epoch [110/1000], Val NLL: -1.2091
-Fine-tune Epoch [111/1000], Val NLL: -1.2257
-  - 微调验证损失改善 (-1.2182 -> -1.2257)。保存模型...
-Fine-tune Epoch [112/1000], Val NLL: -1.1779
-Fine-tune Epoch [113/1000], Val NLL: -1.0856
-Fine-tune Epoch [114/1000], Val NLL: -1.1480
-Fine-tune Epoch [115/1000], Val NLL: -1.2472
-  - 微调验证损失改善 (-1.2257 -> -1.2472)。保存模型...
-Fine-tune Epoch [116/1000], Val NLL: -1.2069
-Fine-tune Epoch [117/1000], Val NLL: -1.2193
-Fine-tune Epoch [118/1000], Val NLL: -1.1870
-Fine-tune Epoch [119/1000], Val NLL: -1.2147
-Fine-tune Epoch [120/1000], Val NLL: -1.2438
-Fine-tune Epoch [121/1000], Val NLL: -1.2253
-Fine-tune Epoch [122/1000], Val NLL: -1.1980
-Fine-tune Epoch [123/1000], Val NLL: -1.1958
-Fine-tune Epoch [124/1000], Val NLL: -1.2688
-  - 微调验证损失改善 (-1.2472 -> -1.2688)。保存模型...
-Fine-tune Epoch [125/1000], Val NLL: -1.2222
-Fine-tune Epoch [126/1000], Val NLL: -1.2038
-Fine-tune Epoch [127/1000], Val NLL: -1.2869
-  - 微调验证损失改善 (-1.2688 -> -1.2869)。保存模型...
-Fine-tune Epoch [128/1000], Val NLL: -1.2354
-Fine-tune Epoch [129/1000], Val NLL: -1.2470
-Fine-tune Epoch [130/1000], Val NLL: -1.2485
-Fine-tune Epoch [131/1000], Val NLL: -1.2504
-Fine-tune Epoch [132/1000], Val NLL: -1.2786
-Fine-tune Epoch [133/1000], Val NLL: -1.2852
-Fine-tune Epoch [134/1000], Val NLL: -1.2724
-Fine-tune Epoch [135/1000], Val NLL: -1.2578
-Fine-tune Epoch [136/1000], Val NLL: -1.2975
-  - 微调验证损失改善 (-1.2869 -> -1.2975)。保存模型...
-Fine-tune Epoch [137/1000], Val NLL: -1.2689
-Fine-tune Epoch [138/1000], Val NLL: -1.3170
-  - 微调验证损失改善 (-1.2975 -> -1.3170)。保存模型...
-Fine-tune Epoch [139/1000], Val NLL: -1.3067
-Fine-tune Epoch [140/1000], Val NLL: -1.3341
-  - 微调验证损失改善 (-1.3170 -> -1.3341)。保存模型...
-Fine-tune Epoch [141/1000], Val NLL: -1.3108
-Fine-tune Epoch [142/1000], Val NLL: -1.2892
-Fine-tune Epoch [143/1000], Val NLL: -1.3040
-Fine-tune Epoch [144/1000], Val NLL: -1.3464
-  - 微调验证损失改善 (-1.3341 -> -1.3464)。保存模型...
-Fine-tune Epoch [145/1000], Val NLL: -1.3231
-Fine-tune Epoch [146/1000], Val NLL: -1.3268
-Fine-tune Epoch [147/1000], Val NLL: -1.2430
-Fine-tune Epoch [148/1000], Val NLL: -1.3196
-Fine-tune Epoch [149/1000], Val NLL: -1.3653
-  - 微调验证损失改善 (-1.3464 -> -1.3653)。保存模型...
-Fine-tune Epoch [150/1000], Val NLL: -1.2468
-Fine-tune Epoch [151/1000], Val NLL: -1.2815
-Fine-tune Epoch [152/1000], Val NLL: -1.3418
-Fine-tune Epoch [153/1000], Val NLL: -1.3018
-Fine-tune Epoch [154/1000], Val NLL: -1.2863
-Fine-tune Epoch [155/1000], Val NLL: -1.2067
-Fine-tune Epoch [156/1000], Val NLL: -1.3058
-Fine-tune Epoch [157/1000], Val NLL: -1.3147
-Fine-tune Epoch [158/1000], Val NLL: -1.2481
-Fine-tune Epoch [159/1000], Val NLL: -1.3010
-Fine-tune Epoch [160/1000], Val NLL: -1.3323
-Fine-tune Epoch [161/1000], Val NLL: -1.2809
-Fine-tune Epoch [162/1000], Val NLL: -1.3203
-Fine-tune Epoch [163/1000], Val NLL: -1.3373
-Fine-tune Epoch [164/1000], Val NLL: -1.3087
-Fine-tune Epoch [165/1000], Val NLL: -1.3260
-Fine-tune Epoch [166/1000], Val NLL: -1.3315
-Fine-tune Epoch [167/1000], Val NLL: -1.1971
-Fine-tune Epoch [168/1000], Val NLL: -1.2077
-Fine-tune Epoch [169/1000], Val NLL: -1.2393
-Fine-tune Epoch [170/1000], Val NLL: -1.2082
-Fine-tune Epoch [171/1000], Val NLL: -1.3283
-Fine-tune Epoch [172/1000], Val NLL: -1.2856
-Fine-tune Epoch [173/1000], Val NLL: -1.3314
-Fine-tune Epoch [174/1000], Val NLL: -1.3633
-Fine-tune Epoch [175/1000], Val NLL: -1.3568
-Fine-tune Epoch [176/1000], Val NLL: -1.3173
-Fine-tune Epoch [177/1000], Val NLL: -1.3610
-Fine-tune Epoch [178/1000], Val NLL: -1.3443
-Fine-tune Epoch [179/1000], Val NLL: -1.3419
-Fine-tune Epoch [180/1000], Val NLL: -1.3458
-Fine-tune Epoch [181/1000], Val NLL: -1.3462
-Fine-tune Epoch [182/1000], Val NLL: -1.3768
-  - 微调验证损失改善 (-1.3653 -> -1.3768)。保存模型...
-Fine-tune Epoch [183/1000], Val NLL: -1.4224
-  - 微调验证损失改善 (-1.3768 -> -1.4224)。保存模型...
-Fine-tune Epoch [184/1000], Val NLL: -1.3362
-Fine-tune Epoch [185/1000], Val NLL: -1.3057
-Fine-tune Epoch [186/1000], Val NLL: -1.3339
-Fine-tune Epoch [187/1000], Val NLL: -1.3738
-Fine-tune Epoch [188/1000], Val NLL: -1.2983
-Fine-tune Epoch [189/1000], Val NLL: -1.3227
-Fine-tune Epoch [190/1000], Val NLL: -1.2698
-Fine-tune Epoch [191/1000], Val NLL: -1.3081
-Fine-tune Epoch [192/1000], Val NLL: -1.3053
-Fine-tune Epoch [193/1000], Val NLL: -1.3948
-Fine-tune Epoch [194/1000], Val NLL: -1.3438
-Fine-tune Epoch [195/1000], Val NLL: -1.3469
-Fine-tune Epoch [196/1000], Val NLL: -1.3525
-Fine-tune Epoch [197/1000], Val NLL: -1.2893
-Fine-tune Epoch [198/1000], Val NLL: -1.3571
-Fine-tune Epoch [199/1000], Val NLL: -1.4254
-  - 微调验证损失改善 (-1.4224 -> -1.4254)。保存模型...
-Fine-tune Epoch [200/1000], Val NLL: -1.3679
-Fine-tune Epoch [201/1000], Val NLL: -1.3288
-Fine-tune Epoch [202/1000], Val NLL: -1.3695
-Fine-tune Epoch [203/1000], Val NLL: -1.3772
-Fine-tune Epoch [204/1000], Val NLL: -1.3774
-Fine-tune Epoch [205/1000], Val NLL: -1.2963
-Fine-tune Epoch [206/1000], Val NLL: -1.4171
-Fine-tune Epoch [207/1000], Val NLL: -1.3846
-Fine-tune Epoch [208/1000], Val NLL: -1.3039
-Fine-tune Epoch [209/1000], Val NLL: -1.4005
-Fine-tune Epoch [210/1000], Val NLL: -1.3364
-Fine-tune Epoch [211/1000], Val NLL: -1.3806
-Fine-tune Epoch [212/1000], Val NLL: -1.3638
-Fine-tune Epoch [213/1000], Val NLL: -1.3865
-Fine-tune Epoch [214/1000], Val NLL: -1.3893
-Fine-tune Epoch [215/1000], Val NLL: -1.2952
-Fine-tune Epoch [216/1000], Val NLL: -1.3381
-Fine-tune Epoch [217/1000], Val NLL: -1.4365
-  - 微调验证损失改善 (-1.4254 -> -1.4365)。保存模型...
-Fine-tune Epoch [218/1000], Val NLL: -1.4107
-Fine-tune Epoch [219/1000], Val NLL: -1.3904
-Fine-tune Epoch [220/1000], Val NLL: -1.3686
-Fine-tune Epoch [221/1000], Val NLL: -1.3377
-Fine-tune Epoch [222/1000], Val NLL: -1.3932
-Fine-tune Epoch [223/1000], Val NLL: -1.4287
-Fine-tune Epoch [224/1000], Val NLL: -1.4067
-Fine-tune Epoch [225/1000], Val NLL: -1.3321
-Fine-tune Epoch [226/1000], Val NLL: -1.2858
-Fine-tune Epoch [227/1000], Val NLL: -1.3352
-Fine-tune Epoch [228/1000], Val NLL: -1.3922
-Fine-tune Epoch [229/1000], Val NLL: -1.3352
-Fine-tune Epoch [230/1000], Val NLL: -1.4351
-Fine-tune Epoch [231/1000], Val NLL: -1.4173
-Fine-tune Epoch [232/1000], Val NLL: -1.3648
-Fine-tune Epoch [233/1000], Val NLL: -1.4353
-Fine-tune Epoch [234/1000], Val NLL: -1.3682
-Fine-tune Epoch [235/1000], Val NLL: -1.4028
-Fine-tune Epoch [236/1000], Val NLL: -1.3120
-Fine-tune Epoch [237/1000], Val NLL: -1.3497
-Fine-tune Epoch [238/1000], Val NLL: -1.3049
-Fine-tune Epoch [239/1000], Val NLL: -1.3185
-Fine-tune Epoch [240/1000], Val NLL: -1.3859
-Fine-tune Epoch [241/1000], Val NLL: -1.4056
-Fine-tune Epoch [242/1000], Val NLL: -1.3338
-Fine-tune Epoch [243/1000], Val NLL: -1.3169
-Fine-tune Epoch [244/1000], Val NLL: -1.3392
-Fine-tune Epoch [245/1000], Val NLL: -1.3403
-Fine-tune Epoch [246/1000], Val NLL: -1.2475
-Fine-tune Epoch [247/1000], Val NLL: -1.3138
-Fine-tune Epoch [248/1000], Val NLL: -1.2794
-Fine-tune Epoch [249/1000], Val NLL: -1.2904
-Fine-tune Epoch [250/1000], Val NLL: -1.3150
-Fine-tune Epoch [251/1000], Val NLL: -1.2406
-Fine-tune Epoch [252/1000], Val NLL: -1.3045
-Fine-tune Epoch [253/1000], Val NLL: -1.3007
-Fine-tune Epoch [254/1000], Val NLL: -1.3071
-Fine-tune Epoch [255/1000], Val NLL: -1.2602
-Fine-tune Epoch [256/1000], Val NLL: -1.3231
-Fine-tune Epoch [257/1000], Val NLL: -1.3729
-Fine-tune Epoch [258/1000], Val NLL: -1.3338
-Fine-tune Epoch [259/1000], Val NLL: -1.3099
-Fine-tune Epoch [260/1000], Val NLL: -1.3616
-Fine-tune Epoch [261/1000], Val NLL: -1.3216
-Fine-tune Epoch [262/1000], Val NLL: -1.2870
-Fine-tune Epoch [263/1000], Val NLL: -1.3529
-Fine-tune Epoch [264/1000], Val NLL: -1.3681
-Fine-tune Epoch [265/1000], Val NLL: -1.1140
-Fine-tune Epoch [266/1000], Val NLL: -1.2662
-Fine-tune Epoch [267/1000], Val NLL: -1.2927
-Fine-tune Epoch [268/1000], Val NLL: -1.2559
-Fine-tune Epoch [269/1000], Val NLL: -1.2502
-Fine-tune Epoch [270/1000], Val NLL: -1.2581
-Fine-tune Epoch [271/1000], Val NLL: -1.0758
-Fine-tune Epoch [272/1000], Val NLL: -1.3317
-Fine-tune Epoch [273/1000], Val NLL: -1.3008
-Fine-tune Epoch [274/1000], Val NLL: -1.3561
-Fine-tune Epoch [275/1000], Val NLL: -1.3110
-Fine-tune Epoch [276/1000], Val NLL: -1.3268
-Fine-tune Epoch [277/1000], Val NLL: -1.2953
-Fine-tune Epoch [278/1000], Val NLL: -1.3760
-Fine-tune Epoch [279/1000], Val NLL: -1.3276
-Fine-tune Epoch [280/1000], Val NLL: -1.3940
-Fine-tune Epoch [281/1000], Val NLL: -1.4001
-Fine-tune Epoch [282/1000], Val NLL: -1.3733
-Fine-tune Epoch [283/1000], Val NLL: -1.4139
-Fine-tune Epoch [284/1000], Val NLL: -1.3494
-Fine-tune Epoch [285/1000], Val NLL: -1.3856
-Fine-tune Epoch [286/1000], Val NLL: -1.2330
-Fine-tune Epoch [287/1000], Val NLL: -1.3825
-Fine-tune Epoch [288/1000], Val NLL: -1.3833
-Fine-tune Epoch [289/1000], Val NLL: -1.3212
-Fine-tune Epoch [290/1000], Val NLL: -1.3083
-Fine-tune Epoch [291/1000], Val NLL: -1.3017
-Fine-tune Epoch [292/1000], Val NLL: -1.3086
-Fine-tune Epoch [293/1000], Val NLL: -1.2580
-Fine-tune Epoch [294/1000], Val NLL: -1.3655
-Fine-tune Epoch [295/1000], Val NLL: -1.3532
-Fine-tune Epoch [296/1000], Val NLL: -1.3825
-Fine-tune Epoch [297/1000], Val NLL: -1.3441
-Fine-tune Epoch [298/1000], Val NLL: -1.2384
-Fine-tune Epoch [299/1000], Val NLL: -1.2662
-Fine-tune Epoch [300/1000], Val NLL: -1.3474
-Fine-tune Epoch [301/1000], Val NLL: -1.3251
-Fine-tune Epoch [302/1000], Val NLL: -1.3622
-Fine-tune Epoch [303/1000], Val NLL: -1.3505
-Fine-tune Epoch [304/1000], Val NLL: -1.3143
-Fine-tune Epoch [305/1000], Val NLL: -1.3194
-Fine-tune Epoch [306/1000], Val NLL: -1.2999
-Fine-tune Epoch [307/1000], Val NLL: -1.2923
-Fine-tune Epoch [308/1000], Val NLL: -1.2633
-Fine-tune Epoch [309/1000], Val NLL: -1.3081
-Fine-tune Epoch [310/1000], Val NLL: -1.3240
-Fine-tune Epoch [311/1000], Val NLL: -1.2526
-Fine-tune Epoch [312/1000], Val NLL: -1.3293
-Fine-tune Epoch [313/1000], Val NLL: -1.2893
-Fine-tune Epoch [314/1000], Val NLL: -1.2072
-Fine-tune Epoch [315/1000], Val NLL: -1.3169
-Fine-tune Epoch [316/1000], Val NLL: -1.2837
-Fine-tune Epoch [317/1000], Val NLL: -1.3765
-验证损失连续 100 轮未改善，触发早停。
+Fine-tune Epoch [17252/100000], Val NLL: -1.9604
+验证损失连续 1000 轮未改善，触发早停。
 --- [阶段二] 微调完成，最佳模型已保存至 ../results\5t_opamp_finetuned.pth ---
 
 训练流程全部完成。
@@ -514,10 +15,912 @@ Fine-tune Epoch [317/1000], Val NLL: -1.3765
 --- [评估阶段] 开始计算指标 ---
 
 === 目标域验证集指标（物理单位）===
-slewrate_pos    MSE=6.123e+10  MAE=1.182e+05  R2=0.9845
-dc_gain         MSE=73.48  MAE=6.168  R2=0.9567
-ugf             MSE=1.085e+11  MAE=1.925e+05  R2=0.9926
-phase_margin    MSE=0.1661  MAE=0.3066  R2=0.9835
-cmrr            MSE=3.78e+05  MAE=155.9  R2=0.6844
+slewrate_pos    MSE=1.657e+10  MAE=7.934e+04  R2=0.9958
+dc_gain         MSE=67.43  MAE=6.007  R2=0.9603
+ugf             MSE=7.234e+10  MAE=1.763e+05  R2=0.9951
+phase_margin    MSE=0.08141  MAE=0.2152  R2=0.9919
+cmrr            MSE=2.305e+05  MAE=115.8  R2=0.8075
 
-Avg  (all dims)   MSE=3.395e+10  MAE=6.218e+04  R2=0.9204
+Avg  (all dims)   MSE=1.778e+10  MAE=5.115e+04  R2=0.9501
+
+-----------------------------------------------------------------------------------
+更激进的lr_pretrain=3e-2,lr_finetune=1e-4
+
+Pre-train Epoch [176/1000], Val HuberLoss: 0.021193
+  - 预训练模型已保存，验证Val HuberLoss提升至: 0.021193
+Fine-tune Epoch [17582/100000], Val NLL: -1.5677
+验证损失连续 1000 轮未改善，触发早停。
+--- [阶段二] 微调完成，最佳模型已保存至 ../results\5t_opamp_finetuned.pth ---
+
+训练流程全部完成。
+
+--- [评估流程启动] ---
+为评估加载最佳模型权重: ../results\5t_opamp_finetuned.pth
+在验证集上生成预测...
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.34e+10  MAE=1.044e+05  R2=0.9941
+dc_gain         MSE=132.2  MAE=9.047  R2=0.9222
+ugf             MSE=1.292e+11  MAE=2.502e+05  R2=0.9912
+phase_margin    MSE=0.2276  MAE=0.3673  R2=0.9775
+cmrr            MSE=4.529e+05  MAE=194  R2=0.6219
+
+Avg  (all dims)   MSE=3.052e+10  MAE=7.096e+04  R2=0.9014
+
+
+··········以下为使用lr_finder找到微调阶段的推荐头学习率7.58e-3·············
+
+--- [评估流程启动] ---
+为评估加载最佳模型权重: ../results\5t_opamp_finetuned.pth
+在验证集上生成预测...
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.365e+10  MAE=1.025e+05  R2=0.9940
+dc_gain         MSE=46.6  MAE=4.01  R2=0.9726
+ugf             MSE=1.02e+11  MAE=2.136e+05  R2=0.9930
+phase_margin    MSE=0.1804  MAE=0.3078  R2=0.9821
+cmrr            MSE=1.23e+05  MAE=111.7  R2=0.8973（不同次波动很大）
+
+Avg  (all dims)   MSE=2.513e+10  MAE=6.325e+04  R2=0.9678
+
+---------------------------------------------------------------------------------------
+T0=200 使用LR_finder找到的推荐学习率 ：lr_pretrain=2e-3 lr_finetune=7.85e-3
+
+Pre-train Epoch [176/1000], Val HuberLoss: 0.018
+  - 预训练模型已保存，验证Val HuberLoss提升至: 0.018
+Fine-tune Epoch [3613/100000], Train Loss: -1.9114, Val NLL: -1.9437
+验证损失连续 1000 轮未改善，触发早停。
+
+slewrate_pos    MSE=2.033e+10  MAE=8.671e+04  R2=0.9949
+dc_gain         MSE=31.14  MAE=3.159  R2=0.9817
+ugf             MSE=9.055e+10  MAE=1.873e+05  R2=0.9938
+phase_margin    MSE=0.143  MAE=0.2796  R2=0.9858
+cmrr            MSE=2.452e+05  MAE=111.4  R2=0.7953
+
+Avg  (all dims)   MSE=2.218e+10  MAE=5.483e+04  R2=0.9503
+
+------------------------------------------------------------------------------------------
+T0=200 使用LR_finder找到的推荐学习率 ：lr_pretrain=3e-3 lr_finetune=7.85e-3
+pretrain时每次热重启同时重启adamw优化器
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.148e+10  MAE=1.018e+05  R2=0.9921
+dc_gain         MSE=37.78  MAE=3.404  R2=0.9778
+ugf             MSE=9.843e+10  MAE=2.009e+05  R2=0.9933
+phase_margin    MSE=0.1357  MAE=0.2513  R2=0.9866
+cmrr            MSE=2.957e+05  MAE=124.2  R2=0.7531
+
+Avg  (all dims)   MSE=2.598e+10  MAE=6.056e+04  R2=0.9406
+
+·········第二次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.349e+10  MAE=8.836e+04  R2=0.9941
+dc_gain         MSE=34.73  MAE=3.276  R2=0.9796
+ugf             MSE=9.938e+10  MAE=1.906e+05  R2=0.9932
+phase_margin    MSE=0.1488  MAE=0.2553  R2=0.9853
+cmrr            MSE=2.135e+05  MAE=118.6  R2=0.8218
+
+Avg  (all dims)   MSE=2.457e+10  MAE=5.582e+04  R2=0.9548
+
+
+········第三次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.426e+10  MAE=8.662e+04  R2=0.9939
+dc_gain         MSE=35.23  MAE=3.37  R2=0.9793
+ugf             MSE=7.443e+10  MAE=1.76e+05  R2=0.9949
+phase_margin    MSE=0.1479  MAE=0.2784  R2=0.9854
+cmrr            MSE=1.939e+05  MAE=122.2  R2=0.8381
+
+Avg  (all dims)   MSE=1.974e+10  MAE=5.254e+04  R2=0.9583
+
+----------------------------------------------------------------------------
+batch_B=64 lr_finetune=3.8e-3
+lamda_coral=0.1
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.296e+10  MAE=8.253e+04  R2=0.9942
+dc_gain         MSE=40.43  MAE=3.483  R2=0.9762
+ugf             MSE=7.37e+10  MAE=1.725e+05  R2=0.9950
+phase_margin    MSE=0.1438  MAE=0.2605  R2=0.9858
+cmrr            MSE=1.839e+05  MAE=107.4  R2=0.8464
+
+Avg  (all dims)   MSE=1.933e+10  MAE=5.102e+04  R2=0.9595
+
+
+
+
+
+
+
+
+
+day2****************************************************************************************
+=================================== EXPERIMENT 1/6: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.863e+10  MAE=8.154e+04  R2=0.9953
+dc_gain         MSE=42.35  MAE=3.546  R2=0.9751
+ugf             MSE=6.078e+10  MAE=1.607e+05  R2=0.9959
+phase_margin    MSE=0.1228  MAE=0.2437  R2=0.9878
+cmrr            MSE=6.277e+04  MAE=83.08  R2=0.9476
+
+Avg  (all dims)   MSE=1.588e+10  MAE=4.846e+04  R2=0.9803
+
+···第二次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.194e+10  MAE=8.399e+04  R2=0.9945
+dc_gain         MSE=29.74  MAE=2.98  R2=0.9825
+ugf             MSE=9.386e+10  MAE=1.84e+05  R2=0.9936
+phase_margin    MSE=0.1374  MAE=0.2655  R2=0.9864
+cmrr            MSE=1.974e+05  MAE=114.6  R2=0.8352
+
+Avg  (all dims)   MSE=2.316e+10  MAE=5.362e+04  R2=0.9584
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.028e+10  MAE=7.932e+04  R2=0.9949
+dc_gain         MSE=31.59  MAE=3.484  R2=0.9814
+ugf             MSE=6.745e+10  MAE=1.614e+05  R2=0.9954
+phase_margin    MSE=0.1124  MAE=0.222  R2=0.9889
+cmrr            MSE=1.615e+05  MAE=103.2  R2=0.8652
+
+Avg  (all dims)   MSE=1.755e+10  MAE=4.816e+04  R2=0.9651
+
+
+········第四次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.713e+10  MAE=7.953e+04  R2=0.9957
+dc_gain         MSE=26.9  MAE=2.876  R2=0.9842
+ugf             MSE=7.879e+10  MAE=1.917e+05  R2=0.9946
+phase_margin    MSE=0.1125  MAE=0.2448  R2=0.9889
+cmrr            MSE=2.807e+05  MAE=124  R2=0.7656
+
+Avg  (all dims)   MSE=1.918e+10  MAE=5.427e+04  R2=0.9458
+
+
+·······第五次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.938e+10  MAE=7.861e+04  R2=0.9951
+dc_gain         MSE=42.7  MAE=3.553  R2=0.9749
+ugf             MSE=8.044e+10  MAE=1.812e+05  R2=0.9945
+phase_margin    MSE=0.1297  MAE=0.2547  R2=0.9872
+cmrr            MSE=1.833e+05  MAE=105.3  R2=0.8470
+
+Avg  (all dims)   MSE=1.996e+10  MAE=5.199e+04  R2=0.9597
+
+·········第六次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.184e+10  MAE=8.137e+04  R2=0.9945
+dc_gain         MSE=22.53  MAE=2.754  R2=0.9867
+ugf             MSE=9.014e+10  MAE=1.773e+05  R2=0.9938
+phase_margin    MSE=0.1273  MAE=0.2471  R2=0.9874
+cmrr            MSE=1.123e+05  MAE=94.85  R2=0.9063
+
+Avg  (all dims)   MSE=2.24e+10  MAE=5.176e+04  R2=0.9737
+
+
+=================================== EXPERIMENT 2/6: coral_search_low ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.902e+10  MAE=8.159e+04  R2=0.9952
+dc_gain         MSE=27.28  MAE=2.947  R2=0.9839
+ugf             MSE=7.942e+10  MAE=1.699e+05  R2=0.9946
+phase_margin    MSE=0.1207  MAE=0.2494  R2=0.9880
+cmrr            MSE=1.356e+05  MAE=102.5  R2=0.8868
+
+Avg  (all dims)   MSE=1.969e+10  MAE=5.032e+04  R2=0.9697
+
+·········第二次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.012e+10  MAE=8.025e+04  R2=0.9949
+dc_gain         MSE=36.74  MAE=3.388  R2=0.9784
+ugf             MSE=6.051e+10  MAE=1.606e+05  R2=0.9959
+phase_margin    MSE=0.1271  MAE=0.2455  R2=0.9874
+cmrr            MSE=7.965e+04  MAE=91.07  R2=0.9335
+
+Avg  (all dims)   MSE=1.613e+10  MAE=4.818e+04  R2=0.9780
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.162e+10  MAE=7.889e+04  R2=0.9945
+dc_gain         MSE=33.96  MAE=3.149  R2=0.9800
+ugf             MSE=7.122e+10  MAE=1.651e+05  R2=0.9951
+phase_margin    MSE=0.1363  MAE=0.2531  R2=0.9865
+cmrr            MSE=2.006e+05  MAE=114.1  R2=0.8325
+
+Avg  (all dims)   MSE=1.857e+10  MAE=4.881e+04  R2=0.9577
+
+
+=================================== EXPERIMENT 3/6: coral_search_medium ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.815e+10  MAE=7.941e+04  R2=0.9954
+dc_gain         MSE=36.91  MAE=3.234  R2=0.9783
+ugf             MSE=8.198e+10  MAE=1.729e+05  R2=0.9944
+phase_margin    MSE=0.1405  MAE=0.2668  R2=0.9861
+cmrr            MSE=7.671e+04  MAE=91.06  R2=0.9360
+
+Avg  (all dims)   MSE=2.003e+10  MAE=5.048e+04  R2=0.9780
+
+
+·········第二次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.519e+10  MAE=7.796e+04  R2=0.9936
+dc_gain         MSE=38.49  MAE=3.498  R2=0.9773
+ugf             MSE=7.849e+10  MAE=1.608e+05  R2=0.9946
+phase_margin    MSE=0.1361  MAE=0.2566  R2=0.9865
+cmrr            MSE=1.316e+05  MAE=103.2  R2=0.8901
+
+Avg  (all dims)   MSE=2.074e+10  MAE=4.778e+04  R2=0.9685
+
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.049e+10  MAE=8.143e+04  R2=0.9948
+dc_gain         MSE=30.88  MAE=3.166  R2=0.9818
+ugf             MSE=8.969e+10  MAE=1.86e+05  R2=0.9939
+phase_margin    MSE=0.1304  MAE=0.2544  R2=0.9871
+cmrr            MSE=1.467e+05  MAE=102.6  R2=0.8775
+
+Avg  (all dims)   MSE=2.204e+10  MAE=5.35e+04  R2=0.9670
+
+
+
+=================================== EXPERIMENT 4/6: coral_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.238e+10  MAE=8.147e+04  R2=0.9944
+dc_gain         MSE=44.97  MAE=3.547  R2=0.9735
+ugf             MSE=1.003e+11  MAE=1.851e+05  R2=0.9932
+phase_margin    MSE=0.1358  MAE=0.2549  R2=0.9865
+cmrr            MSE=8.992e+04  MAE=90.29  R2=0.9249
+
+Avg  (all dims)   MSE=2.454e+10  MAE=5.333e+04  R2=0.9745
+
+
+·········第二次测试
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.911e+10  MAE=7.544e+04  R2=0.9952
+dc_gain         MSE=30.31  MAE=3.015  R2=0.9822
+ugf             MSE=7.522e+10  MAE=1.653e+05  R2=0.9949
+phase_margin    MSE=0.1281  MAE=0.2546  R2=0.9873
+cmrr            MSE=1.233e+05  MAE=103.8  R2=0.8971
+
+Avg  (all dims)   MSE=1.887e+10  MAE=4.816e+04  R2=0.9713
+
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.661e+10  MAE=8.289e+04  R2=0.9933
+dc_gain         MSE=51.38  MAE=3.222  R2=0.9698
+ugf             MSE=9.949e+10  MAE=1.745e+05  R2=0.9932
+phase_margin    MSE=0.1127  MAE=0.2315  R2=0.9888
+cmrr            MSE=8.978e+04  MAE=102.9  R2=0.9250
+
+Avg  (all dims)   MSE=2.522e+10  MAE=5.15e+04  R2=0.9740
+
+
+=================================== EXPERIMENT 5/6: coral_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=10.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.063e+10  MAE=8.238e+04  R2=0.9948
+dc_gain         MSE=55.21  MAE=4.415  R2=0.9675
+ugf             MSE=8.428e+10  MAE=1.836e+05  R2=0.9942
+phase_margin    MSE=0.1933  MAE=0.3236  R2=0.9809
+cmrr            MSE=1.032e+05  MAE=98.76  R2=0.9138
+
+Avg  (all dims)   MSE=2.098e+10  MAE=5.322e+04  R2=0.9702
+
+
+=================================== EXPERIMENT 6/6: coral_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=100.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.966e+12  MAE=1.672e+06  R2=-0.0011
+dc_gain         MSE=241.3  MAE=11  R2=0.8579
+ugf             MSE=1.537e+13  MAE=3.14e+06  R2=-0.0491
+phase_margin    MSE=10.02  MAE=2.26  R2=0.0078
+cmrr            MSE=6.563e+05  MAE=154.3  R2=0.4521
+
+Avg  (all dims)   MSE=3.867e+12  MAE=9.624e+05  R2=0.2535(舍弃)
+
+
+
+
+
+
+
+
+day3*****************************************************************************
+restart pretrain ---由于预训练得到的模型波动很大，选择多次重启预训练找最佳模型的策略，上面的调参可以忽略
+=================================== EXPERIMENT 1/12: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.716e+10  MAE=8.883e+04  R2=0.9931
+dc_gain         MSE=30.03  MAE=2.948  R2=0.9823
+ugf             MSE=9.935e+10  MAE=1.823e+05  R2=0.9932
+phase_margin    MSE=0.1428  MAE=0.2543  R2=0.9859
+cmrr            MSE=1.554e+05  MAE=99.19  R2=0.8702
+
+Avg  (all dims)   MSE=2.53e+10  MAE=5.424e+04  R2=0.9650
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.394e+10  MAE=7.291e+04  R2=0.9965
+dc_gain         MSE=43.17  MAE=3.45  R2=0.9746
+ugf             MSE=8.286e+10  MAE=1.842e+05  R2=0.9943
+phase_margin    MSE=0.1213  MAE=0.2356  R2=0.9880
+cmrr            MSE=1.597e+05  MAE=93.23  R2=0.8667
+
+Avg  (all dims)   MSE=1.936e+10  MAE=5.143e+04  R2=0.9640
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.098e+10  MAE=8.673e+04  R2=0.9922
+dc_gain         MSE=31.47  MAE=3.454  R2=0.9815
+ugf             MSE=1.017e+11  MAE=1.832e+05  R2=0.9931
+phase_margin    MSE=0.1152  MAE=0.2351  R2=0.9886
+cmrr            MSE=2.212e+05  MAE=113.1  R2=0.8153
+
+Avg  (all dims)   MSE=2.653e+10  MAE=5.4e+04  R2=0.9541
+
+
+=================================== EXPERIMENT 2/12: coral_search_low ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.742e+10  MAE=7.798e+04  R2=0.9956
+dc_gain         MSE=49.71  MAE=4.061  R2=0.9707
+ugf             MSE=8.101e+10  MAE=1.714e+05  R2=0.9945
+phase_margin    MSE=0.1092  MAE=0.2343  R2=0.9892
+cmrr            MSE=1.19e+05  MAE=88.35  R2=0.9007
+
+Avg  (all dims)   MSE=1.969e+10  MAE=4.99e+04  R2=0.9701
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.095e+10  MAE=8.3e+04  R2=0.9947
+dc_gain         MSE=31.89  MAE=3.143  R2=0.9812
+ugf             MSE=8.674e+10  MAE=1.826e+05  R2=0.9941
+phase_margin    MSE=0.1228  MAE=0.2365  R2=0.9878
+cmrr            MSE=1.446e+05  MAE=98.91  R2=0.8792
+
+Avg  (all dims)   MSE=2.154e+10  MAE=5.313e+04  R2=0.9674
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.96e+10  MAE=7.714e+04  R2=0.9951
+dc_gain         MSE=37.08  MAE=3.577  R2=0.9782
+ugf             MSE=9.007e+10  MAE=1.785e+05  R2=0.9939
+phase_margin    MSE=0.1078  MAE=0.233  R2=0.9893
+cmrr            MSE=1.704e+05  MAE=97.1  R2=0.8577
+
+Avg  (all dims)   MSE=2.193e+10  MAE=5.115e+04  R2=0.9628
+
+
+=================================== EXPERIMENT 3/12: coral_search_medium ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.831e+10  MAE=7.844e+04  R2=0.9954
+dc_gain         MSE=36.19  MAE=3.646  R2=0.9787
+ugf             MSE=7.354e+10  MAE=1.703e+05  R2=0.9950
+phase_margin    MSE=0.09727  MAE=0.2346  R2=0.9904
+cmrr            MSE=1.546e+05  MAE=95.18  R2=0.8710   *****************************最佳取值
+
+Avg  (all dims)   MSE=1.837e+10  MAE=4.976e+04  R2=0.9661
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.285e+10  MAE=7.997e+04  R2=0.9942
+dc_gain         MSE=32.01  MAE=2.937  R2=0.9812
+ugf             MSE=8.635e+10  MAE=1.74e+05  R2=0.9941
+phase_margin    MSE=0.1273  MAE=0.2373  R2=0.9874
+cmrr            MSE=4.569e+04  MAE=82.45  R2=0.9619
+
+Avg  (all dims)   MSE=2.184e+10  MAE=5.082e+04  R2=0.9837
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.681e+10  MAE=7.526e+04  R2=0.9958
+dc_gain         MSE=44.48  MAE=3.257  R2=0.9738
+ugf             MSE=7.706e+10  MAE=1.666e+05  R2=0.9947
+phase_margin    MSE=0.1231  MAE=0.2455  R2=0.9878
+cmrr            MSE=3.851e+04  MAE=87.41  R2=0.9678
+
+Avg  (all dims)   MSE=1.877e+10  MAE=4.839e+04  R2=0.9840
+
+
+=================================== EXPERIMENT 4/12: coral_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.695e+10  MAE=7.6e+04  R2=0.9957
+dc_gain         MSE=38.68  MAE=3.26  R2=0.9772
+ugf             MSE=7.334e+10  MAE=1.667e+05  R2=0.9950
+phase_margin    MSE=0.1267  MAE=0.2528  R2=0.9874
+cmrr            MSE=1.473e+05  MAE=93.28  R2=0.8770
+
+Avg  (all dims)   MSE=1.806e+10  MAE=4.855e+04  R2=0.9665
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.628e+10  MAE=7.458e+04  R2=0.9959
+dc_gain         MSE=36.23  MAE=3.321  R2=0.9787
+ugf             MSE=7.578e+10  MAE=1.585e+05  R2=0.9948
+phase_margin    MSE=0.1289  MAE=0.2554  R2=0.9872
+cmrr            MSE=1.63e+05  MAE=105.4  R2=0.8639
+
+Avg  (all dims)   MSE=1.841e+10  MAE=4.664e+04  R2=0.9641
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.351e+10  MAE=7.943e+04  R2=0.9941
+dc_gain         MSE=36.92  MAE=3.38  R2=0.9783
+ugf             MSE=9.284e+10  MAE=1.687e+05  R2=0.9937
+phase_margin    MSE=0.1144  MAE=0.2471  R2=0.9887
+cmrr            MSE=1.432e+05  MAE=101.2  R2=0.8804
+
+Avg  (all dims)   MSE=2.327e+10  MAE=4.964e+04  R2=0.9670
+
+
+
+
+
+
+
+
+day4****************************************************************************************
+首先复现了最佳lambda_coral=0.1
+=================================== EXPERIMENT 1/42: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.762e+10  MAE=7.714e+04  R2=0.9956
+dc_gain         MSE=39.83  MAE=3.417  R2=0.9766
+ugf             MSE=7.622e+10  MAE=1.583e+05  R2=0.9948
+phase_margin    MSE=0.1387  MAE=0.2543  R2=0.9863
+cmrr            MSE=1.737e+05  MAE=100  R2=0.8549
+
+Avg  (all dims)   MSE=1.877e+10  MAE=4.711e+04  R2=0.9616
+
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.22e+10  MAE=8.188e+04  R2=0.9944
+dc_gain         MSE=47.04  MAE=3.654  R2=0.9723
+ugf             MSE=8.111e+10  MAE=1.639e+05  R2=0.9945
+phase_margin    MSE=0.1223  MAE=0.2621  R2=0.9879
+cmrr            MSE=1.665e+05  MAE=96.58  R2=0.8610
+
+Avg  (all dims)   MSE=2.066e+10  MAE=4.918e+04  R2=0.9620
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.799e+10  MAE=7.426e+04  R2=0.9955
+dc_gain         MSE=30.68  MAE=3.117  R2=0.9819
+ugf             MSE=7.962e+10  MAE=1.675e+05  R2=0.9946
+phase_margin    MSE=0.1111  MAE=0.2468  R2=0.9890
+cmrr            MSE=1.877e+05  MAE=99.64  R2=0.8433
+
+Avg  (all dims)   MSE=1.952e+10  MAE=4.837e+04  R2=0.9608
+
+
+=================================== EXPERIMENT 2/42: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.009e+10  MAE=8.152e+04  R2=0.9949
+dc_gain         MSE=65.42  MAE=3.825  R2=0.9615
+ugf             MSE=9.078e+10  MAE=1.748e+05  R2=0.9938
+phase_margin    MSE=0.1327  MAE=0.2482  R2=0.9869
+cmrr            MSE=2.185e+05  MAE=97.01  R2=0.8176
+
+Avg  (all dims)   MSE=2.217e+10  MAE=5.128e+04  R2=0.9509
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.61e+10  MAE=7.937e+04  R2=0.9959
+dc_gain         MSE=38.54  MAE=3.623  R2=0.9773
+ugf             MSE=6.859e+10  MAE=1.573e+05  R2=0.9953
+phase_margin    MSE=0.1174  MAE=0.2429  R2=0.9884
+cmrr            MSE=1.791e+05  MAE=101.1  R2=0.8505
+
+Avg  (all dims)   MSE=1.694e+10  MAE=4.736e+04  R2=0.9615
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.763e+10  MAE=7.737e+04  R2=0.9956
+dc_gain         MSE=44.45  MAE=3.546  R2=0.9738
+ugf             MSE=8.51e+10  MAE=1.686e+05  R2=0.9942
+phase_margin    MSE=0.1344  MAE=0.2493  R2=0.9867
+cmrr            MSE=1.977e+05  MAE=97  R2=0.8350
+
+Avg  (all dims)   MSE=2.054e+10  MAE=4.922e+04  R2=0.9570
+
+
+=================================== EXPERIMENT 3/42: baseline ===================================*最好
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.271e+10  MAE=7.898e+04  R2=0.9943
+dc_gain         MSE=28.29  MAE=2.994  R2=0.9833
+ugf             MSE=7.792e+10  MAE=1.553e+05  R2=0.9947
+phase_margin    MSE=0.1068  MAE=0.2392  R2=0.9894
+cmrr            MSE=1.446e+05  MAE=94.39  R2=0.8793
+
+Avg  (all dims)   MSE=2.013e+10  MAE=4.687e+04  R2=0.9682
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.625e+10  MAE=9.236e+04  R2=0.9934
+dc_gain         MSE=41.29  MAE=3.351  R2=0.9757
+ugf             MSE=9.622e+10  MAE=1.82e+05  R2=0.9934
+phase_margin    MSE=0.1221  MAE=0.2469  R2=0.9879
+cmrr            MSE=8.295e+04  MAE=93.2  R2=0.9307
+
+Avg  (all dims)   MSE=2.449e+10  MAE=5.489e+04  R2=0.9762
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.585e+10  MAE=7.763e+04  R2=0.9960
+dc_gain         MSE=34.73  MAE=3.519  R2=0.9796
+ugf             MSE=7.599e+10  MAE=1.635e+05  R2=0.9948
+phase_margin    MSE=0.1226  MAE=0.2416  R2=0.9879
+cmrr            MSE=1.592e+05  MAE=96.7  R2=0.8671
+
+Avg  (all dims)   MSE=1.837e+10  MAE=4.825e+04  R2=0.9651
+
+
+=================================== EXPERIMENT 4/42: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.803e+10  MAE=7.968e+04  R2=0.9954
+dc_gain         MSE=33.61  MAE=3.306  R2=0.9802
+ugf             MSE=8.223e+10  MAE=1.677e+05  R2=0.9944
+phase_margin    MSE=0.1146  MAE=0.2506  R2=0.9886
+cmrr            MSE=1.217e+05  MAE=90.38  R2=0.8984
+
+Avg  (all dims)   MSE=2.005e+10  MAE=4.949e+04  R2=0.9714
+
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.661e+10  MAE=7.679e+04  R2=0.9958
+dc_gain         MSE=47.44  MAE=3.726  R2=0.9721
+ugf             MSE=7.082e+10  MAE=1.502e+05  R2=0.9952
+phase_margin    MSE=0.115  MAE=0.239  R2=0.9886
+cmrr            MSE=1.519e+05  MAE=105  R2=0.8732
+
+Avg  (all dims)   MSE=1.748e+10  MAE=4.541e+04  R2=0.9650
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.616e+10  MAE=9.271e+04  R2=0.9909
+dc_gain         MSE=29  MAE=3.08  R2=0.9829
+ugf             MSE=1.074e+11  MAE=1.795e+05  R2=0.9927
+phase_margin    MSE=0.1141  MAE=0.2307  R2=0.9887
+cmrr            MSE=1.781e+05  MAE=99.25  R2=0.8513
+
+Avg  (all dims)   MSE=2.872e+10  MAE=5.447e+04  R2=0.9613
+
+
+
+然后执行了alpha_r2的调参
+=================================== EXPERIMENT 13/42: newbaseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.063e+10  MAE=8.01e+04  R2=0.9948
+dc_gain         MSE=30.09  MAE=3.173  R2=0.9823
+ugf             MSE=8.196e+10  MAE=1.726e+05  R2=0.9944
+phase_margin    MSE=0.1103  MAE=0.2396  R2=0.9891
+cmrr            MSE=1.433e+05  MAE=92.63  R2=0.8804
+
+Avg  (all dims)   MSE=2.052e+10  MAE=5.057e+04  R2=0.9682
+
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.422e+10  MAE=7.7e+04  R2=0.9939
+dc_gain         MSE=40.36  MAE=3.525  R2=0.9762
+ugf             MSE=8.446e+10  MAE=1.723e+05  R2=0.9942
+phase_margin    MSE=0.1619  MAE=0.2607  R2=0.9840
+cmrr            MSE=1.454e+05  MAE=94.47  R2=0.8786
+
+Avg  (all dims)   MSE=2.174e+10  MAE=4.988e+04  R2=0.9654
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.025e+10  MAE=8.443e+04  R2=0.9949
+dc_gain         MSE=37.6  MAE=3.588  R2=0.9779
+ugf             MSE=7.892e+10  MAE=1.634e+05  R2=0.9946
+phase_margin    MSE=0.118  MAE=0.246  R2=0.9883
+cmrr            MSE=1.402e+05  MAE=99.61  R2=0.8830
+
+Avg  (all dims)   MSE=1.983e+10  MAE=4.958e+04  R2=0.9677
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.023e+10  MAE=8.365e+04  R2=0.9949
+dc_gain         MSE=39.4  MAE=3.365  R2=0.9768
+ugf             MSE=8.574e+10  MAE=1.824e+05  R2=0.9941
+phase_margin    MSE=0.1266  MAE=0.2604  R2=0.9875
+cmrr            MSE=1.781e+05  MAE=96.3  R2=0.8513
+
+Avg  (all dims)   MSE=2.119e+10  MAE=5.322e+04  R2=0.9609
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.81e+10  MAE=7.325e+04  R2=0.9954
+dc_gain         MSE=41.51  MAE=3.677  R2=0.9756
+ugf             MSE=6.974e+10  MAE=1.531e+05  R2=0.9952
+phase_margin    MSE=0.1248  MAE=0.2518  R2=0.9876
+cmrr            MSE=1.792e+05  MAE=99.64  R2=0.8504
+
+Avg  (all dims)   MSE=1.757e+10  MAE=4.53e+04  R2=0.9609
+
+=================================== EXPERIMENT 14/42: r2_search_low ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.707e+10  MAE=7.463e+04  R2=0.9957
+dc_gain         MSE=31.06  MAE=3.258  R2=0.9817
+ugf             MSE=7.829e+10  MAE=1.636e+05  R2=0.9947
+phase_margin    MSE=0.1208  MAE=0.2478  R2=0.9880
+cmrr            MSE=1.842e+05  MAE=92.3  R2=0.8463
+
+Avg  (all dims)   MSE=1.907e+10  MAE=4.766e+04  R2=0.9613
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.163e+10  MAE=8.235e+04  R2=0.9945
+dc_gain         MSE=26.12  MAE=2.845  R2=0.9846
+ugf             MSE=8.045e+10  MAE=1.731e+05  R2=0.9945
+phase_margin    MSE=0.16  MAE=0.2755  R2=0.9842
+cmrr            MSE=2.369e+05  MAE=101.9  R2=0.8022
+
+Avg  (all dims)   MSE=2.042e+10  MAE=5.112e+04  R2=0.9520
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.751e+10  MAE=7.639e+04  R2=0.9956
+dc_gain         MSE=34.39  MAE=3.541  R2=0.9798
+ugf             MSE=6.662e+10  MAE=1.547e+05  R2=0.9955
+phase_margin    MSE=0.128  MAE=0.2473  R2=0.9873
+cmrr            MSE=1.544e+05  MAE=95.83  R2=0.8711
+
+Avg  (all dims)   MSE=1.683e+10  MAE=4.623e+04  R2=0.9658
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.775e+10  MAE=7.809e+04  R2=0.9955
+dc_gain         MSE=33.06  MAE=3.453  R2=0.9805
+ugf             MSE=6.775e+10  MAE=1.623e+05  R2=0.9954
+phase_margin    MSE=0.1037  MAE=0.244  R2=0.9897
+cmrr            MSE=1.598e+05  MAE=101.3  R2=0.8666
+
+Avg  (all dims)   MSE=1.71e+10  MAE=4.81e+04  R2=0.9656
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.816e+10  MAE=7.925e+04  R2=0.9954
+dc_gain         MSE=37.75  MAE=3.477  R2=0.9778
+ugf             MSE=8.586e+10  MAE=1.755e+05  R2=0.9941
+phase_margin    MSE=0.141  MAE=0.2628  R2=0.9860
+cmrr            MSE=1.504e+05  MAE=89.93  R2=0.8744
+
+Avg  (all dims)   MSE=2.08e+10  MAE=5.097e+04  R2=0.9656
+
+=================================== EXPERIMENT 15/42: r2_search_medium ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.694e+10  MAE=8.289e+04  R2=0.9932
+dc_gain         MSE=34.21  MAE=3.201  R2=0.9799
+ugf             MSE=8.751e+10  MAE=1.77e+05  R2=0.9940
+phase_margin    MSE=0.1206  MAE=0.251  R2=0.9881
+cmrr            MSE=1.659e+05  MAE=94.71  R2=0.8615
+
+Avg  (all dims)   MSE=2.289e+10  MAE=5.2e+04  R2=0.9633
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.881e+10  MAE=8.653e+04  R2=0.9927
+dc_gain         MSE=36.39  MAE=3.57  R2=0.9786
+ugf             MSE=8.844e+10  MAE=1.798e+05  R2=0.9940
+phase_margin    MSE=0.1021  MAE=0.2448  R2=0.9899
+cmrr            MSE=2.358e+05  MAE=106.5  R2=0.8032
+
+Avg  (all dims)   MSE=2.345e+10  MAE=5.329e+04  R2=0.9517
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.466e+10  MAE=8.469e+04  R2=0.9938
+dc_gain         MSE=29.76  MAE=3.333  R2=0.9825
+ugf             MSE=9.946e+10  MAE=1.785e+05  R2=0.9932
+phase_margin    MSE=0.144  MAE=0.2712  R2=0.9857
+cmrr            MSE=2.032e+05  MAE=104  R2=0.8303
+
+Avg  (all dims)   MSE=2.482e+10  MAE=5.265e+04  R2=0.9571
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.137e+10  MAE=8.044e+04  R2=0.9946
+dc_gain         MSE=24.81  MAE=3.047  R2=0.9854
+ugf             MSE=8.526e+10  MAE=1.827e+05  R2=0.9942
+phase_margin    MSE=0.1147  MAE=0.2453  R2=0.9886
+cmrr            MSE=1.735e+05  MAE=99.55  R2=0.8551
+
+Avg  (all dims)   MSE=2.133e+10  MAE=5.265e+04  R2=0.9636
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.623e+10  MAE=7.095e+04  R2=0.9959
+dc_gain         MSE=40.18  MAE=3.801  R2=0.9763
+ugf             MSE=6.112e+10  MAE=1.473e+05  R2=0.9958
+phase_margin    MSE=0.1105  MAE=0.2403  R2=0.9890
+cmrr            MSE=2.067e+05  MAE=105.5  R2=0.8274
+
+Avg  (all dims)   MSE=1.547e+10  MAE=4.367e+04  R2=0.9569
+
+
+=================================== EXPERIMENT 16/42: r2_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.897e+10  MAE=8.082e+04  R2=0.9952
+dc_gain         MSE=30.24  MAE=3.065  R2=0.9822
+ugf             MSE=8.663e+10  MAE=1.813e+05  R2=0.9941
+phase_margin    MSE=0.1151  MAE=0.2413  R2=0.9886
+cmrr            MSE=2.042e+05  MAE=101.3  R2=0.8296
+
+Avg  (all dims)   MSE=2.112e+10  MAE=5.245e+04  R2=0.9579
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.528e+10  MAE=7.354e+04  R2=0.9961
+dc_gain         MSE=50.35  MAE=4.856  R2=0.9704
+ugf             MSE=6.516e+10  MAE=1.575e+05  R2=0.9956
+phase_margin    MSE=0.1243  MAE=0.2625  R2=0.9877
+cmrr            MSE=1.752e+05  MAE=102.8  R2=0.8537
+
+Avg  (all dims)   MSE=1.609e+10  MAE=4.623e+04  R2=0.9607
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.617e+10  MAE=7.262e+04  R2=0.9959
+dc_gain         MSE=52.56  MAE=4.717  R2=0.9691
+ugf             MSE=6.48e+10  MAE=1.625e+05  R2=0.9956
+phase_margin    MSE=0.1082  MAE=0.236  R2=0.9893
+cmrr            MSE=1.829e+05  MAE=102  R2=0.8473
+
+Avg  (all dims)   MSE=1.62e+10  MAE=4.704e+04  R2=0.9594
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.15e+10  MAE=8.078e+04  R2=0.9946
+dc_gain         MSE=25.7  MAE=3  R2=0.9849
+ugf             MSE=6.955e+10  MAE=1.603e+05  R2=0.9953
+phase_margin    MSE=0.1216  MAE=0.239  R2=0.9880
+cmrr            MSE=2.409e+05  MAE=100.6  R2=0.7988
+
+Avg  (all dims)   MSE=1.821e+10  MAE=4.823e+04  R2=0.9523
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.032e+10  MAE=8.484e+04  R2=0.9923
+dc_gain         MSE=29.31  MAE=3.05  R2=0.9827
+ugf             MSE=9.094e+10  MAE=1.688e+05  R2=0.9938
+phase_margin    MSE=0.1162  MAE=0.2498  R2=0.9885
+cmrr            MSE=2.075e+05  MAE=96.39  R2=0.8267
+
+Avg  (all dims)   MSE=2.425e+10  MAE=5.074e+04  R2=0.9568
+
+
+
+=================================== EXPERIMENT 17/42: r2_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.522e+10  MAE=8.733e+04  R2=0.9936
+dc_gain         MSE=34.96  MAE=3.509  R2=0.9794
+ugf             MSE=9.253e+10  MAE=1.835e+05  R2=0.9937
+phase_margin    MSE=0.1236  MAE=0.2465  R2=0.9878
+cmrr            MSE=1.601e+05  MAE=93.62  R2=0.8663
+
+Avg  (all dims)   MSE=2.355e+10  MAE=5.418e+04  R2=0.9642
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.204e+10  MAE=8.144e+04  R2=0.9944
+dc_gain         MSE=36.69  MAE=3.236  R2=0.9784
+ugf             MSE=8.968e+10  MAE=1.892e+05  R2=0.9939
+phase_margin    MSE=0.1409  MAE=0.273  R2=0.9860
+cmrr            MSE=2.048e+05  MAE=103  R2=0.8290
+
+Avg  (all dims)   MSE=2.234e+10  MAE=5.416e+04  R2=0.9564
+
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.587e+10  MAE=7.612e+04  R2=0.9960
+dc_gain         MSE=42.51  MAE=4.007  R2=0.9750
+ugf             MSE=6.691e+10  MAE=1.631e+05  R2=0.9954
+phase_margin    MSE=0.1136  MAE=0.2401  R2=0.9887
+cmrr            MSE=1.711e+05  MAE=104.8  R2=0.8571
+
+Avg  (all dims)   MSE=1.656e+10  MAE=4.787e+04  R2=0.9625
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.421e+10  MAE=8.726e+04  R2=0.9939
+dc_gain         MSE=35.41  MAE=3.587  R2=0.9792
+ugf             MSE=9.686e+10  MAE=1.88e+05  R2=0.9934
+phase_margin    MSE=0.1407  MAE=0.2726  R2=0.9861
+cmrr            MSE=1.902e+05  MAE=91.71  R2=0.8412
+
+Avg  (all dims)   MSE=2.421e+10  MAE=5.507e+04  R2=0.9587
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.887e+10  MAE=8.055e+04  R2=0.9952
+dc_gain         MSE=36.66  MAE=3.527  R2=0.9784
+ugf             MSE=9.069e+10  MAE=1.765e+05  R2=0.9938
+phase_margin    MSE=0.1056  MAE=0.2363  R2=0.9895
+cmrr            MSE=1.759e+05  MAE=95.87  R2=0.8532
+
+Avg  (all dims)   MSE=2.191e+10  MAE=5.143e+04  R2=0.9620
+
+
+
+=================================== EXPERIMENT 18/42: r2_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.26e+10  MAE=8.869e+04  R2=0.9943
+dc_gain         MSE=34.18  MAE=3.178  R2=0.9799
+ugf             MSE=9.851e+10  MAE=2e+05  R2=0.9933
+phase_margin    MSE=0.1292  MAE=0.2518  R2=0.9872
+cmrr            MSE=1.607e+05  MAE=91.81  R2=0.8658
+
+Avg  (all dims)   MSE=2.422e+10  MAE=5.776e+04  R2=0.9641
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.961e+10  MAE=8.369e+04  R2=0.9925
+dc_gain         MSE=39.35  MAE=3.612  R2=0.9768
+ugf             MSE=1.054e+11  MAE=1.865e+05  R2=0.9928
+phase_margin    MSE=0.1257  MAE=0.2476  R2=0.9876
+cmrr            MSE=2.15e+05  MAE=105.6  R2=0.8205
+
+Avg  (all dims)   MSE=2.7e+10  MAE=5.405e+04  R2=0.9540
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.607e+10  MAE=8.097e+04  R2=0.9934
+dc_gain         MSE=29.61  MAE=3.072  R2=0.9826
+ugf             MSE=9.815e+10  MAE=1.732e+05  R2=0.9933
+phase_margin    MSE=0.1309  MAE=0.2486  R2=0.9870
+cmrr            MSE=2.029e+05  MAE=99.95  R2=0.8306
+
+Avg  (all dims)   MSE=2.484e+10  MAE=5.085e+04  R2=0.9574
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.72e+10  MAE=8.221e+04  R2=0.9957
+dc_gain         MSE=37.2  MAE=3.654  R2=0.9781
+ugf             MSE=7.459e+10  MAE=1.743e+05  R2=0.9949
+phase_margin    MSE=0.1261  MAE=0.2531  R2=0.9875
+cmrr            MSE=2.052e+05  MAE=99.42  R2=0.8287
+
+Avg  (all dims)   MSE=1.836e+10  MAE=5.131e+04  R2=0.9570
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.547e+10  MAE=7.581e+04  R2=0.9961
+dc_gain         MSE=35.18  MAE=3.089  R2=0.9793
+ugf             MSE=7.861e+10  MAE=1.748e+05  R2=0.9946
+phase_margin    MSE=0.1416  MAE=0.2722  R2=0.9860
+cmrr            MSE=1.756e+05  MAE=95.94  R2=0.8534
+
+Avg  (all dims)   MSE=1.881e+10  MAE=5.014e+04  R2=0.9619
