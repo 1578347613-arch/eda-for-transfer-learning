@@ -328,7 +328,7 @@ def main():
     if args.restart or not os.path.exists(pretrained_path):
 
         # --- START: 5t Opamp 特殊元优化逻辑 ---
-        if args.opamp == '5t':
+        if args.opamp == '5t_opamp':
             print("--- 检测到 5t opamp，启用“元优化”预训练策略 ---")
 
             # 在这里定义 5t 的专属配置
