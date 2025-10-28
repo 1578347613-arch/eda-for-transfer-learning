@@ -37,7 +37,7 @@ TASK_CONFIGS = {
         'dropout_rate': 0.2,
 
         # 损失函数权重
-        'lambda_coral': 0,
+        'lambda_coral': 0.1,
         'alpha_r2': 0,
         # 反向模型
         'mdn_components': 20,
@@ -54,31 +54,30 @@ TASK_CONFIGS = {
     'two_stage_opamp': {
         # 训练设置
         'epochs_pretrain': 1000,
-        'patience_pretrain': 1000,
+        'patience_pretrain': 200,
         'lr_pretrain': 3e-3,
         'epochs_finetune': 100000,
         'patience_finetune': 1000,
-        'lr_finetune': 1e-4,
+        'lr_finetune': 3.8e-3,
         'batch_a': 128,
-        'batch_b': 128,
-
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
         # 模型设置
-        'hidden_dim': 512,
-        'num_layers': 5,
-        'dropout_rate': 0.15,
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
 
         # 损失函数权重
         'lambda_coral': 0.1,
-        'alpha_r2': 1.0,
+        'alpha_r2': 0,
         # 反向模型
-        'mdn_components': 25,
-        'mdn_hidden_dim': 256,
-        'mdn_num_layers': 4,
-        'mdn_epochs': 600,
-        'mdn_lr': 8e-4,
+        'mdn_components': 20,
+        'mdn_hidden_dim': 128,
+        'mdn_num_layers': 3,
+        'mdn_epochs': 500,
+        'mdn_lr': 1e-3,
         'mdn_batch_size': 256,
         'mdn_weight_decay': 1e-5,
-        'ensemble_alpha': [0.5] * 5,
 
     },
 

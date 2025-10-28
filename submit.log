@@ -1,0 +1,1315 @@
+Using device: cpu
+============================================================
+开始生成提交文件 (v6)
+执行目录 (PWD): /home/mario1578347613/eda-for-transfer-learning-1
+项目根目录 (推断): /home/mario1578347613/eda-for-transfer-learning-1
+SRC 目录 (推断):  /home/mario1578347613/eda-for-transfer-learning-1/src
+模型/Scaler来源: /home/mario1578347613/eda-for-transfer-learning-1/src/results
+输入数据来源:   /home/mario1578347613/eda-for-transfer-learning-1/data/02_public_test_set/features
+结果输出至:     /home/mario1578347613/eda-for-transfer-learning-1/submission
+============================================================
+
+--- 开始正向简单预测任务: 5t_opamp [align] ---
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+成功加载正向模型: 5t_opamp_finetuned.pth (Input: 7, Output: 5)
+成功生成简单预测文件: predA.csv
+
+--- 开始正向简单预测任务: two_stage_opamp [align] ---
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+成功加载正向模型: two_stage_opamp_finetuned.pth (Input: 13, Output: 5)
+成功生成简单预测文件: predB.csv
+
+--- 开始反向混合预测任务: 5t_opamp ---
+成功加载反向MDN模型: mdn_5t_opamp.pth
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+开始逐样本优化 100 个目标点 ...
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+成功生成混合策略的提交文件: predC.csv
+
+--- 开始反向混合预测任务: two_stage_opamp ---
+成功加载反向MDN模型: mdn_two_stage_opamp.pth
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+开始逐样本优化 100 个目标点 ...
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+成功生成混合策略的提交文件: predD.csv
+
+--- 运行离线评测（simple forward 影子榜单，物理域口径） ---
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 5t_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+成功加载正向模型: 5t_opamp_finetuned.pth (Input: 7, Output: 5)
+
+=== Offline Eval (simple forward) [5t_opamp | model=align | split=val] ===
+slewrate_pos    MSE=2.212e+10  MAE=8.552e+04  R2=0.9944
+dc_gain         MSE=41.57  MAE=3.202  R2=0.9755
+ugf             MSE=1.062e+11  MAE=2.017e+05  R2=0.9927
+phase_margin    MSE=0.1198  MAE=0.2304  R2=0.9881
+cmrr            MSE=1.655e+05  MAE=107.4  R2=0.8618
+
+Avg  (all dims)   MSE=2.567e+10  MAE=5.747e+04  R2=0.9625
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+成功加载正向模型: two_stage_opamp_finetuned.pth (Input: 13, Output: 5)
+
+=== Offline Eval (simple forward) [two_stage_opamp | model=align | split=val] ===
+slewrate_pos    MSE=1.301e+14  MAE=8.541e+06  R2=0.6967
+dc_gain         MSE=2.169e+07  MAE=1422  R2=0.4432
+ugf             MSE=1.074e+14  MAE=6.76e+06  R2=0.7572
+phase_margin    MSE=169.6  MAE=10  R2=0.8522
+cmrr            MSE=8.269e+11  MAE=8.957e+04  R2=0.0454
+
+Avg  (all dims)   MSE=4.766e+13  MAE=3.078e+06  R2=0.5589
+
+============================================================
+所有提交文件已成功生成！
+请检查 '/home/mario1578347613/eda-for-transfer-learning-1/submission' 目录。
+============================================================
