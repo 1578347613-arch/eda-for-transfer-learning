@@ -70,42 +70,53 @@ def make_loader(x, y, bs, shuffle=True, drop_last=False):
     y = torch.tensor(y, dtype=torch.float32)
     return DataLoader(TensorDataset(x, y), batch_size=bs, shuffle=shuffle, drop_last=drop_last)
 
-# ========== 2. 阶段一：Backbone 预训练 ==========
+# ========== 2. 阶段一：Backbone 预训练 (已修改) ==========
 
 
-def run_pretraining(model, train_loader, val_loader, device, save_path, args):
-    """在源域数据上仅预训练模型的backbone"""
-    print("\n--- [阶段一] 开始 Backbone 预训练 ---")
+def run_pretraining(model, train_loader, val_loader, device, args, scheduler_config):
+    """
+    在源域数据上仅预训练模型的backbone。
+    此函数现在接受 scheduler_config 并返回最佳损失和模型状态，而不是直接保存。
+    """
+    print(f"\n--- [阶段一] 开始 Backbone 预训练 (配置: {scheduler_config}) ---")
+
+    # 从配置中获取参数，如果未提供，则使用默认值
+    epochs = scheduler_config.get("epochs_pretrain", args.epochs_pretrain)
+    T_0 = scheduler_config.get("T_0", 200)  # 原始硬编码值为 200
+    T_mult = scheduler_config.get("T_mult", 1)  # 原始硬编码值为 1
 
     optimizer = torch.optim.AdamW(
         model.backbone.parameters(), lr=args.lr_pretrain)
     scheduler = CosineAnnealingWarmRestarts(
-        optimizer, T_0=200, T_mult=1, eta_min=1e-6)
-    T_0 = 200
-    T_mult = 1
-    current_T = T_0
+        optimizer, T_0=T_0, T_mult=T_mult, eta_min=1e-6)
+
     criterion = torch.nn.HuberLoss(delta=1)
     best_val_loss = float('inf')
+    best_model_state_dict = None  # 在内存中保存最佳模型
 
     patience = args.patience_pretrain
-    patience_counter = patience  # 使用一个计数器
+    patience_counter = patience
 
-    restart_epochs_list = [current_T]
-    max_cycles = int(np.log(args.epochs_pretrain / T_0) / np.log(T_mult)
-                     ) + 2 if T_mult > 1 else args.epochs_pretrain // T_0
-    for _ in range(max_cycles):
-        current_T *= T_mult
-        next_restart = restart_epochs_list[-1] + current_T
-        if next_restart <= args.epochs_pretrain:
-            restart_epochs_list.append(next_restart)
+    # --- 动态计算重启点 ---
+    restart_epochs_list = []
+    current_T = T_0
+    current_restart_point = 0
+
+    while True:
+        current_restart_point += current_T
+        if current_restart_point <= epochs:
+            restart_epochs_list.append(current_restart_point)
+            current_T *= T_mult
         else:
             break
 
     # 转换为集合以便在循环中快速查找
     restart_epochs = set(restart_epochs_list)
-    print(f"优化器将在以下 epoch 结束后重置: {sorted(restart_epochs_list)}")
+    if restart_epochs:
+        print(f"优化器将在以下 epoch 结束后重置: {sorted(restart_epochs_list)}")
+    # --- 重启点计算结束 ---
 
-    for epoch in range(args.epochs_pretrain):
+    for epoch in range(epochs):
         model.train()
         total_train_loss = 0
         for inputs, labels in train_loader:
@@ -133,26 +144,33 @@ def run_pretraining(model, train_loader, val_loader, device, save_path, args):
         scheduler.step()
         current_lr = optimizer.param_groups[0]['lr']
         print(
-            f"Pre-train Epoch [{epoch+1}/{args.epochs_pretrain}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}, LR: {current_lr:.2e}")
+            f"Pre-train Epoch [{epoch+1}/{epochs}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}, LR: {current_lr:.2e}")
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
-            torch.save(model.state_dict(), save_path)
+            best_model_state_dict = model.state_dict()  # 保存到内存
             patience_counter = patience  # 重置计数器
-            print(f"  - 预训练模型已保存，验证HuberLoss提升至: {best_val_loss:.6f}")
+            print(f"  - (内存)预训练模型已更新，验证HuberLoss提升至: {best_val_loss:.6f}")
         else:
             patience_counter -= 1
             if patience_counter == 0:
                 print(f"验证损失连续 {patience} 轮未改善，触发早停。")
                 break
 
-        if (epoch + 1) in restart_epochs and (epoch + 1) < args.epochs_pretrain:
+        if (epoch + 1) in restart_epochs and (epoch + 1) < epochs:
             print(f"--- Epoch {epoch+1} 是一个重启点。重置 AdamW 优化器状态！ ---")
+            # 重置优化器状态
             optimizer = torch.optim.AdamW(
                 model.backbone.parameters(), lr=args.lr_pretrain)
-            scheduler.optimizer = optimizer
+            # 将新优化器交给调度器
+            scheduler = CosineAnnealingWarmRestarts(
+                optimizer, T_0=T_0, T_mult=T_mult, eta_min=1e-6)
+            # 手动将 scheduler "快进" 到当前 epoch
+            for _ in range(epoch + 1):
+                scheduler.step()
 
-    print(f"--- [阶段一] 预训练完成，最佳模型已保存至 {save_path} ---")
+    print(f"--- [阶段一] 本次运行完成，最佳损失: {best_val_loss:.6f} ---")
+    return best_val_loss, best_model_state_dict
 
 
 # ========== 3. 阶段二：整体模型微调 (重构) ==========
@@ -257,7 +275,7 @@ def get_predictions(model, dataloader, device):
 
     return np.concatenate(all_preds), np.concatenate(all_labels)
 
-# ========== 5. 主函数 ==========
+# ========== 5. 主函数 (已修改) ==========
 
 
 def main():
@@ -295,7 +313,9 @@ def main():
         X_src_val, y_src_val, args.batch_a, shuffle=False)
 
     # 注意：input_dim 和 output_dim 不在命令行参数里，所以我们从字典里取
-    model_config = TASK_CONFIGS[args.opamp]
+    # model_config = TASK_CONFIGS[args.opamp] # model_config 未被使用，注释掉
+
+    # 仅初始化一个模型实例，用于加载权重或作为非5t opamp的基础
     model = AlignHeteroMLP(
         input_dim=input_dim,
         output_dim=output_dim,
@@ -304,14 +324,119 @@ def main():
         dropout_rate=args.dropout_rate
     ).to(DEVICE)
 
+    # --- [阶段一] 预训练逻辑 (已重构) ---
     if args.restart or not os.path.exists(pretrained_path):
 
-        run_pretraining(model, pretrain_loader_A,
-                        pretrain_loader_val, DEVICE, pretrained_path, args)
+        # --- START: 5t Opamp 特殊元优化逻辑 ---
+        if args.opamp == '5t_opamp':
+            print("--- 检测到 5t opamp，启用“元优化”预训练策略 ---")
+
+            # 在这里定义 5t 的专属配置
+            RESTART_PRETRAIN = 9
+            PRETRAIN_SCHEDULER_CONFIGS = [  # 重复执行三次元优化
+                # --- 策略一：广泛探索 ---
+                {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第1次重启
+                {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第2次重启
+                # --- 策略二：精细打磨 ---
+                {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第3次重启
+                # --- 策略一：广泛探索 ---
+                {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第4次重启
+                {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第5次重启
+                # --- 策略二：精细打磨 ---
+                {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第6次重启
+                # --- 策略一：广泛探索 ---
+                {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第7次重启
+                {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第8次重启
+                # --- 策略二：精细打磨 ---
+                {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第9次重启
+            ]
+
+            global_best_val_loss = float('inf')
+
+            print(f"--- [元优化流程启动] 将执行 {RESTART_PRETRAIN} 次独立预训练 ---")
+
+            for i in range(RESTART_PRETRAIN):
+                print(f"\n{'='*30} 人工重启 {i+1}/{RESTART_PRETRAIN} {'='*30}")
+
+                # 每次都重新初始化一个新模型
+                model_run = AlignHeteroMLP(
+                    input_dim=input_dim,
+                    output_dim=output_dim,
+                    hidden_dim=args.hidden_dim,
+                    num_layers=args.num_layers,
+                    dropout_rate=args.dropout_rate
+                ).to(DEVICE)
+
+                if i < len(PRETRAIN_SCHEDULER_CONFIGS):
+                    current_scheduler_config = PRETRAIN_SCHEDULER_CONFIGS[i]
+                else:
+                    # 如果配置列表不够长，则复用最后一个
+                    current_scheduler_config = PRETRAIN_SCHEDULER_CONFIGS[-1]
+
+                best_loss_this_run, best_state_dict_this_run = run_pretraining(
+                    model_run, pretrain_loader_A, pretrain_loader_val, DEVICE, args, current_scheduler_config
+                )
+                print(
+                    f"--- 人工重启 {i+1} 完成，本次最佳损失: {best_loss_this_run:.6f} ---")
+
+                if best_state_dict_this_run and best_loss_this_run < global_best_val_loss:
+                    global_best_val_loss = best_loss_this_run
+                    print(
+                        f"  🏆🏆🏆 新的全局最佳损失！ {global_best_val_loss:.6f}。正在覆盖 {pretrained_path}...")
+                    torch.save(best_state_dict_this_run, pretrained_path)
+                elif not best_state_dict_this_run:
+                    print(
+                        f"  -- 本次运行未能产生有效模型 (损失: {best_loss_this_run:.6f})，不保存。")
+                else:
+                    print(
+                        f"  -- 本次结果 ({best_loss_this_run:.6f}) 未超越全局最佳 ({global_best_val_loss:.6f})，不保存。")
+
+            print(
+                f"\n所有 {RESTART_PRETRAIN} 次重启完成。最终全局最佳损失: {global_best_val_loss:.6f}")
+            print(f"--- [阶段一] 5t 元优化预训练完成 ---")
+
+        # --- END: 5t Opamp 逻辑 ---
+
+        # --- START: 其他 Opamp 的标准逻辑 ---
+        else:
+            print(f"--- [阶段一] {args.opamp} 启用标准预训练 ---")
+
+            # 为标准逻辑创建一个默认的 scheduler_config
+            # 注意：T_0=200, T_mult=1 是原文件中的硬编码值
+            default_scheduler_config = {
+                "epochs_pretrain": args.epochs_pretrain,
+                "T_0": 200,
+                "T_mult": 1
+            }
+
+            best_loss, best_state_dict = run_pretraining(
+                model, pretrain_loader_A, pretrain_loader_val, DEVICE, args, default_scheduler_config
+            )
+
+            if best_state_dict:
+                print(
+                    f"--- [阶段一] 预训练完成，保存最佳模型 (损失: {best_loss:.6f}) 至 {pretrained_path} ---")
+                torch.save(best_state_dict, pretrained_path)
+            else:
+                print(f"--- [阶段一] 预训练完成，但未能找到有效模型。跳过保存。 ---")
+
+        # --- END: 其他 Opamp 逻辑 ---
+
+        # --- 关键：无论哪种训练方式，训练后都从磁盘加载最佳模型 ---
+        if os.path.exists(pretrained_path):
+            print(f"--- [阶段一] 加载最佳预训练模型 {pretrained_path} 以进行微调 ---")
+            model.load_state_dict(torch.load(
+                pretrained_path, map_location=DEVICE))
+        else:
+            print(
+                f"--- [阶段一] 警告：预训练未产生任何模型文件 ({pretrained_path})。微调将从随机权重开始！ ---")
+
     else:
+        # 这部分逻辑 (加载现有模型) 保持不变
         print(f"--- [阶段一] 跳过预训练，加载已存在的模型: {pretrained_path} ---")
         model.load_state_dict(torch.load(pretrained_path, map_location=DEVICE))
 
+    # --- [阶段二] 微调逻辑 (保持不变) ---
     finetune_loaders = {
         'source': make_loader(X_src, y_src, args.batch_a, shuffle=True, drop_last=True),
         'target_train': make_loader(X_trg_tr, y_trg_tr, args.batch_b, shuffle=True),
@@ -321,7 +446,19 @@ def main():
         print(f"--- [阶段二] 检测到已有微调模型: {finetuned_path}，跳过微调并直接载入该权重 ---")
         model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
     else:
-        run_finetuning(model, finetune_loaders, DEVICE, finetuned_path, args)
+        # 只有在模型文件确实存在时才开始微调（防止预训练彻底失败）
+        if os.path.exists(pretrained_path) or (args.restart and os.path.exists(pretrained_path)):
+            run_finetuning(model, finetune_loaders,
+                           DEVICE, finetuned_path, args)
+        elif not os.path.exists(pretrained_path) and not args.restart:
+            # 如果文件不存在，但我们没有重启，说明是加载模式，
+            # 这种情况下 finetuned_path 应该存在 (如上一个 if 所示)，
+            # 如果 finetuned_path 也不存在，我们就不应该运行 finetuning
+            print(
+                f"错误：未找到预训练模型 {pretrained_path} 且未找到微调模型 {finetuned_path}。无法开始微调。")
+        else:
+            print(f"警告：预训练失败，未生成 {pretrained_path}。跳过微调阶段。")
+
     print("\n训练流程全部完成。")
 
     # (可选)测试
