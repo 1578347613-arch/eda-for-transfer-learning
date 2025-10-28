@@ -138,6 +138,11 @@ def run_pretraining(model, train_loader, val_loader, device, args, scheduler_con
         print(
             f"Pre-train Epoch [{epoch+1}/{scheduler_config['epochs_pretrain']}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}, LR: {current_lr:.2e}")
 
+        if avg_val_loss < best_val_loss_this_run:
+            best_val_loss_this_run = avg_val_loss
+            best_state_dict_this_run = copy.deepcopy(model.state_dict())
+            print(f"    - 新的本次运行最佳损失: {best_val_loss_this_run:.6f}")
+
         if (epoch + 1) in restart_epochs and (epoch + 1) < scheduler_config['epochs_pretrain']:
             print(f"--- Epoch {epoch+1} 是一个重启点。重置 AdamW 优化器状态！ ---")
             optimizer = torch.optim.AdamW(
