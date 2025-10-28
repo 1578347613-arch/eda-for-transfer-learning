@@ -1,3 +1,144 @@
+day1******************************************************************
+--------------------------------------------------------------------------
+lr_pretrain=3e-3 lr_finetune=1e-4
+
+Fine-tune Epoch [17252/100000], Val NLL: -1.9604
+验证损失连续 1000 轮未改善，触发早停。
+--- [阶段二] 微调完成，最佳模型已保存至 ../results\5t_opamp_finetuned.pth ---
+
+训练流程全部完成。
+
+--- [评估流程启动] ---
+为评估加载最佳模型权重: ../results\5t_opamp_finetuned.pth
+在验证集上生成预测...
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.657e+10  MAE=7.934e+04  R2=0.9958
+dc_gain         MSE=67.43  MAE=6.007  R2=0.9603
+ugf             MSE=7.234e+10  MAE=1.763e+05  R2=0.9951
+phase_margin    MSE=0.08141  MAE=0.2152  R2=0.9919
+cmrr            MSE=2.305e+05  MAE=115.8  R2=0.8075
+
+Avg  (all dims)   MSE=1.778e+10  MAE=5.115e+04  R2=0.9501
+
+-----------------------------------------------------------------------------------
+更激进的lr_pretrain=3e-2,lr_finetune=1e-4
+
+Pre-train Epoch [176/1000], Val HuberLoss: 0.021193
+  - 预训练模型已保存，验证Val HuberLoss提升至: 0.021193
+Fine-tune Epoch [17582/100000], Val NLL: -1.5677
+验证损失连续 1000 轮未改善，触发早停。
+--- [阶段二] 微调完成，最佳模型已保存至 ../results\5t_opamp_finetuned.pth ---
+
+训练流程全部完成。
+
+--- [评估流程启动] ---
+为评估加载最佳模型权重: ../results\5t_opamp_finetuned.pth
+在验证集上生成预测...
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.34e+10  MAE=1.044e+05  R2=0.9941
+dc_gain         MSE=132.2  MAE=9.047  R2=0.9222
+ugf             MSE=1.292e+11  MAE=2.502e+05  R2=0.9912
+phase_margin    MSE=0.2276  MAE=0.3673  R2=0.9775
+cmrr            MSE=4.529e+05  MAE=194  R2=0.6219
+
+Avg  (all dims)   MSE=3.052e+10  MAE=7.096e+04  R2=0.9014
+
+
+··········以下为使用lr_finder找到微调阶段的推荐头学习率7.58e-3·············
+
+--- [评估流程启动] ---
+为评估加载最佳模型权重: ../results\5t_opamp_finetuned.pth
+在验证集上生成预测...
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.365e+10  MAE=1.025e+05  R2=0.9940
+dc_gain         MSE=46.6  MAE=4.01  R2=0.9726
+ugf             MSE=1.02e+11  MAE=2.136e+05  R2=0.9930
+phase_margin    MSE=0.1804  MAE=0.3078  R2=0.9821
+cmrr            MSE=1.23e+05  MAE=111.7  R2=0.8973（不同次波动很大）
+
+Avg  (all dims)   MSE=2.513e+10  MAE=6.325e+04  R2=0.9678
+
+---------------------------------------------------------------------------------------
+T0=200 使用LR_finder找到的推荐学习率 ：lr_pretrain=2e-3 lr_finetune=7.85e-3
+
+Pre-train Epoch [176/1000], Val HuberLoss: 0.018
+  - 预训练模型已保存，验证Val HuberLoss提升至: 0.018
+Fine-tune Epoch [3613/100000], Train Loss: -1.9114, Val NLL: -1.9437
+验证损失连续 1000 轮未改善，触发早停。
+
+slewrate_pos    MSE=2.033e+10  MAE=8.671e+04  R2=0.9949
+dc_gain         MSE=31.14  MAE=3.159  R2=0.9817
+ugf             MSE=9.055e+10  MAE=1.873e+05  R2=0.9938
+phase_margin    MSE=0.143  MAE=0.2796  R2=0.9858
+cmrr            MSE=2.452e+05  MAE=111.4  R2=0.7953
+
+Avg  (all dims)   MSE=2.218e+10  MAE=5.483e+04  R2=0.9503
+
+------------------------------------------------------------------------------------------
+T0=200 使用LR_finder找到的推荐学习率 ：lr_pretrain=3e-3 lr_finetune=7.85e-3
+pretrain时每次热重启同时重启adamw优化器
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.148e+10  MAE=1.018e+05  R2=0.9921
+dc_gain         MSE=37.78  MAE=3.404  R2=0.9778
+ugf             MSE=9.843e+10  MAE=2.009e+05  R2=0.9933
+phase_margin    MSE=0.1357  MAE=0.2513  R2=0.9866
+cmrr            MSE=2.957e+05  MAE=124.2  R2=0.7531
+
+Avg  (all dims)   MSE=2.598e+10  MAE=6.056e+04  R2=0.9406
+
+·········第二次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.349e+10  MAE=8.836e+04  R2=0.9941
+dc_gain         MSE=34.73  MAE=3.276  R2=0.9796
+ugf             MSE=9.938e+10  MAE=1.906e+05  R2=0.9932
+phase_margin    MSE=0.1488  MAE=0.2553  R2=0.9853
+cmrr            MSE=2.135e+05  MAE=118.6  R2=0.8218
+
+Avg  (all dims)   MSE=2.457e+10  MAE=5.582e+04  R2=0.9548
+
+
+········第三次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.426e+10  MAE=8.662e+04  R2=0.9939
+dc_gain         MSE=35.23  MAE=3.37  R2=0.9793
+ugf             MSE=7.443e+10  MAE=1.76e+05  R2=0.9949
+phase_margin    MSE=0.1479  MAE=0.2784  R2=0.9854
+cmrr            MSE=1.939e+05  MAE=122.2  R2=0.8381
+
+Avg  (all dims)   MSE=1.974e+10  MAE=5.254e+04  R2=0.9583
+
+----------------------------------------------------------------------------
+batch_B=64 lr_finetune=3.8e-3
+lamda_coral=0.1
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.296e+10  MAE=8.253e+04  R2=0.9942
+dc_gain         MSE=40.43  MAE=3.483  R2=0.9762
+ugf             MSE=7.37e+10  MAE=1.725e+05  R2=0.9950
+phase_margin    MSE=0.1438  MAE=0.2605  R2=0.9858
+cmrr            MSE=1.839e+05  MAE=107.4  R2=0.8464
+
+Avg  (all dims)   MSE=1.933e+10  MAE=5.102e+04  R2=0.9595
+
+
+
+
+
+
+
+
+
+day2****************************************************************************************
 =================================== EXPERIMENT 1/6: baseline ===================================
 Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
 === 目标域验证集指标（物理单位）===
@@ -8,6 +149,60 @@ phase_margin    MSE=0.1228  MAE=0.2437  R2=0.9878
 cmrr            MSE=6.277e+04  MAE=83.08  R2=0.9476
 
 Avg  (all dims)   MSE=1.588e+10  MAE=4.846e+04  R2=0.9803
+
+···第二次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.194e+10  MAE=8.399e+04  R2=0.9945
+dc_gain         MSE=29.74  MAE=2.98  R2=0.9825
+ugf             MSE=9.386e+10  MAE=1.84e+05  R2=0.9936
+phase_margin    MSE=0.1374  MAE=0.2655  R2=0.9864
+cmrr            MSE=1.974e+05  MAE=114.6  R2=0.8352
+
+Avg  (all dims)   MSE=2.316e+10  MAE=5.362e+04  R2=0.9584
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.028e+10  MAE=7.932e+04  R2=0.9949
+dc_gain         MSE=31.59  MAE=3.484  R2=0.9814
+ugf             MSE=6.745e+10  MAE=1.614e+05  R2=0.9954
+phase_margin    MSE=0.1124  MAE=0.222  R2=0.9889
+cmrr            MSE=1.615e+05  MAE=103.2  R2=0.8652
+
+Avg  (all dims)   MSE=1.755e+10  MAE=4.816e+04  R2=0.9651
+
+
+········第四次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.713e+10  MAE=7.953e+04  R2=0.9957
+dc_gain         MSE=26.9  MAE=2.876  R2=0.9842
+ugf             MSE=7.879e+10  MAE=1.917e+05  R2=0.9946
+phase_margin    MSE=0.1125  MAE=0.2448  R2=0.9889
+cmrr            MSE=2.807e+05  MAE=124  R2=0.7656
+
+Avg  (all dims)   MSE=1.918e+10  MAE=5.427e+04  R2=0.9458
+
+
+·······第五次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.938e+10  MAE=7.861e+04  R2=0.9951
+dc_gain         MSE=42.7  MAE=3.553  R2=0.9749
+ugf             MSE=8.044e+10  MAE=1.812e+05  R2=0.9945
+phase_margin    MSE=0.1297  MAE=0.2547  R2=0.9872
+cmrr            MSE=1.833e+05  MAE=105.3  R2=0.8470
+
+Avg  (all dims)   MSE=1.996e+10  MAE=5.199e+04  R2=0.9597
+
+·········第六次测试
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.184e+10  MAE=8.137e+04  R2=0.9945
+dc_gain         MSE=22.53  MAE=2.754  R2=0.9867
+ugf             MSE=9.014e+10  MAE=1.773e+05  R2=0.9938
+phase_margin    MSE=0.1273  MAE=0.2471  R2=0.9874
+cmrr            MSE=1.123e+05  MAE=94.85  R2=0.9063
+
+Avg  (all dims)   MSE=2.24e+10  MAE=5.176e+04  R2=0.9737
 
 
 =================================== EXPERIMENT 2/6: coral_search_low ===================================
@@ -20,6 +215,28 @@ phase_margin    MSE=0.1207  MAE=0.2494  R2=0.9880
 cmrr            MSE=1.356e+05  MAE=102.5  R2=0.8868
 
 Avg  (all dims)   MSE=1.969e+10  MAE=5.032e+04  R2=0.9697
+
+·········第二次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.012e+10  MAE=8.025e+04  R2=0.9949
+dc_gain         MSE=36.74  MAE=3.388  R2=0.9784
+ugf             MSE=6.051e+10  MAE=1.606e+05  R2=0.9959
+phase_margin    MSE=0.1271  MAE=0.2455  R2=0.9874
+cmrr            MSE=7.965e+04  MAE=91.07  R2=0.9335
+
+Avg  (all dims)   MSE=1.613e+10  MAE=4.818e+04  R2=0.9780
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.162e+10  MAE=7.889e+04  R2=0.9945
+dc_gain         MSE=33.96  MAE=3.149  R2=0.9800
+ugf             MSE=7.122e+10  MAE=1.651e+05  R2=0.9951
+phase_margin    MSE=0.1363  MAE=0.2531  R2=0.9865
+cmrr            MSE=2.006e+05  MAE=114.1  R2=0.8325
+
+Avg  (all dims)   MSE=1.857e+10  MAE=4.881e+04  R2=0.9577
 
 
 =================================== EXPERIMENT 3/6: coral_search_medium ===================================
@@ -34,6 +251,31 @@ cmrr            MSE=7.671e+04  MAE=91.06  R2=0.9360
 Avg  (all dims)   MSE=2.003e+10  MAE=5.048e+04  R2=0.9780
 
 
+·········第二次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.519e+10  MAE=7.796e+04  R2=0.9936
+dc_gain         MSE=38.49  MAE=3.498  R2=0.9773
+ugf             MSE=7.849e+10  MAE=1.608e+05  R2=0.9946
+phase_margin    MSE=0.1361  MAE=0.2566  R2=0.9865
+cmrr            MSE=1.316e+05  MAE=103.2  R2=0.8901
+
+Avg  (all dims)   MSE=2.074e+10  MAE=4.778e+04  R2=0.9685
+
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.049e+10  MAE=8.143e+04  R2=0.9948
+dc_gain         MSE=30.88  MAE=3.166  R2=0.9818
+ugf             MSE=8.969e+10  MAE=1.86e+05  R2=0.9939
+phase_margin    MSE=0.1304  MAE=0.2544  R2=0.9871
+cmrr            MSE=1.467e+05  MAE=102.6  R2=0.8775
+
+Avg  (all dims)   MSE=2.204e+10  MAE=5.35e+04  R2=0.9670
+
+
+
 =================================== EXPERIMENT 4/6: coral_search_high ===================================
 Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
 === 目标域验证集指标（物理单位）===
@@ -44,6 +286,30 @@ phase_margin    MSE=0.1358  MAE=0.2549  R2=0.9865
 cmrr            MSE=8.992e+04  MAE=90.29  R2=0.9249
 
 Avg  (all dims)   MSE=2.454e+10  MAE=5.333e+04  R2=0.9745
+
+
+·········第二次测试
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.911e+10  MAE=7.544e+04  R2=0.9952
+dc_gain         MSE=30.31  MAE=3.015  R2=0.9822
+ugf             MSE=7.522e+10  MAE=1.653e+05  R2=0.9949
+phase_margin    MSE=0.1281  MAE=0.2546  R2=0.9873
+cmrr            MSE=1.233e+05  MAE=103.8  R2=0.8971
+
+Avg  (all dims)   MSE=1.887e+10  MAE=4.816e+04  R2=0.9713
+
+
+········第三次测试
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.661e+10  MAE=8.289e+04  R2=0.9933
+dc_gain         MSE=51.38  MAE=3.222  R2=0.9698
+ugf             MSE=9.949e+10  MAE=1.745e+05  R2=0.9932
+phase_margin    MSE=0.1127  MAE=0.2315  R2=0.9888
+cmrr            MSE=8.978e+04  MAE=102.9  R2=0.9250
+
+Avg  (all dims)   MSE=2.522e+10  MAE=5.15e+04  R2=0.9740
 
 
 =================================== EXPERIMENT 5/6: coral_search_high ===================================
@@ -67,4 +333,594 @@ ugf             MSE=1.537e+13  MAE=3.14e+06  R2=-0.0491
 phase_margin    MSE=10.02  MAE=2.26  R2=0.0078
 cmrr            MSE=6.563e+05  MAE=154.3  R2=0.4521
 
-Avg  (all dims)   MSE=3.867e+12  MAE=9.624e+05  R2=0.2535
+Avg  (all dims)   MSE=3.867e+12  MAE=9.624e+05  R2=0.2535(舍弃)
+
+
+
+
+
+
+
+
+day3*****************************************************************************
+restart pretrain ---由于预训练得到的模型波动很大，选择多次重启预训练找最佳模型的策略，上面的调参可以忽略
+=================================== EXPERIMENT 1/12: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.716e+10  MAE=8.883e+04  R2=0.9931
+dc_gain         MSE=30.03  MAE=2.948  R2=0.9823
+ugf             MSE=9.935e+10  MAE=1.823e+05  R2=0.9932
+phase_margin    MSE=0.1428  MAE=0.2543  R2=0.9859
+cmrr            MSE=1.554e+05  MAE=99.19  R2=0.8702
+
+Avg  (all dims)   MSE=2.53e+10  MAE=5.424e+04  R2=0.9650
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.394e+10  MAE=7.291e+04  R2=0.9965
+dc_gain         MSE=43.17  MAE=3.45  R2=0.9746
+ugf             MSE=8.286e+10  MAE=1.842e+05  R2=0.9943
+phase_margin    MSE=0.1213  MAE=0.2356  R2=0.9880
+cmrr            MSE=1.597e+05  MAE=93.23  R2=0.8667
+
+Avg  (all dims)   MSE=1.936e+10  MAE=5.143e+04  R2=0.9640
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.098e+10  MAE=8.673e+04  R2=0.9922
+dc_gain         MSE=31.47  MAE=3.454  R2=0.9815
+ugf             MSE=1.017e+11  MAE=1.832e+05  R2=0.9931
+phase_margin    MSE=0.1152  MAE=0.2351  R2=0.9886
+cmrr            MSE=2.212e+05  MAE=113.1  R2=0.8153
+
+Avg  (all dims)   MSE=2.653e+10  MAE=5.4e+04  R2=0.9541
+
+
+=================================== EXPERIMENT 2/12: coral_search_low ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.742e+10  MAE=7.798e+04  R2=0.9956
+dc_gain         MSE=49.71  MAE=4.061  R2=0.9707
+ugf             MSE=8.101e+10  MAE=1.714e+05  R2=0.9945
+phase_margin    MSE=0.1092  MAE=0.2343  R2=0.9892
+cmrr            MSE=1.19e+05  MAE=88.35  R2=0.9007
+
+Avg  (all dims)   MSE=1.969e+10  MAE=4.99e+04  R2=0.9701
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.095e+10  MAE=8.3e+04  R2=0.9947
+dc_gain         MSE=31.89  MAE=3.143  R2=0.9812
+ugf             MSE=8.674e+10  MAE=1.826e+05  R2=0.9941
+phase_margin    MSE=0.1228  MAE=0.2365  R2=0.9878
+cmrr            MSE=1.446e+05  MAE=98.91  R2=0.8792
+
+Avg  (all dims)   MSE=2.154e+10  MAE=5.313e+04  R2=0.9674
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.96e+10  MAE=7.714e+04  R2=0.9951
+dc_gain         MSE=37.08  MAE=3.577  R2=0.9782
+ugf             MSE=9.007e+10  MAE=1.785e+05  R2=0.9939
+phase_margin    MSE=0.1078  MAE=0.233  R2=0.9893
+cmrr            MSE=1.704e+05  MAE=97.1  R2=0.8577
+
+Avg  (all dims)   MSE=2.193e+10  MAE=5.115e+04  R2=0.9628
+
+
+=================================== EXPERIMENT 3/12: coral_search_medium ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.831e+10  MAE=7.844e+04  R2=0.9954
+dc_gain         MSE=36.19  MAE=3.646  R2=0.9787
+ugf             MSE=7.354e+10  MAE=1.703e+05  R2=0.9950
+phase_margin    MSE=0.09727  MAE=0.2346  R2=0.9904
+cmrr            MSE=1.546e+05  MAE=95.18  R2=0.8710   *****************************最佳取值
+
+Avg  (all dims)   MSE=1.837e+10  MAE=4.976e+04  R2=0.9661
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.285e+10  MAE=7.997e+04  R2=0.9942
+dc_gain         MSE=32.01  MAE=2.937  R2=0.9812
+ugf             MSE=8.635e+10  MAE=1.74e+05  R2=0.9941
+phase_margin    MSE=0.1273  MAE=0.2373  R2=0.9874
+cmrr            MSE=4.569e+04  MAE=82.45  R2=0.9619
+
+Avg  (all dims)   MSE=2.184e+10  MAE=5.082e+04  R2=0.9837
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.681e+10  MAE=7.526e+04  R2=0.9958
+dc_gain         MSE=44.48  MAE=3.257  R2=0.9738
+ugf             MSE=7.706e+10  MAE=1.666e+05  R2=0.9947
+phase_margin    MSE=0.1231  MAE=0.2455  R2=0.9878
+cmrr            MSE=3.851e+04  MAE=87.41  R2=0.9678
+
+Avg  (all dims)   MSE=1.877e+10  MAE=4.839e+04  R2=0.9840
+
+
+=================================== EXPERIMENT 4/12: coral_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.695e+10  MAE=7.6e+04  R2=0.9957
+dc_gain         MSE=38.68  MAE=3.26  R2=0.9772
+ugf             MSE=7.334e+10  MAE=1.667e+05  R2=0.9950
+phase_margin    MSE=0.1267  MAE=0.2528  R2=0.9874
+cmrr            MSE=1.473e+05  MAE=93.28  R2=0.8770
+
+Avg  (all dims)   MSE=1.806e+10  MAE=4.855e+04  R2=0.9665
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.628e+10  MAE=7.458e+04  R2=0.9959
+dc_gain         MSE=36.23  MAE=3.321  R2=0.9787
+ugf             MSE=7.578e+10  MAE=1.585e+05  R2=0.9948
+phase_margin    MSE=0.1289  MAE=0.2554  R2=0.9872
+cmrr            MSE=1.63e+05  MAE=105.4  R2=0.8639
+
+Avg  (all dims)   MSE=1.841e+10  MAE=4.664e+04  R2=0.9641
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0.0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.351e+10  MAE=7.943e+04  R2=0.9941
+dc_gain         MSE=36.92  MAE=3.38  R2=0.9783
+ugf             MSE=9.284e+10  MAE=1.687e+05  R2=0.9937
+phase_margin    MSE=0.1144  MAE=0.2471  R2=0.9887
+cmrr            MSE=1.432e+05  MAE=101.2  R2=0.8804
+
+Avg  (all dims)   MSE=2.327e+10  MAE=4.964e+04  R2=0.9670
+
+
+
+
+
+
+
+
+day4****************************************************************************************
+首先复现了最佳lambda_coral=0.1
+=================================== EXPERIMENT 1/42: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.762e+10  MAE=7.714e+04  R2=0.9956
+dc_gain         MSE=39.83  MAE=3.417  R2=0.9766
+ugf             MSE=7.622e+10  MAE=1.583e+05  R2=0.9948
+phase_margin    MSE=0.1387  MAE=0.2543  R2=0.9863
+cmrr            MSE=1.737e+05  MAE=100  R2=0.8549
+
+Avg  (all dims)   MSE=1.877e+10  MAE=4.711e+04  R2=0.9616
+
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.22e+10  MAE=8.188e+04  R2=0.9944
+dc_gain         MSE=47.04  MAE=3.654  R2=0.9723
+ugf             MSE=8.111e+10  MAE=1.639e+05  R2=0.9945
+phase_margin    MSE=0.1223  MAE=0.2621  R2=0.9879
+cmrr            MSE=1.665e+05  MAE=96.58  R2=0.8610
+
+Avg  (all dims)   MSE=2.066e+10  MAE=4.918e+04  R2=0.9620
+
+Parameters: lambda_nll=1.0, lambda_coral=0.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.799e+10  MAE=7.426e+04  R2=0.9955
+dc_gain         MSE=30.68  MAE=3.117  R2=0.9819
+ugf             MSE=7.962e+10  MAE=1.675e+05  R2=0.9946
+phase_margin    MSE=0.1111  MAE=0.2468  R2=0.9890
+cmrr            MSE=1.877e+05  MAE=99.64  R2=0.8433
+
+Avg  (all dims)   MSE=1.952e+10  MAE=4.837e+04  R2=0.9608
+
+
+=================================== EXPERIMENT 2/42: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.009e+10  MAE=8.152e+04  R2=0.9949
+dc_gain         MSE=65.42  MAE=3.825  R2=0.9615
+ugf             MSE=9.078e+10  MAE=1.748e+05  R2=0.9938
+phase_margin    MSE=0.1327  MAE=0.2482  R2=0.9869
+cmrr            MSE=2.185e+05  MAE=97.01  R2=0.8176
+
+Avg  (all dims)   MSE=2.217e+10  MAE=5.128e+04  R2=0.9509
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.61e+10  MAE=7.937e+04  R2=0.9959
+dc_gain         MSE=38.54  MAE=3.623  R2=0.9773
+ugf             MSE=6.859e+10  MAE=1.573e+05  R2=0.9953
+phase_margin    MSE=0.1174  MAE=0.2429  R2=0.9884
+cmrr            MSE=1.791e+05  MAE=101.1  R2=0.8505
+
+Avg  (all dims)   MSE=1.694e+10  MAE=4.736e+04  R2=0.9615
+
+Parameters: lambda_nll=1.0, lambda_coral=0.01, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.763e+10  MAE=7.737e+04  R2=0.9956
+dc_gain         MSE=44.45  MAE=3.546  R2=0.9738
+ugf             MSE=8.51e+10  MAE=1.686e+05  R2=0.9942
+phase_margin    MSE=0.1344  MAE=0.2493  R2=0.9867
+cmrr            MSE=1.977e+05  MAE=97  R2=0.8350
+
+Avg  (all dims)   MSE=2.054e+10  MAE=4.922e+04  R2=0.9570
+
+
+=================================== EXPERIMENT 3/42: baseline ===================================*最好
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.271e+10  MAE=7.898e+04  R2=0.9943
+dc_gain         MSE=28.29  MAE=2.994  R2=0.9833
+ugf             MSE=7.792e+10  MAE=1.553e+05  R2=0.9947
+phase_margin    MSE=0.1068  MAE=0.2392  R2=0.9894
+cmrr            MSE=1.446e+05  MAE=94.39  R2=0.8793
+
+Avg  (all dims)   MSE=2.013e+10  MAE=4.687e+04  R2=0.9682
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.625e+10  MAE=9.236e+04  R2=0.9934
+dc_gain         MSE=41.29  MAE=3.351  R2=0.9757
+ugf             MSE=9.622e+10  MAE=1.82e+05  R2=0.9934
+phase_margin    MSE=0.1221  MAE=0.2469  R2=0.9879
+cmrr            MSE=8.295e+04  MAE=93.2  R2=0.9307
+
+Avg  (all dims)   MSE=2.449e+10  MAE=5.489e+04  R2=0.9762
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.585e+10  MAE=7.763e+04  R2=0.9960
+dc_gain         MSE=34.73  MAE=3.519  R2=0.9796
+ugf             MSE=7.599e+10  MAE=1.635e+05  R2=0.9948
+phase_margin    MSE=0.1226  MAE=0.2416  R2=0.9879
+cmrr            MSE=1.592e+05  MAE=96.7  R2=0.8671
+
+Avg  (all dims)   MSE=1.837e+10  MAE=4.825e+04  R2=0.9651
+
+
+=================================== EXPERIMENT 4/42: baseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.803e+10  MAE=7.968e+04  R2=0.9954
+dc_gain         MSE=33.61  MAE=3.306  R2=0.9802
+ugf             MSE=8.223e+10  MAE=1.677e+05  R2=0.9944
+phase_margin    MSE=0.1146  MAE=0.2506  R2=0.9886
+cmrr            MSE=1.217e+05  MAE=90.38  R2=0.8984
+
+Avg  (all dims)   MSE=2.005e+10  MAE=4.949e+04  R2=0.9714
+
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.661e+10  MAE=7.679e+04  R2=0.9958
+dc_gain         MSE=47.44  MAE=3.726  R2=0.9721
+ugf             MSE=7.082e+10  MAE=1.502e+05  R2=0.9952
+phase_margin    MSE=0.115  MAE=0.239  R2=0.9886
+cmrr            MSE=1.519e+05  MAE=105  R2=0.8732
+
+Avg  (all dims)   MSE=1.748e+10  MAE=4.541e+04  R2=0.9650
+
+Parameters: lambda_nll=1.0, lambda_coral=1.0, alpha_r2=0
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.616e+10  MAE=9.271e+04  R2=0.9909
+dc_gain         MSE=29  MAE=3.08  R2=0.9829
+ugf             MSE=1.074e+11  MAE=1.795e+05  R2=0.9927
+phase_margin    MSE=0.1141  MAE=0.2307  R2=0.9887
+cmrr            MSE=1.781e+05  MAE=99.25  R2=0.8513
+
+Avg  (all dims)   MSE=2.872e+10  MAE=5.447e+04  R2=0.9613
+
+
+
+然后执行了alpha_r2的调参
+=================================== EXPERIMENT 13/42: newbaseline ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.063e+10  MAE=8.01e+04  R2=0.9948
+dc_gain         MSE=30.09  MAE=3.173  R2=0.9823
+ugf             MSE=8.196e+10  MAE=1.726e+05  R2=0.9944
+phase_margin    MSE=0.1103  MAE=0.2396  R2=0.9891
+cmrr            MSE=1.433e+05  MAE=92.63  R2=0.8804
+
+Avg  (all dims)   MSE=2.052e+10  MAE=5.057e+04  R2=0.9682
+
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.422e+10  MAE=7.7e+04  R2=0.9939
+dc_gain         MSE=40.36  MAE=3.525  R2=0.9762
+ugf             MSE=8.446e+10  MAE=1.723e+05  R2=0.9942
+phase_margin    MSE=0.1619  MAE=0.2607  R2=0.9840
+cmrr            MSE=1.454e+05  MAE=94.47  R2=0.8786
+
+Avg  (all dims)   MSE=2.174e+10  MAE=4.988e+04  R2=0.9654
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.025e+10  MAE=8.443e+04  R2=0.9949
+dc_gain         MSE=37.6  MAE=3.588  R2=0.9779
+ugf             MSE=7.892e+10  MAE=1.634e+05  R2=0.9946
+phase_margin    MSE=0.118  MAE=0.246  R2=0.9883
+cmrr            MSE=1.402e+05  MAE=99.61  R2=0.8830
+
+Avg  (all dims)   MSE=1.983e+10  MAE=4.958e+04  R2=0.9677
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.023e+10  MAE=8.365e+04  R2=0.9949
+dc_gain         MSE=39.4  MAE=3.365  R2=0.9768
+ugf             MSE=8.574e+10  MAE=1.824e+05  R2=0.9941
+phase_margin    MSE=0.1266  MAE=0.2604  R2=0.9875
+cmrr            MSE=1.781e+05  MAE=96.3  R2=0.8513
+
+Avg  (all dims)   MSE=2.119e+10  MAE=5.322e+04  R2=0.9609
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.81e+10  MAE=7.325e+04  R2=0.9954
+dc_gain         MSE=41.51  MAE=3.677  R2=0.9756
+ugf             MSE=6.974e+10  MAE=1.531e+05  R2=0.9952
+phase_margin    MSE=0.1248  MAE=0.2518  R2=0.9876
+cmrr            MSE=1.792e+05  MAE=99.64  R2=0.8504
+
+Avg  (all dims)   MSE=1.757e+10  MAE=4.53e+04  R2=0.9609
+
+=================================== EXPERIMENT 14/42: r2_search_low ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.707e+10  MAE=7.463e+04  R2=0.9957
+dc_gain         MSE=31.06  MAE=3.258  R2=0.9817
+ugf             MSE=7.829e+10  MAE=1.636e+05  R2=0.9947
+phase_margin    MSE=0.1208  MAE=0.2478  R2=0.9880
+cmrr            MSE=1.842e+05  MAE=92.3  R2=0.8463
+
+Avg  (all dims)   MSE=1.907e+10  MAE=4.766e+04  R2=0.9613
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.163e+10  MAE=8.235e+04  R2=0.9945
+dc_gain         MSE=26.12  MAE=2.845  R2=0.9846
+ugf             MSE=8.045e+10  MAE=1.731e+05  R2=0.9945
+phase_margin    MSE=0.16  MAE=0.2755  R2=0.9842
+cmrr            MSE=2.369e+05  MAE=101.9  R2=0.8022
+
+Avg  (all dims)   MSE=2.042e+10  MAE=5.112e+04  R2=0.9520
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.751e+10  MAE=7.639e+04  R2=0.9956
+dc_gain         MSE=34.39  MAE=3.541  R2=0.9798
+ugf             MSE=6.662e+10  MAE=1.547e+05  R2=0.9955
+phase_margin    MSE=0.128  MAE=0.2473  R2=0.9873
+cmrr            MSE=1.544e+05  MAE=95.83  R2=0.8711
+
+Avg  (all dims)   MSE=1.683e+10  MAE=4.623e+04  R2=0.9658
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.775e+10  MAE=7.809e+04  R2=0.9955
+dc_gain         MSE=33.06  MAE=3.453  R2=0.9805
+ugf             MSE=6.775e+10  MAE=1.623e+05  R2=0.9954
+phase_margin    MSE=0.1037  MAE=0.244  R2=0.9897
+cmrr            MSE=1.598e+05  MAE=101.3  R2=0.8666
+
+Avg  (all dims)   MSE=1.71e+10  MAE=4.81e+04  R2=0.9656
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=0.5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.816e+10  MAE=7.925e+04  R2=0.9954
+dc_gain         MSE=37.75  MAE=3.477  R2=0.9778
+ugf             MSE=8.586e+10  MAE=1.755e+05  R2=0.9941
+phase_margin    MSE=0.141  MAE=0.2628  R2=0.9860
+cmrr            MSE=1.504e+05  MAE=89.93  R2=0.8744
+
+Avg  (all dims)   MSE=2.08e+10  MAE=5.097e+04  R2=0.9656
+
+=================================== EXPERIMENT 15/42: r2_search_medium ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.694e+10  MAE=8.289e+04  R2=0.9932
+dc_gain         MSE=34.21  MAE=3.201  R2=0.9799
+ugf             MSE=8.751e+10  MAE=1.77e+05  R2=0.9940
+phase_margin    MSE=0.1206  MAE=0.251  R2=0.9881
+cmrr            MSE=1.659e+05  MAE=94.71  R2=0.8615
+
+Avg  (all dims)   MSE=2.289e+10  MAE=5.2e+04  R2=0.9633
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.881e+10  MAE=8.653e+04  R2=0.9927
+dc_gain         MSE=36.39  MAE=3.57  R2=0.9786
+ugf             MSE=8.844e+10  MAE=1.798e+05  R2=0.9940
+phase_margin    MSE=0.1021  MAE=0.2448  R2=0.9899
+cmrr            MSE=2.358e+05  MAE=106.5  R2=0.8032
+
+Avg  (all dims)   MSE=2.345e+10  MAE=5.329e+04  R2=0.9517
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.466e+10  MAE=8.469e+04  R2=0.9938
+dc_gain         MSE=29.76  MAE=3.333  R2=0.9825
+ugf             MSE=9.946e+10  MAE=1.785e+05  R2=0.9932
+phase_margin    MSE=0.144  MAE=0.2712  R2=0.9857
+cmrr            MSE=2.032e+05  MAE=104  R2=0.8303
+
+Avg  (all dims)   MSE=2.482e+10  MAE=5.265e+04  R2=0.9571
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.137e+10  MAE=8.044e+04  R2=0.9946
+dc_gain         MSE=24.81  MAE=3.047  R2=0.9854
+ugf             MSE=8.526e+10  MAE=1.827e+05  R2=0.9942
+phase_margin    MSE=0.1147  MAE=0.2453  R2=0.9886
+cmrr            MSE=1.735e+05  MAE=99.55  R2=0.8551
+
+Avg  (all dims)   MSE=2.133e+10  MAE=5.265e+04  R2=0.9636
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=1
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.623e+10  MAE=7.095e+04  R2=0.9959
+dc_gain         MSE=40.18  MAE=3.801  R2=0.9763
+ugf             MSE=6.112e+10  MAE=1.473e+05  R2=0.9958
+phase_margin    MSE=0.1105  MAE=0.2403  R2=0.9890
+cmrr            MSE=2.067e+05  MAE=105.5  R2=0.8274
+
+Avg  (all dims)   MSE=1.547e+10  MAE=4.367e+04  R2=0.9569
+
+
+=================================== EXPERIMENT 16/42: r2_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.897e+10  MAE=8.082e+04  R2=0.9952
+dc_gain         MSE=30.24  MAE=3.065  R2=0.9822
+ugf             MSE=8.663e+10  MAE=1.813e+05  R2=0.9941
+phase_margin    MSE=0.1151  MAE=0.2413  R2=0.9886
+cmrr            MSE=2.042e+05  MAE=101.3  R2=0.8296
+
+Avg  (all dims)   MSE=2.112e+10  MAE=5.245e+04  R2=0.9579
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.528e+10  MAE=7.354e+04  R2=0.9961
+dc_gain         MSE=50.35  MAE=4.856  R2=0.9704
+ugf             MSE=6.516e+10  MAE=1.575e+05  R2=0.9956
+phase_margin    MSE=0.1243  MAE=0.2625  R2=0.9877
+cmrr            MSE=1.752e+05  MAE=102.8  R2=0.8537
+
+Avg  (all dims)   MSE=1.609e+10  MAE=4.623e+04  R2=0.9607
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.617e+10  MAE=7.262e+04  R2=0.9959
+dc_gain         MSE=52.56  MAE=4.717  R2=0.9691
+ugf             MSE=6.48e+10  MAE=1.625e+05  R2=0.9956
+phase_margin    MSE=0.1082  MAE=0.236  R2=0.9893
+cmrr            MSE=1.829e+05  MAE=102  R2=0.8473
+
+Avg  (all dims)   MSE=1.62e+10  MAE=4.704e+04  R2=0.9594
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.15e+10  MAE=8.078e+04  R2=0.9946
+dc_gain         MSE=25.7  MAE=3  R2=0.9849
+ugf             MSE=6.955e+10  MAE=1.603e+05  R2=0.9953
+phase_margin    MSE=0.1216  MAE=0.239  R2=0.9880
+cmrr            MSE=2.409e+05  MAE=100.6  R2=0.7988
+
+Avg  (all dims)   MSE=1.821e+10  MAE=4.823e+04  R2=0.9523
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=2
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=3.032e+10  MAE=8.484e+04  R2=0.9923
+dc_gain         MSE=29.31  MAE=3.05  R2=0.9827
+ugf             MSE=9.094e+10  MAE=1.688e+05  R2=0.9938
+phase_margin    MSE=0.1162  MAE=0.2498  R2=0.9885
+cmrr            MSE=2.075e+05  MAE=96.39  R2=0.8267
+
+Avg  (all dims)   MSE=2.425e+10  MAE=5.074e+04  R2=0.9568
+
+
+
+=================================== EXPERIMENT 17/42: r2_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.522e+10  MAE=8.733e+04  R2=0.9936
+dc_gain         MSE=34.96  MAE=3.509  R2=0.9794
+ugf             MSE=9.253e+10  MAE=1.835e+05  R2=0.9937
+phase_margin    MSE=0.1236  MAE=0.2465  R2=0.9878
+cmrr            MSE=1.601e+05  MAE=93.62  R2=0.8663
+
+Avg  (all dims)   MSE=2.355e+10  MAE=5.418e+04  R2=0.9642
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.204e+10  MAE=8.144e+04  R2=0.9944
+dc_gain         MSE=36.69  MAE=3.236  R2=0.9784
+ugf             MSE=8.968e+10  MAE=1.892e+05  R2=0.9939
+phase_margin    MSE=0.1409  MAE=0.273  R2=0.9860
+cmrr            MSE=2.048e+05  MAE=103  R2=0.8290
+
+Avg  (all dims)   MSE=2.234e+10  MAE=5.416e+04  R2=0.9564
+
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.587e+10  MAE=7.612e+04  R2=0.9960
+dc_gain         MSE=42.51  MAE=4.007  R2=0.9750
+ugf             MSE=6.691e+10  MAE=1.631e+05  R2=0.9954
+phase_margin    MSE=0.1136  MAE=0.2401  R2=0.9887
+cmrr            MSE=1.711e+05  MAE=104.8  R2=0.8571
+
+Avg  (all dims)   MSE=1.656e+10  MAE=4.787e+04  R2=0.9625
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.421e+10  MAE=8.726e+04  R2=0.9939
+dc_gain         MSE=35.41  MAE=3.587  R2=0.9792
+ugf             MSE=9.686e+10  MAE=1.88e+05  R2=0.9934
+phase_margin    MSE=0.1407  MAE=0.2726  R2=0.9861
+cmrr            MSE=1.902e+05  MAE=91.71  R2=0.8412
+
+Avg  (all dims)   MSE=2.421e+10  MAE=5.507e+04  R2=0.9587
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=5
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.887e+10  MAE=8.055e+04  R2=0.9952
+dc_gain         MSE=36.66  MAE=3.527  R2=0.9784
+ugf             MSE=9.069e+10  MAE=1.765e+05  R2=0.9938
+phase_margin    MSE=0.1056  MAE=0.2363  R2=0.9895
+cmrr            MSE=1.759e+05  MAE=95.87  R2=0.8532
+
+Avg  (all dims)   MSE=2.191e+10  MAE=5.143e+04  R2=0.9620
+
+
+
+=================================== EXPERIMENT 18/42: r2_search_high ===================================
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.26e+10  MAE=8.869e+04  R2=0.9943
+dc_gain         MSE=34.18  MAE=3.178  R2=0.9799
+ugf             MSE=9.851e+10  MAE=2e+05  R2=0.9933
+phase_margin    MSE=0.1292  MAE=0.2518  R2=0.9872
+cmrr            MSE=1.607e+05  MAE=91.81  R2=0.8658
+
+Avg  (all dims)   MSE=2.422e+10  MAE=5.776e+04  R2=0.9641
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.961e+10  MAE=8.369e+04  R2=0.9925
+dc_gain         MSE=39.35  MAE=3.612  R2=0.9768
+ugf             MSE=1.054e+11  MAE=1.865e+05  R2=0.9928
+phase_margin    MSE=0.1257  MAE=0.2476  R2=0.9876
+cmrr            MSE=2.15e+05  MAE=105.6  R2=0.8205
+
+Avg  (all dims)   MSE=2.7e+10  MAE=5.405e+04  R2=0.9540
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.607e+10  MAE=8.097e+04  R2=0.9934
+dc_gain         MSE=29.61  MAE=3.072  R2=0.9826
+ugf             MSE=9.815e+10  MAE=1.732e+05  R2=0.9933
+phase_margin    MSE=0.1309  MAE=0.2486  R2=0.9870
+cmrr            MSE=2.029e+05  MAE=99.95  R2=0.8306
+
+Avg  (all dims)   MSE=2.484e+10  MAE=5.085e+04  R2=0.9574
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.72e+10  MAE=8.221e+04  R2=0.9957
+dc_gain         MSE=37.2  MAE=3.654  R2=0.9781
+ugf             MSE=7.459e+10  MAE=1.743e+05  R2=0.9949
+phase_margin    MSE=0.1261  MAE=0.2531  R2=0.9875
+cmrr            MSE=2.052e+05  MAE=99.42  R2=0.8287
+
+Avg  (all dims)   MSE=1.836e+10  MAE=5.131e+04  R2=0.9570
+
+Parameters: lambda_nll=1.0, lambda_coral=0.1, alpha_r2=10
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.547e+10  MAE=7.581e+04  R2=0.9961
+dc_gain         MSE=35.18  MAE=3.089  R2=0.9793
+ugf             MSE=7.861e+10  MAE=1.748e+05  R2=0.9946
+phase_margin    MSE=0.1416  MAE=0.2722  R2=0.9860
+cmrr            MSE=1.756e+05  MAE=95.94  R2=0.8534
+
+Avg  (all dims)   MSE=1.881e+10  MAE=5.014e+04  R2=0.9619
