@@ -293,8 +293,12 @@ def main():
     if os.path.exists(finetuned_path) and not args.restart:
         print(f"检测到最终模型 {finetuned_path} 已存在且未指定 --restart。跳过所有训练。")
         if args.evaluate:
-            model = AlignHeteroMLP(input_dim=input_dim,
-                                   output_dim=output_dim).to(DEVICE)
+            model = AlignHeteroMLP(
+                input_dim=input_dim,
+                output_dim=output_dim,
+                hidden_dims=config.HIDDEN_DIMS,
+                dropout_rate=config.DROPOUT_RATE
+            ).to(DEVICE)
             model.load_state_dict(torch.load(
                 finetuned_path, map_location=DEVICE))
             pred_scaled, true_scaled = get_predictions(
@@ -313,8 +317,12 @@ def main():
         print(f"\n{'='*30} 完整流水线 {i+1}/{num_pipelines} {'='*30}")
 
         # 1. 每次都创建新模型，保证隔离
-        model = AlignHeteroMLP(input_dim=input_dim,
-                               output_dim=output_dim).to(DEVICE)
+        model = AlignHeteroMLP(
+            input_dim=input_dim,
+            output_dim=output_dim,
+            hidden_dims=config.HIDDEN_DIMS,
+            dropout_rate=config.DROPOUT_RATE
+        ).to(DEVICE)
 
         # 2. 选择预训练配置并执行
         scheduler_config = config.PRETRAIN_SCHEDULER_CONFIGS[i % len(
@@ -382,8 +390,12 @@ def main():
     # --- (可选) 评估最终选出的模型 ---
     if args.evaluate:
         print("\n--- [最终评估流程启动] ---")
-        model = AlignHeteroMLP(input_dim=input_dim,
-                               output_dim=output_dim).to(DEVICE)
+        model = AlignHeteroMLP(
+            input_dim=input_dim,
+            output_dim=output_dim,
+            hidden_dims=config.HIDDEN_DIMS,
+            dropout_rate=config.DROPOUT_RATE
+        ).to(DEVICE)
         model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
         pred_scaled, true_scaled = get_predictions(
             model, finetune_loaders['target_val'], DEVICE)

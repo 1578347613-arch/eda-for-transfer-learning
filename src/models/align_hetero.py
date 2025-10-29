@@ -2,9 +2,7 @@
 import torch.nn as nn
 from .mlp import MLP
 import config
-HIDDEN_DIM = config.HIDDEN_DIM
-NUM_LAYERS = config.NUM_LAYERS
-DROPOUT_RATE = config.DROPOUT_RATE
+from typing import List
 
 
 class AlignHeteroMLP(nn.Module):
@@ -15,16 +13,14 @@ class AlignHeteroMLP(nn.Module):
     - forward: 返回 (mu, logvar, features)；features = mu（与现有训练脚本接口一致）
     """
 
-    def __init__(self, input_dim, output_dim,
-                 hidden_dim: int = HIDDEN_DIM,
-                 num_layers: int = NUM_LAYERS,
-                 dropout_rate: float = DROPOUT_RATE):
+    def __init__(self, input_dim: int, output_dim: int,
+                 hidden_dims: List[int],
+                 dropout_rate: float):
         super().__init__()
         self.backbone = MLP(
             input_dim=input_dim,
             output_dim=output_dim,
-            hidden_dim=hidden_dim,
-            num_layers=num_layers,
+            hidden_dims=hidden_dims,      # 直接传递列表
             dropout_rate=dropout_rate
         )
         self.hetero_head = nn.Linear(output_dim, output_dim)
