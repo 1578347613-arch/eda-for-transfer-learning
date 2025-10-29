@@ -81,7 +81,8 @@ def _load_forward_model(opamp_type: str, ckpt_path: Path) -> AlignHeteroMLP:
         dropout_rate=config['dropout_rate']
     ).to(DEVICE)
 
-    state = torch.load(ckpt_path, map_location=DEVICE)
+    state = torch.load(ckpt_path, map_location=DEVICE, weights_only=False)
+
     model_state = state.get('state_dict', state)
     model.load_state_dict(model_state, strict=False)
     model.eval()

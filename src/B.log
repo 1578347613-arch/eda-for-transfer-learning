@@ -1,56 +1,3 @@
-# src/config.py
-
-import torch
-
-# --- 通用配置 (所有模型共享) ---
-COMMON_CONFIG = {
-    'device': 'cuda' if torch.cuda.is_available() else 'cpu',
-    'restart': False,
-    'evaluate': True,
-    'save_path': 'results',
-    'seed': 42
-}
-
-LOG_TRANSFORMED_COLS = [
-    "ugf",
-    "cmrr",
-    "dc_gain",
-    "slewrate_pos",
-]
-
-# --- 各模型专属配置 ---
-TASK_CONFIGS = {
-    '5t_opamp': {
-        # 训练设置
-        'epochs_pretrain': 1000,
-        'patience_pretrain': 200,
-        'lr_pretrain': 3e-3,
-        'epochs_finetune': 100000,
-        'patience_finetune': 1000,
-        'lr_finetune': 3.8e-3,
-        'batch_a': 128,
-        'batch_b': 64,
-        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
-        # 模型设置
-        'hidden_dim': 256,
-        'num_layers': 4,
-        'dropout_rate': 0.2,
-
-        # 损失函数权重
-        'lambda_coral': 0.1,
-        'alpha_r2': 0,
-        # 反向模型
-        'mdn_components': 20,
-        'mdn_hidden_dim': 128,
-        'mdn_num_layers': 3,
-        'mdn_epochs': 500,
-        'mdn_lr': 1e-3,
-        'mdn_batch_size': 256,
-        'mdn_weight_decay': 1e-5,
-
-
-    },
-
     'two_stage_opamp': {
         # 训练设置
         'epochs_pretrain': 1000,
@@ -146,6 +93,23 @@ TASK_CONFIGS = {
         'dc_gain_iso_enabled': False,
 
     },
+aftermoe:
+--- [评估阶段] 开始计算指标 ---
 
-    # ... 其他任务 ...
-}
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.737e+14  MAE=9.679e+06  R2=0.5950
+dc_gain         MSE=2.794e+06  MAE=625  R2=0.5804
+ugf             MSE=1.131e+14  MAE=7.096e+06  R2=0.7444
+phase_margin    MSE=187.3  MAE=10.12  R2=0.8368
+cmrr            MSE=1.616e+10  MAE=3.128e+04  R2=0.4280
+
+Avg  (all dims)   MSE=5.736e+13  MAE=3.361e+06  R2=0.6369
+[Evaluate-B+MoE+Iso Focus] cmrr    R2=0.6238  MAE=28215.2
+
+============================================================
+=== PIPELINE FINISHED (multi-target residual MoE) ===
+============================================================
+
+============================================================
+=== PIPELINE FINISHED ===
+============================================================
