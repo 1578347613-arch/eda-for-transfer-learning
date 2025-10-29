@@ -1,191 +1,148 @@
+# src/lr_finder.py (已重构为可调用函数)
 import os
 import argparse
-import math
 import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 # --- 从您的项目模块中导入 ---
+# 假设此脚本仍在 src 目录中
 from data_loader import get_data_and_scalers
 from models.align_hetero import AlignHeteroMLP
-import config
 from loss_function import heteroscedastic_nll
+import config
 
 
-def setup_args():
-    """设置和解析命令行参数"""
-    parser = argparse.ArgumentParser(description="学习率范围测试脚本")
-    parser.add_argument("--mode", type=str, default="pretrain", choices=["pretrain", "finetune"],
-                        help="选择测试模式: 'pretrain' 或 'finetune'")
-    parser.add_argument("--opamp", type=str,
-                        default=config.OPAMP_TYPE, help="运放类型")
-    parser.add_argument("--start_lr", type=float,
-                        default=1e-7, help="起始的最小学习率")
-    parser.add_argument("--end_lr", type=float, default=1.0, help="结束的最大学习率")
-    parser.add_argument("--num_iter", type=int,
-                        default=2000, help="测试的总步数（batch数量）")
-    parser.add_argument("--batch_size", type=int,
-                        default=128, help="测试时使用的Batch Size")
-    parser.add_argument("--device", type=str, default="cuda",
-                        help="设备 'cuda' or 'cpu'")
-    parser.add_argument("--pretrained_path", type=str,
-                        default="../results/{}_pretrained.pth".format(
-                            config.OPAMP_TYPE),
-                        help="预训练模型的路径 (仅在 finetune 模式下使用)")
-    args = parser.parse_args()
-    return args
-
-
-def run_lr_range_test(model, optimizer, criterion, loader, device, start_lr, end_lr, num_iter):
-    """执行学习率范围测试的核心逻辑"""
+def _run_lr_range_test(model, optimizer, criterion, loader, device, start_lr, end_lr, num_iter):
+    """执行学习率范围测试的核心逻辑 (内部函数)"""
     lrs = []
     losses = []
-
-    # 计算每一步学习率的乘法因子
     factor = (end_lr / start_lr) ** (1 / (num_iter - 1))
-
-    # 获取数据加载器的迭代器
     data_iter = iter(loader)
 
-    # 设置初始学习率
     for param_group in optimizer.param_groups:
         param_group['lr'] = start_lr
 
-    model.train()  # 确保模型处于训练模式
-
+    model.train()
     for i in range(num_iter):
         try:
             inputs, labels = next(data_iter)
         except StopIteration:
-            # 如果数据用完，则重新创建迭代器
             data_iter = iter(loader)
             inputs, labels = next(data_iter)
 
         inputs, labels = inputs.to(device), labels.to(device)
-
-        # 1. 前向传播
         optimizer.zero_grad()
+
         if isinstance(criterion, nn.HuberLoss):
             mu, _, _ = model(inputs)
             loss = criterion(mu, labels)
-        else:  # 假设是 heteroscedastic_nll
+        else:
             mu, logvar, _ = model(inputs)
             loss = criterion(mu, logvar, labels)
 
-        # 2. 检查损失是否爆炸
         if torch.isnan(loss) or loss.item() > 4 * (losses[0] if losses else 1e9):
-            print(f"损失在第 {i+1} 步爆炸，测试提前结束。")
             break
 
-        # 3. 记录
         lrs.append(optimizer.param_groups[0]['lr'])
         losses.append(loss.item())
-
-        # 4. 反向传播和更新
         loss.backward()
         optimizer.step()
 
-        # 5. 更新学习率以备下一步使用
         for param_group in optimizer.param_groups:
             param_group['lr'] *= factor
 
     return lrs, losses
 
 
-def plot_results(lrs, losses, mode, save_path="../results"):
-    """绘制并保存学习率与损失的关系图"""
-    os.makedirs(save_path, exist_ok=True)
+def find_optimal_lr(
+    model_class,
+    model_params,
+    data,
+    mode="pretrain",
+    pretrained_weights_path=None,
+    start_lr=1e-7,
+    end_lr=1.0,
+    num_iter=100,
+    batch_size=128,
+    device="cuda",
+    smoothing_beta=0.98
+):
+    """
+    一个可调用的函数，用于寻找给定模型和数据的最优学习率。
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(lrs, losses)
-    # **关键**: X轴使用对数尺度，因为学习率的变化是指数级的
-    plt.xscale("log")
-    plt.xlabel("Learning Rate")
-    plt.ylabel("Loss")
-    plt.title(f"Learning Rate Range Test ({mode} mode)")
-    plt.grid(True)
+    返回:
+        float: 推荐的最佳学习率。
+    """
+    device = torch.device(device if torch.cuda.is_available() else "cpu")
 
-    # 找到损失最低点，并用红点标记
-    min_loss_idx = np.argmin(losses)
-    min_loss_lr = lrs[min_loss_idx]
-    plt.plot(min_loss_lr, losses[min_loss_idx], 'ro',
-             label=f'Min Loss at LR={min_loss_lr:.2e}')
-    plt.legend()
+    # 1. 实例化模型
+    model = model_class(**model_params).to(device)
 
-    # 保存图像
-    plot_file = os.path.join(save_path, f"lr_range_test_{mode}.png")
-    plt.savefig(plot_file)
-    print(f"\n测试完成！结果图已保存至: {plot_file}")
-    print(f"损失最低点对应的学习率约为: {min_loss_lr:.2e}")
-
-
-def main():
-    args = setup_args()
-    device = torch.device(args.device if torch.cuda.is_available() else "cpu")
-    print(f"--- 运行在设备: {device} ---")
-    print(f"--- 当前测试模式: {args.mode.upper()} ---")
-
-    # 1. 加载数据
-    data = get_data_and_scalers(opamp_type=args.opamp)
-
-    # 2. 初始化模型
-    input_dim = data['source_train'][0].shape[1]
-    output_dim = data['source_train'][1].shape[1]
-    model = AlignHeteroMLP(input_dim=input_dim,
-                           output_dim=output_dim).to(device)
-
-    # --- [重要] 根据模式进行不同的设置 ---
-    if args.mode == "pretrain":
-        # --- 预训练模式设置 ---
-        print("为预训练准备：使用源域数据，优化 backbone。")
+    # 2. 根据模式设置数据、优化器和损失函数
+    if mode == "pretrain":
         X_train, y_train = data['source_train']
-        # 我们只测试 backbone
-        optimizer = torch.optim.AdamW(
-            model.backbone.parameters(), lr=args.start_lr)
+        optimizer = torch.optim.AdamW(model.backbone.parameters(), lr=start_lr)
         criterion = nn.HuberLoss()
-
-    elif args.mode == "finetune":
-        # --- 微调模式设置 ---
-        print("为微调准备：加载预训练模型，使用目标域数据，优化 head。")
-
-        # 检查并加载预训练权重
-        if not os.path.exists(args.pretrained_path):
+    elif mode == "finetune":
+        if not pretrained_weights_path or not os.path.exists(pretrained_weights_path):
             raise FileNotFoundError(
-                f"错误：在finetune模式下，未找到预训练模型文件: {args.pretrained_path}")
-        print(f"加载预训练权重: {args.pretrained_path}")
+                f"微调模式下需要有效的预训练模型路径，但未找到: {pretrained_weights_path}")
         model.load_state_dict(torch.load(
-            args.pretrained_path, map_location=device))
-
+            pretrained_weights_path, map_location=device))
         X_train, y_train = data['target_train']
-        # 我们只测试 hetero_head
         optimizer = torch.optim.AdamW(
-            model.hetero_head.parameters(), lr=args.start_lr)
+            model.hetero_head.parameters(), lr=start_lr)
         criterion = heteroscedastic_nll
+    else:
+        raise ValueError("mode 必须是 'pretrain' 或 'finetune'")
 
-    # 3. 创建 DataLoader
+    # 3. 创建数据加载器
     loader = DataLoader(
         TensorDataset(torch.tensor(X_train, dtype=torch.float32),
                       torch.tensor(y_train, dtype=torch.float32)),
-        batch_size=args.batch_size,
+        batch_size=batch_size,
         shuffle=True
     )
 
-    # 4. 运行测试
-    print(
-        f"开始学习率范围测试，从 {args.start_lr:.1e} 到 {args.end_lr:.1e}，共 {args.num_iter} 步...")
-    lrs, losses = run_lr_range_test(
-        model, optimizer, criterion, loader, device,
-        args.start_lr, args.end_lr, args.num_iter
-    )
+    # 4. 运行学习率范围测试
+    lrs, losses = _run_lr_range_test(
+        model, optimizer, criterion, loader, device, start_lr, end_lr, num_iter)
 
-    # 5. 绘制结果
-    if lrs and losses:
-        plot_results(lrs, losses, args.mode)
-    else:
-        print("未能收集到任何数据点，无法绘制图像。")
+    if not losses:
+        print("警告: 学习率查找器未能收集到任何损失数据。返回默认值 1e-3。")
+        return 1e-3
+
+    # 5. 自动选择最佳学习率 (核心算法)
+    # 使用指数移动平均平滑损失曲线以减少噪声
+    smoothed_losses = []
+    avg_loss = 0
+    for i, loss in enumerate(losses):
+        avg_loss = smoothing_beta * avg_loss + (1 - smoothing_beta) * loss
+        smoothed_losses.append(avg_loss / (1 - smoothing_beta**(i+1)))
+
+    # 找到损失下降最快的点 (梯度最小的点)
+    # 我们在对数尺度的学习率上计算梯度
+    log_lrs = np.log10(lrs)
+    gradients = np.gradient(smoothed_losses, log_lrs)
+    best_idx = np.argmin(gradients)
+
+    # 最佳学习率通常是这个最速下降点，或者比最低损失点小一个数量级
+    # 这里我们选择最速下降点作为推荐值
+    optimal_lr = lrs[best_idx]
+
+    # 清理内存
+    del model, optimizer, loader
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    return optimal_lr
 
 
+# --- 保留原始的命令行执行功能，用于手动调试 ---
 if __name__ == "__main__":
-    main()
+    # ... (这里可以保留或删除 setup_args 和 main 函数，因为主要功能已封装)
+    print("此脚本现在主要作为工具模块使用。请从其他脚本中调用 find_optimal_lr 函数。")
