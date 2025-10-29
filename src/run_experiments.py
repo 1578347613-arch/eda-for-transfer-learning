@@ -31,7 +31,7 @@ OPAMP_TYPE = '5t_opamp'
 BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_fixed_lr"  # 使用新目录以区分
 
 # <<< --- 核心改动：在这里设置一个固定的微调学习率 --- >>>
-FIXED_LR_FINETUNE = 1e-4  # 您提议的、安全的小学习率
+FIXED_LR_FINETUNE = 1e-3  # 您提议的、安全的小学习率
 
 # ==============================================================================
 # --- 2. 动态生成完整的实验列表 ---
