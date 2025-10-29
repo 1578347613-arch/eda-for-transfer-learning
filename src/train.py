@@ -6,6 +6,7 @@ import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 import copy
+import ast
 
 # --- 从项目模块中导入 ---
 from data_loader import get_data_and_scalers
@@ -31,6 +32,12 @@ def setup_args():
                         default="../results", help="预训练模型存放地址")
     parser.add_argument("--evaluate", action='store_true',
                         help="训练结束后，加载最佳模型并进行评估")
+
+    # --- 模型结构参数 ---
+    parser.add_argument("--hidden_dims", type=str, default=str(config.HIDDEN_DIMS),
+                        help="MLP隐藏层维度列表, e.g., '[256, 256, 256]'")
+    parser.add_argument("--dropout_rate", type=float, default=config.DROPOUT_RATE,
+                        help="Dropout比率")
 
     # --- 训练超参数 ---
     # <<< 将config中的参数全部移到这里，config的值作为默认值
@@ -273,6 +280,14 @@ def main():
     finetuned_path = os.path.join(
         args.save_path, f'{args.opamp}_finetuned.pth')
 
+    try:
+        hidden_dims_list = ast.literal_eval(args.hidden_dims)
+        if not isinstance(hidden_dims_list, list):
+            raise ValueError
+    except (ValueError, SyntaxError):
+        print(f"错误: --hidden_dims 参数格式不正确: {args.hidden_dims}")
+        return
+
     # --- 数据准备 (只需一次) ---
     data = get_data_and_scalers(opamp_type=args.opamp)
     input_dim = data['source'][0].shape[1]
@@ -296,8 +311,8 @@ def main():
             model = AlignHeteroMLP(
                 input_dim=input_dim,
                 output_dim=output_dim,
-                hidden_dims=config.HIDDEN_DIMS,
-                dropout_rate=config.DROPOUT_RATE
+                hidden_dims=hidden_dims_list,
+                dropout_rate=args.dropout_rate
             ).to(DEVICE)
             model.load_state_dict(torch.load(
                 finetuned_path, map_location=DEVICE))
@@ -320,8 +335,8 @@ def main():
         model = AlignHeteroMLP(
             input_dim=input_dim,
             output_dim=output_dim,
-            hidden_dims=config.HIDDEN_DIMS,
-            dropout_rate=config.DROPOUT_RATE
+            hidden_dims=hidden_dims_list,
+            dropout_rate=args.dropout_rate
         ).to(DEVICE)
 
         # 2. 选择预训练配置并执行
@@ -393,8 +408,8 @@ def main():
         model = AlignHeteroMLP(
             input_dim=input_dim,
             output_dim=output_dim,
-            hidden_dims=config.HIDDEN_DIMS,
-            dropout_rate=config.DROPOUT_RATE
+            hidden_dims=hidden_dims_list,
+            dropout_rate=args.dropout_rate
         ).to(DEVICE)
         model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
         pred_scaled, true_scaled = get_predictions(
