@@ -180,6 +180,8 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
     patience = args.patience_finetune
     patience_counter = patience  # 使用一个计数器
 
+    temp_save_path = final_save_path + ".tmp"
+
     for epoch in range(args.epochs_finetune):
         model.train()
         total_train_loss = 0.0
@@ -228,7 +230,8 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
         if val_loss < best_val:
             print(f"  - 微调验证损失改善 ({best_val:.4f} -> {val_loss:.4f})。保存模型...")
             best_val = val_loss
-            torch.save(model.state_dict(), final_save_path)
+            torch.save(model.state_dict(), temp_save_path)
+            os.replace(temp_save_path, final_save_path)
             patience_counter = patience  # 重置计数器
         else:
             patience_counter -= 1
