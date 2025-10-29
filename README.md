@@ -1,5 +1,5 @@
 ### 针对Bmodel进行特调，尤其是对于dcgain和cmrr的数据做了预处理（钳尾）并进行了moe集成
-当前较好结果存储在src/B.log，另外建议流程：python run_training.py --mode all_B | tee run_B.log
+当前较好结果存储在src/B.log，另外建议流程：python run_training.py --mode all_B | tee run_B.log，会自动重新训练B的主干和moe和反向
 ## 环境设置
 
 1.  **克隆项目**
