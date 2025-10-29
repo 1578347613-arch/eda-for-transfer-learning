@@ -1,37 +1,5 @@
-# Amodel0.144，λ0.1优化，有sweepB.py
-# EDA 运放设计自动化 - 迁移学习与混合反向预测
-
-本项目旨在利用机器学习方法解决 EDA 领域的运放（Op-Amp）设计自动化问题。项目包含两个核心任务：
-1.  **正向预测**：根据电路的设计参数（如晶体管尺寸），预测其性能指标（如增益、带宽等）。
-2.  **反向设计**：根据给定的性能指标要求，反向推算出满足要求的设计参数。
-
-为了提高模型在小样本目标工艺（Target Domain）上的表现，本项目采用了**迁移学习**策略。同时，通过**模型集成**和创新的**混合反向预测**方法，进一步提升了预测的准确性和鲁棒性。
-
-## 项目结构
-
-```
-eda-for-transfer-learning-1/
-├── data/
-│   ├── 01_train_set/         # 训练数据
-│   │   ├── 5t_opamp/
-│   │   └── 2stage_opamp/
-│   └── 02_public_test_set/   # 测试数据
-│       └── features/
-├── src/                      # 所有源代码
-│   ├── models/               # 模型定义
-│   ├── results/              # 训练好的模型和scaler存放处
-│   ├── config.py             # 配置文件
-│   ├── data_loader.py        # 数据加载与预处理
-│   ├── train_align_hetero.py # 训练迁移学习正向模型
-│   ├── train_target_only.py  # 训练基线正向模型
-│   ├── unified_inverse_train.py # 训练反向MDN模型
-│   ├── inverse_opt.py        # 反向优化模块
-│   ├── run_training.py       # 自动化训练控制器 (核心)
-│   └── generate_submission.py # 生成提交文件 (核心)
-├── submission/               # 生成的最终结果
-└── README.md                 # 本文档
-```
-
+### 针对Bmodel进行特调，尤其是对于dcgain和cmrr的数据做了预处理（钳尾）并进行了moe集成
+当前较好结果存储在src/B.log，另外建议流程：python run_training.py --mode all_B | tee run_B.log
 ## 环境设置
 
 1.  **克隆项目**
@@ -111,9 +79,13 @@ python generate_submission.py
 
 *   **仅训练特定类型的模型**:
     通过 `--mode` 参数选择训练模式。
-    *   `align_hetero`: 训练带对齐损失的迁移学习正向模型 (生成 `_finetuned.pth`)。
-    *   `target_only`: 训练仅使用目标域数据的正向基线模型 (生成 `_target_only.pth`)。
-    *   `inverse`: 训练用于反向预测的混合密度网络 (MDN) 模型 (生成 `mdn_....pth`)。
+    align_hetero: AB的旧版本（A的次好版本（未融入元优化，有初步退火））的主干训练以及微调
+    align_hetero_B：B 版对齐微调（主干）
+    target_only_B：B 版 target-only baseline（可选）
+    moe_multi：多目标残差 MoE（同时作用 cmrr 和 dc_gain）
+    all_B：align_hetero_B -> target_only_B -> inverse
+    all_B_moe：推荐：align_hetero_B -> moe_multi -> inverse
+    inverse：反向模型
 
     ```bash
     # 为所有电路训练迁移学习模型
@@ -242,3 +214,30 @@ e. 集成预测参数 (Ensemble Prediction)
 这个参数在最终推理阶段（generate_submission.py）使用。
 
 'ensemble_alpha': 在进行模型集成时，用于加权平均“迁移学习模型”和“仅目标域模型”预测结果的权重。它是一个列表，意味着可以为每一个性能输出（如增益、带宽等）设置不同的权重，非常灵活。
+### f:new Bmodel use
+**1** 阶段主干微调用
+
+use_tail_sampler_B=False：关闭尾部过采样（已做 winsor，无需再偏采样）
+use_student_t_B=True，student_t_nu_B=3.8：Student-t NLL，轻度重尾鲁棒
+use_coral_decay_B=True，lambda_coral_start_B=0.02，lambda_coral_end_B=0.02，lambda_coral_decay_mode_B='linear'：对齐系数（此处等值=常量 0.02）
+cmrr_loss_boost_B=6.0，dcgain_loss_boost_B=1.0：目标维度加权
+freeze_backbone_epochs_B=60：先冻后放，稳住源域特征
+logvar_min=-6.0，logvar_max=0.8，logvar_reg=1e-3，anchor_huber=0.75：限制异方差头，防“报大方差逃课”
+**2**预处理截尾 / 清洗（进入模型前）
+
+cmrr_db_cap=125.0，cmrr_outlier_mode='winsor'：将 cmrr 截到 ≤125 dB（钳位，不删样本）
+dc_gain_cap=10000.0，dc_gain_outlier_mode='winsor'：dc_gain 上限 1e4（钳位）
+**3**cmrr 残差 MoE（多目标脚本会读取 cmrr_* 前缀）
+
+cmrr_residual_enabled=True：启用 cmrr 残差专家
+结构与训练：cmrr_residual_hidden=128，cmrr_residual_layers=2，cmrr_residual_dropout=0.1，cmrr_residual_epochs=800，cmrr_residual_patience=120，cmrr_residual_lr=1e-3
+尾部强化：cmrr_tail_quantile=0.90（≥90分位视为尾部），cmrr_tail_weight=6.0（尾部样本加权）
+聚类：cmrr_moe_k=2，cmrr_moe_init=10，cmrr_moe_max_iter=300
+cmrr_iso_enabled=True：启用 Isotonic 单调校准（后处理阶段，仅 cmrr 维度）
+**4**dc_gain 残差 MoE（读取 dc_gain_* 前缀）
+
+dc_gain_residual_enabled=True
+聚类：dc_gain_moe_k=2，dc_gain_moe_min_cluster=60
+尾部强化：dc_gain_tail_quantile=0.80，dc_gain_tail_weight=8.0
+结构与训练：dc_gain_residual_hidden=128，dc_gain_residual_layers=2，dc_gain_residual_dropout=0.10，dc_gain_residual_epochs=800，dc_gain_residual_patience=120，dc_gain_residual_lr=3e-4
+dc_gain_iso_enabled=False：默认不开 dc_gain 的 Isotonic（可按需开启）
