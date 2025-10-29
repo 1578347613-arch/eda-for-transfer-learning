@@ -190,7 +190,8 @@ def get_predictions(model, dataloader, device):
     return np.concatenate(all_preds), np.concatenate(all_labels)
 
 
-# ========== 6. 主函数 (已简化和统一) ==========
+# ========== 6. 主函数 (全新逻辑) ==========
+# 不再生成pretrain.pth，而是直接生成finetune.pth，这样可以元重启n次，只保留损失函数最小的最佳模型
 def main():
     args = setup_args()
     DEVICE = torch.device(args.device)
@@ -200,90 +201,131 @@ def main():
         torch.cuda.manual_seed_all(args.seed)
     os.makedirs(args.save_path, exist_ok=True)
 
-    print(f"--- 任务启动: {args.opamp} | 设备: {DEVICE} ---")
+    print(f"--- 任务启动: {args.opamp} | 设备: {DEVICE} | 模式: 全流程搜索 ---")
 
-    pretrained_path = os.path.join(
-        args.save_path, f'{args.opamp}_pretrained.pth')
-    finetuned_path = os.path.join(
+    final_finetuned_path = os.path.join(
         args.save_path, f'{args.opamp}_finetuned.pth')
 
+    # --- 数据准备 (只需一次) ---
     data = get_data_and_scalers(opamp_type=args.opamp)
     input_dim, output_dim = data['source'][0].shape[1], data['source'][1].shape[1]
 
-    global_best_val_loss = float('inf')
+    pretrain_loader_A = make_loader(
+        data['source_train'][0], data['source_train'][1], args.batch_a, shuffle=True)
+    pretrain_loader_val = make_loader(
+        data['source_val'][0], data['source_val'][1], args.batch_a, shuffle=False)
 
-    # === 阶段一：预训练 (统一逻辑) ===
-    if args.restart or not os.path.exists(pretrained_path):
-        pretrain_loader_A = make_loader(
-            data['source_train'][0], data['source_train'][1], args.batch_a, shuffle=True)
-        pretrain_loader_val = make_loader(
-            data['source_val'][0], data['source_val'][1], args.batch_a, shuffle=False)
-
-        # 统一的、由配置驱动的独立重启循环
-        num_experiments = len(args.PRETRAIN_SCHEDULER_CONFIGS)
-        print(f"--- [阶段一] 启动预训练流程 ({num_experiments} 次独立实验) ---")
-
-        for i, scheduler_config in enumerate(args.PRETRAIN_SCHEDULER_CONFIGS):
-            print(f"\n{'='*30} 独立实验 {i+1}/{num_experiments} {'='*30}")
-
-            # 每次实验都创建新模型
-            model = AlignHeteroMLP(
-                input_dim=input_dim, output_dim=output_dim,
-                hidden_dim=args.hidden_dim, num_layers=args.num_layers,
-                dropout_rate=args.dropout_rate
-            ).to(DEVICE)
-
-            best_loss_this_run, best_state_dict_this_run = run_pretraining(
-                model, pretrain_loader_A, pretrain_loader_val, DEVICE, args, scheduler_config)
-
-            if best_state_dict_this_run and best_loss_this_run < global_best_val_loss:
-                global_best_val_loss = best_loss_this_run
-                print(
-                    f"  [BEST] 新的全局最佳损失！ {global_best_val_loss:.6f}。正在覆盖 {pretrained_path}...")
-                torch.save(best_state_dict_this_run, pretrained_path)
-
-            # 手动清理显存
-            del model
-            del best_state_dict_this_run
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
-
-        print(
-            f"\n所有独立实验完成，全局最佳模型 (损失: {global_best_val_loss:.6f}) 已保存在 {pretrained_path}")
-
-    # === 加载最佳预训练模型 ===
-    print(f"--- [阶段一完成] 加载最终的最佳预训练模型: {pretrained_path} ---")
-    model = AlignHeteroMLP(
-        input_dim=input_dim, output_dim=output_dim,
-        hidden_dim=args.hidden_dim, num_layers=args.num_layers,
-        dropout_rate=args.dropout_rate
-    ).to(DEVICE)
-    if os.path.exists(pretrained_path):
-        model.load_state_dict(torch.load(pretrained_path, map_location=DEVICE))
-    else:
-        print(f"警告：未找到预训练模型 {pretrained_path}。将使用随机初始化的模型进行微调。")
-
-    # === 阶段二：微调 ===
-    # (此部分逻辑无需修改)
     finetune_loaders = {
         'source': make_loader(data['source'][0], data['source'][1], args.batch_a, shuffle=True, drop_last=True),
         'target_train': make_loader(data['target_train'][0], data['target_train'][1], args.batch_b, shuffle=True),
         'target_val': make_loader(data['target_val'][0], data['target_val'][1], args.batch_b, shuffle=False)
     }
 
-    if os.path.exists(finetuned_path) and not args.restart:
-        model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
-    else:
-        run_finetuning(model, finetune_loaders, DEVICE, finetuned_path, args)
+    # --- 全局最优追踪器 ---
+    global_best_finetune_val_nll = float('inf')
+    global_best_finetune_state_dict = None
 
-    # === (可选) 评估 ===
-    # (此部分逻辑无需修改)
+    # --- 主循环：遍历每个预训练配置，执行完整的 "预训练->微调" 流水线 ---
+    num_experiments = len(args.PRETRAIN_SCHEDULER_CONFIGS)
+
+    # 检查是否需要跳过
+    if os.path.exists(final_finetuned_path) and not args.restart:
+        print(f"检测到最终模型 {final_finetuned_path} 已存在且未指定 --restart。跳过所有训练。")
+        # 评估现有模型 (可选)
+        if args.evaluate:
+            model = AlignHeteroMLP(
+                input_dim, output_dim, args.hidden_dim, args.num_layers, args.dropout_rate).to(DEVICE)
+            model.load_state_dict(torch.load(
+                final_finetuned_path, map_location=DEVICE))
+            pred_scaled, true_scaled = get_predictions(
+                model, finetune_loaders['target_val'], DEVICE)
+            calculate_and_print_metrics(
+                pred_scaled, true_scaled, data['y_scaler'])
+        return
+
+    for i, scheduler_config in enumerate(args.PRETRAIN_SCHEDULER_CONFIGS):
+        print(f"\n{'='*30} 完整流水线 {i+1}/{num_experiments} {'='*30}")
+
+        # 1. 每次都创建新模型，保证隔离
+        model = AlignHeteroMLP(
+            input_dim=input_dim, output_dim=output_dim,
+            hidden_dim=args.hidden_dim, num_layers=args.num_layers,
+            dropout_rate=args.dropout_rate
+        ).to(DEVICE)
+
+        # 2. 执行预训练
+        _, best_pretrained_state = run_pretraining(
+            model, pretrain_loader_A, pretrain_loader_val, DEVICE, args, scheduler_config)
+
+        if not best_pretrained_state:
+            print("  [警告] 本次预训练未产生有效模型，跳过此流水线。")
+            continue
+
+        # 3. 加载最佳预训练权重，准备微调
+        print("\n--- [加载预训练模型] ---")
+        model.load_state_dict(best_pretrained_state)
+
+        # 4. 执行微调
+        # 为本次微调创建一个临时的模型保存路径
+        temp_finetune_path = os.path.join(
+            args.save_path, f"{args.opamp}_finetune_temp_run_{i+1}.pth")
+
+        run_finetuning(model, finetune_loaders, DEVICE,
+                       temp_finetune_path, args)
+
+        # 5. 评估本次微调结果，并与全局最优比较
+        if os.path.exists(temp_finetune_path):
+            # 加载本次微调的最佳状态
+            model.load_state_dict(torch.load(
+                temp_finetune_path, map_location=DEVICE))
+
+            # 在验证集上计算最终NLL
+            model.eval()
+            current_pipeline_val_nll = 0.0
+            with torch.no_grad():
+                for xb, yb in finetune_loaders['target_val']:
+                    xb, yb = xb.to(DEVICE), yb.to(DEVICE)
+                    mu, logvar, _ = model(xb)
+                    current_pipeline_val_nll += heteroscedastic_nll(
+                        mu, logvar, yb).item()
+            current_pipeline_val_nll /= len(finetune_loaders['target_val'])
+
+            print(
+                f"\n[流水线 {i+1} 总结] 最终微调验证集 NLL = {current_pipeline_val_nll:.6f}")
+
+            # 6. 如果更优，则更新全局最佳模型
+            if current_pipeline_val_nll < global_best_finetune_val_nll:
+                global_best_finetune_val_nll = current_pipeline_val_nll
+                global_best_finetune_state_dict = copy.deepcopy(
+                    model.state_dict())
+                print(
+                    f"  >>> 新的全局最佳模型诞生！ Val NLL 更新为: {global_best_finetune_val_nll:.6f} <<<")
+
+            # 7. 清理临时文件
+            os.remove(temp_finetune_path)
+
+        # 8. 清理内存，准备下一次循环
+        del model, best_pretrained_state
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+    # --- 所有流水线结束后 ---
+    if global_best_finetune_state_dict:
+        print(f"\n{'='*30} 所有流水线执行完毕 {'='*30}")
+        print(f"全局最优模型的微调验证 NLL 为: {global_best_finetune_val_nll:.6f}")
+        print(f"正在保存最终模型至: {final_finetuned_path}")
+        torch.save(global_best_finetune_state_dict, final_finetuned_path)
+    else:
+        print("\n[错误] 所有流水线均未成功生成模型，未保存任何最终模型。")
+        return
+
+    # --- (可选) 评估最终选出的模型 ---
     if args.evaluate:
-        print("\n--- [评估流程启动] ---")
-        if not os.path.exists(finetuned_path):
-            print(f"错误：未找到已训练的模型文件 {finetuned_path}。跳过评估。")
-            return
-        model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
+        print("\n--- [最终评估流程启动] ---")
+        model = AlignHeteroMLP(input_dim, output_dim, args.hidden_dim,
+                               args.num_layers, args.dropout_rate).to(DEVICE)
+        model.load_state_dict(torch.load(
+            final_finetuned_path, map_location=DEVICE))
         pred_scaled, true_scaled = get_predictions(
             model, finetune_loaders['target_val'], DEVICE)
         calculate_and_print_metrics(pred_scaled, true_scaled, data['y_scaler'])
