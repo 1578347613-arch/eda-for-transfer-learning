@@ -79,12 +79,19 @@ python generate_submission.py
 
 *   **仅训练特定类型的模型**:
     通过 `--mode` 参数选择训练模式。
+    
     align_hetero: AB的旧版本（A的次好版本（未融入元优化，有初步退火））的主干训练以及微调
+    
     align_hetero_B：B 版对齐微调（主干）
+    
     target_only_B：B 版 target-only baseline（可选）
+    
     moe_multi：多目标残差 MoE（同时作用 cmrr 和 dc_gain）
+    
     all_B：align_hetero_B -> target_only_B -> inverse
+    
     all_B_moe：推荐：align_hetero_B -> moe_multi -> inverse
+    
     inverse：反向模型
 
     ```bash
