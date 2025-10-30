@@ -275,6 +275,7 @@ def get_predictions(model, dataloader, device):
 def main():
     args = setup_args()
     DEVICE = torch.device(args.device)
+    print(f"程序在：{DEVICE}  上运行")
     os.makedirs(args.save_path, exist_ok=True)
 
     finetuned_path = os.path.join(
