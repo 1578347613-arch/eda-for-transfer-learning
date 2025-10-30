@@ -215,7 +215,7 @@ e. 集成预测参数 (Ensemble Prediction)
 
 'ensemble_alpha': 在进行模型集成时，用于加权平均“迁移学习模型”和“仅目标域模型”预测结果的权重。它是一个列表，意味着可以为每一个性能输出（如增益、带宽等）设置不同的权重，非常灵活。
 ### f:new Bmodel use
-**1** 阶段主干微调用
+**1  阶段主干微调用**
 
 use_tail_sampler_B=False：关闭尾部过采样（已做 winsor，无需再偏采样）
 use_student_t_B=True，student_t_nu_B=3.8：Student-t NLL，轻度重尾鲁棒
@@ -223,18 +223,21 @@ use_coral_decay_B=True，lambda_coral_start_B=0.02，lambda_coral_end_B=0.02，l
 cmrr_loss_boost_B=6.0，dcgain_loss_boost_B=1.0：目标维度加权
 freeze_backbone_epochs_B=60：先冻后放，稳住源域特征
 logvar_min=-6.0，logvar_max=0.8，logvar_reg=1e-3，anchor_huber=0.75：限制异方差头，防“报大方差逃课”
-**2**预处理截尾 / 清洗（进入模型前）
+
+**2预处理截尾 / 清洗（进入模型前）**
 
 cmrr_db_cap=125.0，cmrr_outlier_mode='winsor'：将 cmrr 截到 ≤125 dB（钳位，不删样本）
 dc_gain_cap=10000.0，dc_gain_outlier_mode='winsor'：dc_gain 上限 1e4（钳位）
-**3**cmrr 残差 MoE（多目标脚本会读取 cmrr_* 前缀）
+
+**3cmrr 残差 MoE（多目标脚本会读取 cmrr_ 前缀）**
 
 cmrr_residual_enabled=True：启用 cmrr 残差专家
 结构与训练：cmrr_residual_hidden=128，cmrr_residual_layers=2，cmrr_residual_dropout=0.1，cmrr_residual_epochs=800，cmrr_residual_patience=120，cmrr_residual_lr=1e-3
 尾部强化：cmrr_tail_quantile=0.90（≥90分位视为尾部），cmrr_tail_weight=6.0（尾部样本加权）
 聚类：cmrr_moe_k=2，cmrr_moe_init=10，cmrr_moe_max_iter=300
 cmrr_iso_enabled=True：启用 Isotonic 单调校准（后处理阶段，仅 cmrr 维度）
-**4**dc_gain 残差 MoE（读取 dc_gain_* 前缀）
+
+**4dc_gain 残差 MoE（读取 dc_gain_前缀）**
 
 dc_gain_residual_enabled=True
 聚类：dc_gain_moe_k=2，dc_gain_moe_min_cluster=60
