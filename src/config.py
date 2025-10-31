@@ -73,8 +73,11 @@ TASK_CONFIGS = {
 
     'two_stage_opamp': {
         # 训练设置
-        'epochs_pretrain': 4000,
-        'patience_pretrain': 200,
+        'RESTART_PRETRAIN': 1,
+        'PRETRAIN_SCHEDULER_CONFIGS': [  # 重复执行三次元优化
+            # --- 策略一：广泛探索 ---
+            {"T_0": 200, "T_mult": 1, "epochs_pretrain": 400},  # 第1次重启
+        ],
         'lr_pretrain': 1e-3,
         'epochs_finetune': 10000,
         'patience_finetune': 500,
