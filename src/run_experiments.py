@@ -28,7 +28,7 @@ BASE_EXPERIMENT_GRID = [
         128, 256, 256, 128], "dropout_rate": 0.3},
     {"name": "瓶颈结构_宽", "hidden_dims": [
         256, 512, 512, 256], "dropout_rate": 0.4},
-    {"name": "逐渐变窄_深", "hidden_dims": [512, 256, 128], "dropout_rate": 0.3},
+    {"name": "逐渐变窄", "hidden_dims": [512, 256, 128], "dropout_rate": 0.3},
     {"name": "逐渐变宽", "hidden_dims": [128, 256, 512], "dropout_rate": 0.2},
 ]
 
