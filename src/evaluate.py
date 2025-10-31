@@ -51,6 +51,26 @@ def calculate_and_print_metrics(
         print(
             f"{name:14s}  MSE={mse[i]:.4g}  MAE={mae[i]:.4g}  R2={r2[i]:.4f}")
 
+    avg_mse = mse.mean()
+    avg_mae = mae.mean()
+    avg_r2 = r2.mean()
+
     print("\nAvg  (all dims)   MSE={:.4g}  MAE={:.4g}  R2={:.4f}".format(
-        mse.mean(), mae.mean(), r2.mean()
+        avg_mse, avg_mae, avg_r2
     ))
+
+    # --- 5. 新增：返回一个包含所有指标的字典 ---
+    metrics_dict = {
+        'avg_mse': float(avg_mse),
+        'avg_mae': float(avg_mae),
+        'avg_r2': float(avg_r2),
+        'per_dim_metrics': {}
+    }
+    for i, name in enumerate(output_cols):
+        metrics_dict['per_dim_metrics'][name] = {
+            'mse': float(mse[i]),
+            'mae': float(mae[i]),
+            'r2': float(r2[i])
+        }
+
+    return metrics_dict

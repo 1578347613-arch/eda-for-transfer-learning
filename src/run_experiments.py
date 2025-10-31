@@ -1,15 +1,22 @@
-# src/run_experiments.py (简化版：使用固定的微调学习率)
+# src/run_experiments.py (最终版 - 自动清理)
 import subprocess
 import os
 import pandas as pd
 import time
+import json
+import shutil  # <-- 导入 shutil 库用于删除文件夹
 from pathlib import Path
 
 # ==============================================================================
-# --- 0. 路径设置 ---
+# --- 0. 路径和实验控制 ---
 # ==============================================================================
 SRC_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SRC_DIR.parent
+
+# <<< --- 核心改动：添加一个清理开关 --- >>>
+# 设置为 True: 实验成功后自动删除模型和临时文件。
+# 设置为 False: 保留所有文件。
+CLEANUP_AFTER_RUN = True
 
 # ==============================================================================
 # --- 1. 定义你的实验搜索空间 ---
@@ -28,14 +35,13 @@ BASE_EXPERIMENT_GRID = [
 # --- 实验控制设置 ---
 NUM_REPETITIONS = 2
 OPAMP_TYPE = '5t_opamp'
-BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_fixed_lr"  # 使用新目录以区分
-
-# <<< --- 核心改动：在这里设置一个固定的微调学习率 --- >>>
-FIXED_LR_FINETUNE = 1e-3  # 您提议的、安全的小学习率
+BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_fixed_lr"
+FIXED_LR_FINETUNE = 1e-4
 
 # ==============================================================================
 # --- 2. 动态生成完整的实验列表 ---
 # ==============================================================================
+# ... (这部分逻辑不变) ...
 EXPERIMENT_GRID = []
 for exp_params in BASE_EXPERIMENT_GRID:
     for run_num in range(1, NUM_REPETITIONS + 1):
@@ -51,66 +57,75 @@ RESULTS = []
 start_time = time.time()
 BASE_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
-print(f"*** 所有微调将使用固定的学习率: {FIXED_LR_FINETUNE} ***")
-
 for i, params in enumerate(EXPERIMENT_GRID):
     exp_name = f"{i+1:02d}_{params['name']}"
+    # ... (打印实验信息的代码不变) ...
     print(f"\n{'='*80}")
     print(f"🚀 开始实验 {i+1}/{len(EXPERIMENT_GRID)}: {exp_name}")
-    print(f"   - 结构 (hidden_dims): {params['hidden_dims']}")
-    print(f"   - 丢弃率 (dropout_rate): {params['dropout_rate']}")
-    print(f"{'='*80}")
 
     exp_results_path = BASE_RESULTS_DIR / exp_name
     exp_results_path.mkdir(parents=True, exist_ok=True)
 
-    # 构建命令行指令 (不再需要自动查找LR)
+    final_results_file = exp_results_path / "final_metrics.json"
+
     command = [
-        "python", "train.py",
-        "--opamp", OPAMP_TYPE,
+        "python", "train.py", "--opamp", OPAMP_TYPE,
         "--hidden_dims", str(params['hidden_dims']),
         "--dropout_rate", str(params['dropout_rate']),
-        "--lr_finetune", str(FIXED_LR_FINETUNE),  # <-- 使用固定的学习率
+        "--lr_finetune", str(FIXED_LR_FINETUNE),
         "--save_path", str(exp_results_path),
-        "--restart"
+        "--restart", "--evaluate",
+        "--results_file", str(final_results_file)
     ]
 
+    print(f"正在执行训练... 输出将直接打印到控制台。")
     process = subprocess.Popen(
         command, cwd=SRC_DIR, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, text=True, encoding='utf-8'
     )
 
-    final_val_nll = None
-    log_file_path = exp_results_path / "training.log"
-    with open(log_file_path, 'w', encoding='utf-8') as log_file:
-        for line in iter(process.stdout.readline, ''):
-            print(line.strip())
-            log_file.write(line)
-            if "全局最优模型的微调验证 NLL 为:" in line:
-                try:
-                    final_val_nll = float(line.split(":")[1].strip())
-                except (IndexError, ValueError):
-                    pass
+    for line in iter(process.stdout.readline, ''):
+        print(line.strip())
+
     process.wait()
 
-    if final_val_nll is not None:
+    # --- 读取结果文件 ---
+    if final_results_file.exists():
+        with open(final_results_file, 'r', encoding='utf-8') as f:
+            final_metrics = json.load(f)
+
+        final_nll = final_metrics.get('best_finetune_val_nll')
+        avg_mse = final_metrics.get('evaluation_metrics', {}).get('avg_mse')
+
+        print(
+            f"✅ 实验 {exp_name} 完成。 最终 Val NLL: {final_nll:.6f}, Avg MSE: {avg_mse:.4g}")
         RESULTS.append({
             '完整实验名称': exp_name, '基础模型': params['base_name'],
             'hidden_dims': str(params['hidden_dims']), 'dropout_rate': params['dropout_rate'],
-            'lr_finetune': FIXED_LR_FINETUNE, 'final_val_nll': final_val_nll
+            'final_val_nll': final_nll, 'avg_mse': avg_mse
         })
+
+        # <<< --- 核心改动：如果开关为True，则删除临时文件夹 --- >>>
+        if CLEANUP_AFTER_RUN:
+            try:
+                shutil.rmtree(exp_results_path)
+                print(f"清理完毕: 已删除临时文件夹 {exp_results_path}")
+            except Exception as e:
+                print(f"⚠️ 清理失败: 删除文件夹 {exp_results_path} 时出错 - {e}")
+
     else:
-        # ... (记录 NaN 的逻辑不变) ...
+        # ... (处理失败情况的代码不变) ...
+        print(f"⚠️ 实验 {exp_name} 完成，但未找到结果文件: {final_results_file}")
         RESULTS.append({
             '完整实验名称': exp_name, '基础模型': params['base_name'],
             'hidden_dims': str(params['hidden_dims']), 'dropout_rate': params['dropout_rate'],
-            'lr_finetune': FIXED_LR_FINETUNE, 'final_val_nll': float('NaN')
+            'final_val_nll': float('NaN'), 'avg_mse': float('NaN')
         })
 
 # ==============================================================================
 # --- 4. 汇总并展示最终结果 ---
 # ==============================================================================
-# ... (这部分代码无需任何修改，它会自动处理和展示结果) ...
+# ... (这部分代码无需任何修改) ...
 end_time = time.time()
 total_duration = end_time - start_time
 print(f"\n\n{'='*80}\n🎉 所有实验已完成！总耗时: {total_duration / 60:.2f} 分钟\n{'='*80}")

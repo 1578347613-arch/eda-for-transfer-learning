@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 import copy
 import ast
+import json
 
 # --- 从项目模块中导入 ---
 from data_loader import get_data_and_scalers
@@ -32,6 +33,8 @@ def setup_args():
                         default="../results", help="预训练模型存放地址")
     parser.add_argument("--evaluate", action='store_true',
                         help="训练结束后，加载最佳模型并进行评估")
+    parser.add_argument("--results_file", type=str, default=None,
+                        help="如果提供，则将最终评估结果保存到此JSON文件")
 
     # --- 模型结构参数 ---
     parser.add_argument("--hidden_dims", type=str, default=str(config.HIDDEN_DIMS),
@@ -415,7 +418,20 @@ def main():
         model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
         pred_scaled, true_scaled = get_predictions(
             model, finetune_loaders['target_val'], DEVICE)
-        calculate_and_print_metrics(pred_scaled, true_scaled, data['y_scaler'])
+        eval_metrics = calculate_and_print_metrics(
+            pred_scaled, true_scaled, data['y_scaler'])
+        final_results = {
+            'best_finetune_val_nll': global_best_finetune_val_nll,
+            'evaluation_metrics': eval_metrics
+        }
+        # 如果命令行指定了结果文件路径，则保存
+        if args.results_file:
+            try:
+                with open(args.results_file, 'w', encoding='utf-8') as f:
+                    json.dump(final_results, f, indent=4)
+                print(f"评估结果已成功保存至: {args.results_file}")
+            except Exception as e:
+                print(f"错误: 保存结果文件失败 - {e}")
 
 
 if __name__ == "__main__":
