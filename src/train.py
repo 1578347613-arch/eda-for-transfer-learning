@@ -272,7 +272,7 @@ def get_predictions(model, dataloader, device):
 
     return np.concatenate(all_preds), np.concatenate(all_labels)
 
-# ========== 5. 主函数 ==========
+# ========== 5. 主函数 (已重构为“先选拔，后精调”模式) ==========
 
 
 def main():
@@ -281,6 +281,9 @@ def main():
     print(f"程序在：{DEVICE}  上运行")
     os.makedirs(args.save_path, exist_ok=True)
 
+    # --- 路径定义 ---
+    pretrained_path = os.path.join(
+        args.save_path, f'{args.opamp}_pretrained.pth')
     finetuned_path = os.path.join(
         args.save_path, f'{args.opamp}_finetuned.pth')
 
@@ -292,144 +295,114 @@ def main():
         print(f"错误: --hidden_dims 参数格式不正确: {args.hidden_dims}")
         return
 
-    # --- 数据准备 (只需一次) ---
+    # --- 数据准备 ---
     data = get_data_and_scalers(opamp_type=args.opamp)
     input_dim = data['source'][0].shape[1]
     output_dim = data['source'][1].shape[1]
 
-    pretrain_loader_A = make_loader(
-        data['source_train'][0], data['source_train'][1], args.batch_a, shuffle=True)
-    pretrain_loader_val = make_loader(
-        data['source_val'][0], data['source_val'][1], args.batch_a, shuffle=False)
-
-    finetune_loaders = {
-        'source_full': make_loader(data['source'][0], data['source'][1], args.batch_a, shuffle=True, drop_last=True),
-        'target_train': make_loader(data['target_train'][0], data['target_train'][1], args.batch_b, shuffle=True),
-        'target_val': make_loader(data['target_val'][0], data['target_val'][1], args.batch_b, shuffle=False)
-    }
-
-    # --- 检查是否需要跳过 ---
+    # --- 检查是否可以完全跳过 ---
     if os.path.exists(finetuned_path) and not args.restart:
-        print(f"检测到最终模型 {finetuned_path} 已存在且未指定 --restart。跳过所有训练。")
-        if args.evaluate:
-            model = AlignHeteroMLP(
-                input_dim=input_dim,
-                output_dim=output_dim,
-                hidden_dims=hidden_dims_list,
-                dropout_rate=args.dropout_rate
-            ).to(DEVICE)
-            model.load_state_dict(torch.load(
-                finetuned_path, map_location=DEVICE))
-            pred_scaled, true_scaled = get_predictions(
-                model, finetune_loaders['target_val'], DEVICE)
-            calculate_and_print_metrics(
-                pred_scaled, true_scaled, data['y_scaler'])
-        return
+        print(f"检测到最终模型 {finetuned_path} 且未指定 --restart。跳过所有训练。")
+    else:
+        # --- 阶段一：预训练元优化 ---
+        global_best_pretrain_val_loss = float('inf')
 
-    # --- 全局最优追踪器 ---
-    global_best_finetune_val_nll = float('inf')
-    global_best_finetune_state_dict = None
+        # 检查是否需要执行预训练
+        if args.restart or not os.path.exists(pretrained_path):
+            print(f"\n{'='*30} 阶段一: 预训练元优化 {'='*30}")
 
-    # --- 主循环：遍历每个预训练配置，执行完整的 "预训练->微调" 流水线 ---
-    num_pipelines = config.RESTART_PRETRAIN
-    for i in range(num_pipelines):
-        print(f"\n{'='*30} 完整流水线 {i+1}/{num_pipelines} {'='*30}")
+            pretrain_loader_A = make_loader(
+                data['source_train'][0], data['source_train'][1], args.batch_a, shuffle=True)
+            pretrain_loader_val = make_loader(
+                data['source_val'][0], data['source_val'][1], args.batch_a, shuffle=False)
 
-        # 1. 每次都创建新模型，保证隔离
-        model = AlignHeteroMLP(
-            input_dim=input_dim,
-            output_dim=output_dim,
-            hidden_dims=hidden_dims_list,
-            dropout_rate=args.dropout_rate
-        ).to(DEVICE)
+            num_experiments = config.RESTART_PRETRAIN
+            for i in range(num_experiments):
+                print(f"\n--- [预训练实验 {i+1}/{num_experiments}] ---")
 
-        # 2. 选择预训练配置并执行
-        scheduler_config = config.PRETRAIN_SCHEDULER_CONFIGS[i % len(
-            config.PRETRAIN_SCHEDULER_CONFIGS)]
-        _, best_pretrained_state = run_pretraining(
-            model, pretrain_loader_A, pretrain_loader_val, DEVICE, args, scheduler_config)
+                model = AlignHeteroMLP(
+                    input_dim=input_dim, output_dim=output_dim,
+                    hidden_dims=hidden_dims_list, dropout_rate=args.dropout_rate
+                ).to(DEVICE)
 
-        if not best_pretrained_state:
-            print("  [警告] 本次预训练未产生有效模型，跳过此流水线。")
-            continue
+                scheduler_config = config.PRETRAIN_SCHEDULER_CONFIGS[i % len(
+                    config.PRETRAIN_SCHEDULER_CONFIGS)]
 
-        # 3. 加载最佳预训练权重，准备微调
-        print("\n--- [加载预训练模型] ---")
-        model.load_state_dict(best_pretrained_state)
+                best_loss_this_run, best_state_dict_this_run = run_pretraining(
+                    model, pretrain_loader_A, pretrain_loader_val, DEVICE, args, scheduler_config)
 
-        # 4. 执行微调，并保存到临时文件
-        temp_finetune_path = os.path.join(
-            args.save_path, f"{args.opamp}_finetune_temp_run_{i+1}.pth")
-        run_finetuning(model, finetune_loaders, DEVICE,
-                       temp_finetune_path, args)
+                if best_state_dict_this_run and best_loss_this_run < global_best_pretrain_val_loss:
+                    global_best_pretrain_val_loss = best_loss_this_run
+                    print(
+                        f"  🏆 新的全局最佳预训练模型！源域验证损失: {global_best_pretrain_val_loss:.6f}。保存中...")
+                    torch.save(best_state_dict_this_run, pretrained_path)
 
-        # 5. 评估本次微调结果，并与全局最优比较
-        if os.path.exists(temp_finetune_path):
-            model.load_state_dict(torch.load(
-                temp_finetune_path, map_location=DEVICE))
-
-            model.eval()
-            current_pipeline_val_nll = 0.0
-            with torch.no_grad():
-                for xb, yb in finetune_loaders['target_val']:
-                    xb, yb = xb.to(DEVICE), yb.to(DEVICE)
-                    mu, logvar, _ = model(xb)
-                    current_pipeline_val_nll += heteroscedastic_nll(
-                        mu, logvar, yb).item()
-            current_pipeline_val_nll /= len(finetune_loaders['target_val'])
+                del model, best_state_dict_this_run
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
 
             print(
-                f"\n[流水线 {i+1} 总结] 最终微调验证集 NLL = {current_pipeline_val_nll:.6f}")
+                f"\n--- [阶段一完成] 所有预训练实验结束。最佳源域验证损失: {global_best_pretrain_val_loss:.6f} ---")
+        else:
+            print(f"--- [阶段一] 检测到已存在的预训练模型 {pretrained_path}，跳过元优化。---")
 
-            # 6. 如果更优，则更新全局最佳模型
-            if current_pipeline_val_nll < global_best_finetune_val_nll:
-                global_best_finetune_val_nll = current_pipeline_val_nll
-                global_best_finetune_state_dict = copy.deepcopy(
-                    model.state_dict())
-                print(
-                    f"  🏆🏆🏆 新的全局最佳模型诞生！ Val NLL 更新为: {global_best_finetune_val_nll:.6f} 🏆🏆🏆")
+        # --- 阶段二：对唯一的最佳预训练模型进行微调 ---
+        if not os.path.exists(pretrained_path):
+            print("\n[错误] 预训练阶段未能产生任何有效模型。无法进行微调。")
+        else:
+            print(f"\n{'='*30} 阶段二: 对最佳预训练模型进行微调 {'='*30}")
+            model = AlignHeteroMLP(
+                input_dim=input_dim, output_dim=output_dim,
+                hidden_dims=hidden_dims_list, dropout_rate=args.dropout_rate
+            ).to(DEVICE)
 
-            os.remove(temp_finetune_path)
+            print(f"加载最佳预训练权重从: {pretrained_path}")
+            model.load_state_dict(torch.load(
+                pretrained_path, map_location=DEVICE))
 
-        # 7. 清理内存
-        del model, best_pretrained_state
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+            finetune_loaders = {
+                'source_full': make_loader(data['source'][0], data['source'][1], args.batch_a, shuffle=True, drop_last=True),
+                'target_train': make_loader(data['target_train'][0], data['target_train'][1], args.batch_b, shuffle=True),
+                'target_val': make_loader(data['target_val'][0], data['target_val'][1], args.batch_b, shuffle=False)
+            }
 
-    # --- 所有流水线结束后 ---
-    if global_best_finetune_state_dict:
-        print(f"\n{'='*30} 所有流水线执行完毕 {'='*30}")
-        print(f"全局最优模型的微调验证 NLL 为: {global_best_finetune_val_nll:.6f}")
-        print(f"正在保存最终模型至: {finetuned_path}")
-        torch.save(global_best_finetune_state_dict, finetuned_path)
-    else:
-        print("\n[错误] 所有流水线均未成功生成模型，未保存任何最终模型。")
-        return
+            run_finetuning(model, finetune_loaders,
+                           DEVICE, finetuned_path, args)
 
-    # --- (可选) 评估最终选出的模型 ---
+    # --- (可选) 最终评估 ---
     if args.evaluate:
         print("\n--- [最终评估流程启动] ---")
+        if not os.path.exists(finetuned_path):
+            print(f"错误：未找到最终微调模型 {finetuned_path}。无法评估。")
+            return
+
         model = AlignHeteroMLP(
-            input_dim=input_dim,
-            output_dim=output_dim,
-            hidden_dims=hidden_dims_list,
-            dropout_rate=args.dropout_rate
+            input_dim=input_dim, output_dim=output_dim,
+            hidden_dims=hidden_dims_list, dropout_rate=args.dropout_rate
         ).to(DEVICE)
+
+        print(f"加载最终模型 {finetuned_path} 进行评估...")
         model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
-        pred_scaled, true_scaled = get_predictions(
-            model, finetune_loaders['target_val'], DEVICE)
+
+        # 准备评估所需的数据加载器
+        eval_loader = make_loader(
+            data['target_val'][0], data['target_val'][1], args.batch_b, shuffle=False)
+
+        pred_scaled, true_scaled = get_predictions(model, eval_loader, DEVICE)
         eval_metrics = calculate_and_print_metrics(
             pred_scaled, true_scaled, data['y_scaler'])
+
         final_results = {
-            'best_finetune_val_nll': global_best_finetune_val_nll,
-            'evaluation_metrics': eval_metrics
+            'opamp': args.opamp,
+            'evaluation_metrics_on_target_validation': eval_metrics
         }
-        # 如果命令行指定了结果文件路径，则保存
+
         if args.results_file:
             try:
-                with open(args.results_file, 'w', encoding='utf-8') as f:
-                    json.dump(final_results, f, indent=4)
-                print(f"评估结果已成功保存至: {args.results_file}")
+                # 使用 'a' 模式追加结果
+                with open(args.results_file, 'a', encoding='utf-8') as f:
+                    f.write(json.dumps(final_results, indent=4) + "\n")
+                print(f"评估结果已成功追加至: {args.results_file}")
             except Exception as e:
                 print(f"错误: 保存结果文件失败 - {e}")
 
