@@ -26,7 +26,7 @@ BASE_EXPERIMENT_GRID = [
 ]
 
 # --- 实验控制设置 ---
-NUM_REPETITIONS = 3
+NUM_REPETITIONS = 2
 OPAMP_TYPE = '5t_opamp'
 BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_fixed_lr"  # 使用新目录以区分
 
