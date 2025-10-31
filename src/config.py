@@ -53,11 +53,11 @@ TASK_CONFIGS = {
 
     'two_stage_opamp': {
         # 训练设置
-        'epochs_pretrain': 1000,
+        'epochs_pretrain': 4000,
         'patience_pretrain': 200,
-        'lr_pretrain': 3e-3,
-        'epochs_finetune': 100000,
-        'patience_finetune': 1000,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 500,
         'lr_finetune': 3.8e-3,
         'batch_a': 128,
         'batch_b': 64,
@@ -68,7 +68,7 @@ TASK_CONFIGS = {
         'dropout_rate': 0.2,
 
         # 损失函数权重
-        'lambda_coral': 0.1,
+        'lambda_coral': 0.025,
         'alpha_r2': 0,
         # 反向模型
         'mdn_components': 20,

@@ -1,0 +1,270 @@
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.378e+14  MAE=8.563e+06  R2=0.6787
+dc_gain         MSE=2.661e+07  MAE=1567  R2=0.3169
+ugf             MSE=9.833e+13  MAE=6.35e+06  R2=0.7777
+phase_margin    MSE=173.9  MAE=9.702  R2=0.8484
+cmrr            MSE=8.216e+11  MAE=8.966e+04  R2=0.0514
+
+Avg  (all dims)   MSE=4.739e+13  MAE=3.001e+06  R2=0.5346
+ 'epochs_pretrain': 1000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 3e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 1000,
+        'lr_finetune': 3.8e-3,
+        'batch_a': 128,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.1,
+        'alpha_r2': 0,
+        
+        0.15points::
+ 'epochs_pretrain': 4000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 1000,
+        'lr_finetune': 3.8e-3,
+        'batch_a': 128,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.1,
+        'alpha_r2': 0,
+
+
+800就finetune早停，lr_finetune = 1e-3，出现了负优化，Bmodel只剩下0.146       
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.185e+14  MAE=8.04e+06  R2=0.7236
+dc_gain         MSE=2.517e+07  MAE=1483  R2=0.3538
+ugf             MSE=8.727e+13  MAE=6.004e+06  R2=0.8027
+phase_margin    MSE=142.8  MAE=8.91  R2=0.8755
+cmrr            MSE=8.06e+11  MAE=8.75e+04  R2=0.0694
+
+Avg  (all dims)   MSE=4.132e+13  MAE=2.827e+06  R2=0.5650
+ 'epochs_pretrain': 4000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 200,
+        'lr_finetune': 1e-3,
+        'batch_a': 128,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.1,
+        'alpha_r2': 0,
+
+
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.313e+14  MAE=8.575e+06  R2=0.6939
+dc_gain         MSE=2.59e+07  MAE=1537  R2=0.3351
+ugf             MSE=9.653e+13  MAE=6.271e+06  R2=0.7818
+phase_margin    MSE=165.8  MAE=9.817  R2=0.8555
+cmrr            MSE=8.223e+11  MAE=8.791e+04  R2=0.0507
+
+Avg  (all dims)   MSE=4.573e+13  MAE=2.987e+06  R2=0.5434
+
+
+        'epochs_pretrain': 4000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 1000,
+        'lr_finetune': 3.8e-3,
+        'batch_a': 128,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.2,
+        'alpha_r2': 0,
+lambda_coral = 0.05 15.09
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.204e+14  MAE=8.136e+06  R2=0.7193
+dc_gain         MSE=2.386e+07  MAE=1501  R2=0.3875
+ugf             MSE=9.18e+13  MAE=6.204e+06  R2=0.7925
+phase_margin    MSE=160.8  MAE=9.401  R2=0.8598
+cmrr            MSE=8.237e+11  MAE=8.772e+04  R2=0.0490
+
+Avg  (all dims)   MSE=4.26e+13  MAE=2.886e+06  R2=0.5616
+        'epochs_pretrain': 4000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 1000,
+        'lr_finetune': 3.8e-3,
+        'batch_a': 128,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.05,
+        'alpha_r2': 0,
+lambda_coral 0.025  15.2points
+slewrate_pos    MSE=1.165e+14  MAE=7.987e+06  R2=0.7283
+dc_gain         MSE=2.423e+07  MAE=1463  R2=0.3781
+ugf             MSE=8.287e+13  MAE=5.768e+06  R2=0.8127
+phase_margin    MSE=141.7  MAE=8.671  R2=0.8765
+cmrr            MSE=8.299e+11  MAE=8.874e+04  R2=0.0418
+
+Avg  (all dims)   MSE=4.005e+13  MAE=2.769e+06  R2=0.5675
+lambda_coral 0.0 ?points 14.87
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.218e+14  MAE=8.13e+06  R2=0.7161
+dc_gain         MSE=2.264e+07  MAE=1497  R2=0.4188
+ugf             MSE=8.39e+13  MAE=5.785e+06  R2=0.8103
+phase_margin    MSE=156.3  MAE=9.126  R2=0.8638
+cmrr            MSE=8.065e+11  MAE=8.71e+04  R2=0.0689
+
+Avg  (all dims)   MSE=4.129e+13  MAE=2.801e+06  R2=0.5756
+lambda_coral = 0.001
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.231e+14  MAE=8.192e+06  R2=0.7129
+dc_gain         MSE=2.368e+07  MAE=1509  R2=0.3921
+ugf             MSE=9.09e+13  MAE=6.01e+06  R2=0.7945
+phase_margin    MSE=154.6  MAE=9.314  R2=0.8653
+cmrr            MSE=8.079e+11  MAE=8.71e+04  R2=0.0673
+
+Avg  (all dims)   MSE=4.297e+13  MAE=2.858e+06  R2=0.5664
+lambda_coral = 0.001
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.249e+14  MAE=8.45e+06  R2=0.7087
+dc_gain         MSE=2.447e+07  MAE=1513  R2=0.3717
+ugf             MSE=1.017e+14  MAE=6.437e+06  R2=0.7701
+phase_margin    MSE=144.3  MAE=9.115  R2=0.8743
+cmrr            MSE=7.949e+11  MAE=8.673e+04  R2=0.0823
+
+Avg  (all dims)   MSE=4.548e+13  MAE=2.995e+06  R2=0.5614
+
+
+
+lambda_coral = 0.02
+        'epochs_pretrain': 4000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 1000,
+        'lr_finetune': 3.8e-3,
+        'batch_a': 128,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.02,
+        'alpha_r2': 0,
+        # 反向模型
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.275e+14  MAE=8.291e+06  R2=0.7027
+dc_gain         MSE=2.466e+07  MAE=1558  R2=0.3669
+ugf             MSE=9.062e+13  MAE=6.039e+06  R2=0.7952
+phase_margin    MSE=156.2  MAE=9.352  R2=0.8639
+cmrr            MSE=8.082e+11  MAE=8.765e+04  R2=0.0669
+
+Avg  (all dims)   MSE=4.379e+13  MAE=2.884e+06  R2=0.5591
+
+
+lambda_coral = 0.03
+slewrate_pos    MSE=1.278e+14  MAE=8.614e+06  R2=0.7021
+dc_gain         MSE=2.522e+07  MAE=1517  R2=0.3526
+ugf             MSE=1.009e+14  MAE=6.451e+06  R2=0.7719
+phase_margin    MSE=146.2  MAE=9.077  R2=0.8726
+cmrr            MSE=7.976e+11  MAE=8.618e+04  R2=0.0791
+
+Avg  (all dims)   MSE=4.59e+13  MAE=3.03e+06  R2=0.5557
+
+ 'two_stage_opamp': {
+        # 训练设置
+        'epochs_pretrain': 4000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 1000,
+        'lr_finetune': 3.8e-3,
+        'batch_a': 128,
+        'batch_b': 96,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.025,
+        'alpha_r2': 0,
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.208e+14  MAE=8.154e+06  R2=0.7183
+dc_gain         MSE=2.488e+07  MAE=1541  R2=0.3614
+ugf             MSE=9.019e+13  MAE=6.306e+06  R2=0.7961
+phase_margin    MSE=152.9  MAE=9.479  R2=0.8667
+cmrr            MSE=8.052e+11  MAE=8.747e+04  R2=0.0704
+
+Avg  (all dims)   MSE=4.236e+13  MAE=2.91e+06  R2=0.5626 14.22分
+
+        'epochs_pretrain': 4000,
+        'patience_pretrain': 200,
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 10000,
+        'patience_finetune': 1000,
+        'lr_finetune': 3.8e-3,
+        'batch_a': 192,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dim': 256,
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.025,
+        'alpha_r2': 0,
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.164e+14  MAE=8.158e+06  R2=0.7285
+dc_gain         MSE=2.346e+07  MAE=1399  R2=0.3977
+ugf             MSE=8.473e+13  MAE=6.008e+06  R2=0.8085
+phase_margin    MSE=161.9  MAE=9.256  R2=0.8589
+cmrr            MSE=8.392e+11  MAE=8.876e+04  R2=0.0311
+
+Avg  (all dims)   MSE=4.04e+13  MAE=2.851e+06  R2=0.5649
+
+
+patience_finetune = 500 无影响！
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.165e+14  MAE=7.987e+06  R2=0.7283
+dc_gain         MSE=2.423e+07  MAE=1463  R2=0.3781
+ugf             MSE=8.287e+13  MAE=5.768e+06  R2=0.8127
+phase_margin    MSE=141.7  MAE=8.671  R2=0.8765
+cmrr            MSE=8.299e+11  MAE=8.874e+04  R2=0.0418
+
+Avg  (all dims)   MSE=4.005e+13  MAE=2.769e+06  R2=0.5675
