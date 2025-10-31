@@ -6,6 +6,9 @@ import time
 import json
 import shutil  # <-- 导入 shutil 库用于删除文件夹
 from pathlib import Path
+from find_lr_utils import find_pretrain_lr
+from models.align_hetero import AlignHeteroMLP  # 需要它来传递类
+from data_loader import get_data_and_scalers  # 需要它来加载数据
 
 # ==============================================================================
 # --- 0. 路径和实验控制 ---
@@ -22,18 +25,30 @@ CLEANUP_AFTER_RUN = True
 # --- 1. 定义你的实验搜索空间 ---
 # ==============================================================================
 BASE_EXPERIMENT_GRID = [
-    {"name": "基线模型_4x256", "hidden_dims": [
-        256, 256, 256, 256], "dropout_rate": 0.2},
-    {"name": "瓶颈结构_窄", "hidden_dims": [
-        128, 256, 256, 128], "dropout_rate": 0.3},
-    {"name": "瓶颈结构_宽", "hidden_dims": [
-        256, 512, 512, 256], "dropout_rate": 0.4},
-    {"name": "逐渐变窄", "hidden_dims": [512, 256, 128], "dropout_rate": 0.3},
-    {"name": "逐渐变宽", "hidden_dims": [128, 256, 512], "dropout_rate": 0.2},
+    {"name": "256, 128, 128, 256]", "hidden_dims": [
+        256, 128, 128, 256], "dropout_rate": 0.2},
+    {"name": "256, 128, 256]", "hidden_dims": [
+        256, 128, 256], "dropout_rate": 0.2},
+    {"name": "128, 256, 512]", "hidden_dims": [
+        128, 256, 512], "dropout_rate": 0.2},
+    {"name": "128, 256, 256]", "hidden_dims": [
+        128, 256, 256], "dropout_rate": 0.2},
+    {"name": "128, 256, 768]", "hidden_dims": [
+        128, 256, 768], "dropout_rate": 0.2},
+    {"name": "128, 128, 256]", "hidden_dims": [
+        128, 128, 256], "dropout_rate": 0.2},
+    {"name": "128, 128, 128]", "hidden_dims": [
+        128, 128, 128], "dropout_rate": 0.2},
+    {"name": "128, 128, 512]", "hidden_dims": [
+        128, 128, 512], "dropout_rate": 0.2},
+    {"name": "64, 128, 128]", "hidden_dims": [
+        64, 128, 128], "dropout_rate": 0.2},
+    {"name": "64, 128, 256]", "hidden_dims": [
+        64, 128, 256], "dropout_rate": 0.2},
 ]
 
 # --- 实验控制设置 ---
-NUM_REPETITIONS = 2
+NUM_REPETITIONS = 1
 OPAMP_TYPE = '5t_opamp'
 BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_fixed_lr"
 FIXED_LR_FINETUNE = 1e-4
@@ -57,6 +72,13 @@ RESULTS = []
 start_time = time.time()
 BASE_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
+# --- 预先加载一次数据，避免在循环中重复IO ---
+print("正在预加载数据...")
+data = get_data_and_scalers(opamp_type=OPAMP_TYPE)
+input_dim = data['source'][0].shape[1]
+output_dim = data['source'][1].shape[1]
+print("数据加载完成。")
+
 for i, params in enumerate(EXPERIMENT_GRID):
     exp_name = f"{i+1:02d}_{params['name']}"
     # ... (打印实验信息的代码不变) ...
@@ -66,12 +88,22 @@ for i, params in enumerate(EXPERIMENT_GRID):
     exp_results_path = BASE_RESULTS_DIR / exp_name
     exp_results_path.mkdir(parents=True, exist_ok=True)
 
+    # --- 核心修改：自动寻找最优预训练学习率 ---
+    print("\n--- 步骤 A: 正在为当前结构自动寻找最优预训练学习率... ---")
+    model_params = {
+        'input_dim': input_dim, 'output_dim': output_dim,
+        'hidden_dims': params['hidden_dims'], 'dropout_rate': params['dropout_rate']
+    }
+    optimal_lr_pretrain = find_pretrain_lr(AlignHeteroMLP, model_params, data)
+    print(f"   - 找到的最优预训练学习率 (lr_pretrain): {optimal_lr_pretrain:.2e}")
+
     final_results_file = exp_results_path / "final_metrics.json"
 
     command = [
         "python", "train.py", "--opamp", OPAMP_TYPE,
         "--hidden_dims", str(params['hidden_dims']),
         "--dropout_rate", str(params['dropout_rate']),
+        "--lr_pretrain", str(optimal_lr_pretrain),  # <-- 使用自动找到的值
         "--lr_finetune", str(FIXED_LR_FINETUNE),
         "--save_path", str(exp_results_path),
         "--restart", "--evaluate",
