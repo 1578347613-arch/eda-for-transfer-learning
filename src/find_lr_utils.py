@@ -218,7 +218,7 @@ if __name__ == '__main__':
     test_model_params = {
         'input_dim': test_input_dim,
         'output_dim': test_output_dim,
-        'hidden_dims': [128, 256, 512],
+        'hidden_dims': [256, 256, 256, 256],
         'dropout_rate': 0.2
     }
 
@@ -243,7 +243,7 @@ if __name__ == '__main__':
             test_model_params,
             test_data,
             pretrained_weights_path=PRETRAINED_PATH,
-            num_iter=1000,
+            num_iter=800,
             save_plot_path="lr_finder_finetune_test.png"
         )
         print(f"手动测试 (Finetune) 完成。建议学习率: {suggested_lr_finetune:.2e}")
