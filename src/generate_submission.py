@@ -1,5 +1,10 @@
 # src/generate_submission.py (v6 - fixed log restore & eval domain)
 
+from inverse_opt import optimize_x_multi_start, load_model_from_ckpt as load_forward_model_for_opt
+from unified_inverse_train import InverseMDN
+from models.align_hetero import AlignHeteroMLP
+from data_loader import get_data_and_scalers
+from config import TASK_CONFIGS, LOG_TRANSFORMED_COLS
 import argparse
 from pathlib import Path
 import sys
@@ -20,11 +25,6 @@ if str(PROJECT_ROOT) not in sys.path:
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from config import TASK_CONFIGS, LOG_TRANSFORMED_COLS
-from data_loader import get_data_and_scalers
-from models.align_hetero import AlignHeteroMLP
-from unified_inverse_train import InverseMDN
-from inverse_opt import optimize_x_multi_start, load_model_from_ckpt as load_forward_model_for_opt
 
 # --- 全局常量 ---
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -70,13 +70,15 @@ def _load_forward_model(opamp_type: str, ckpt_path: Path) -> AlignHeteroMLP:
     config = TASK_CONFIGS[opamp_type]
     all_data = get_data_and_scalers(opamp_type=opamp_type)
 
-    input_dim = all_data['source'][0].shape[1]   # X_source_scaled shape = (N, in_dim)
-    output_dim = all_data['source'][1].shape[1]  # y_source_scaled shape = (N, out_dim)
+    # X_source_scaled shape = (N, in_dim)
+    input_dim = all_data['source'][0].shape[1]
+    # y_source_scaled shape = (N, out_dim)
+    output_dim = all_data['source'][1].shape[1]
 
     model = AlignHeteroMLP(
         input_dim=input_dim,
         output_dim=output_dim,
-        hidden_dim=config['hidden_dim'],
+        hidden_dims=config['hidden_dims'],
         num_layers=config['num_layers'],
         dropout_rate=config['dropout_rate']
     ).to(DEVICE)
@@ -86,7 +88,8 @@ def _load_forward_model(opamp_type: str, ckpt_path: Path) -> AlignHeteroMLP:
     model.load_state_dict(model_state, strict=False)
     model.eval()
 
-    print(f"成功加载正向模型: {ckpt_path.name} (Input: {input_dim}, Output: {output_dim})")
+    print(
+        f"成功加载正向模型: {ckpt_path.name} (Input: {input_dim}, Output: {output_dim})")
     return model
 
 
@@ -184,7 +187,8 @@ def predict_forward_simple(
 
     # 模型前向 (标准化空间输出)
     x_test_t = torch.tensor(x_test_scaled, dtype=torch.float32, device=DEVICE)
-    mu_std, _, _ = model(x_test_t)           # mu_std: [N, D_out] in standardized space
+    # mu_std: [N, D_out] in standardized space
+    mu_std, _, _ = model(x_test_t)
     mu_std = mu_std.cpu().numpy()
 
     # 回到物理域
@@ -222,14 +226,16 @@ def predict_forward_ensemble(
     align_model_path = results_dir / f"{opamp_type}_finetuned.pth"
     target_only_model_path = results_dir / f"{opamp_type}_target_only.pth"
     m_align = _load_forward_model(opamp_type, align_model_path)
-    m_trg   = _load_forward_model(opamp_type, target_only_model_path)
+    m_trg = _load_forward_model(opamp_type, target_only_model_path)
 
     # 在 val split 上计算温度系数、MSE，用于融合
     X_val_t = torch.tensor(X_val, dtype=torch.float32, device=DEVICE)
     mu_a_val, logv_a_val, _ = m_align(X_val_t)
     mu_t_val, logv_t_val, _ = m_trg(X_val_t)
-    mu_a_val = mu_a_val.cpu().numpy(); logv_a_val = logv_a_val.cpu().numpy()
-    mu_t_val = mu_t_val.cpu().numpy(); logv_t_val = logv_t_val.cpu().numpy()
+    mu_a_val = mu_a_val.cpu().numpy()
+    logv_a_val = logv_a_val.cpu().numpy()
+    mu_t_val = mu_t_val.cpu().numpy()
+    logv_t_val = logv_t_val.cpu().numpy()
 
     def fit_temp(mu, logv, y):
         resid2 = (y - mu) ** 2
@@ -256,8 +262,10 @@ def predict_forward_ensemble(
     # 两个模型各自推理
     mu_a_test, logv_a_test, _ = m_align(x_test_t)
     mu_t_test, logv_t_test, _ = m_trg(x_test_t)
-    mu_a_test = mu_a_test.cpu().numpy(); logv_a_test = logv_a_test.cpu().numpy()
-    mu_t_test = mu_t_test.cpu().numpy(); logv_t_test = logv_t_test.cpu().numpy()
+    mu_a_test = mu_a_test.cpu().numpy()
+    logv_a_test = logv_a_test.cpu().numpy()
+    mu_t_test = mu_t_test.cpu().numpy()
+    logv_t_test = logv_t_test.cpu().numpy()
 
     # 温度校准 logvar
     logv_a_cal = logv_a_test + 2.0 * np.log(c_a[None, :])
@@ -322,8 +330,8 @@ def predict_inverse_hybrid(
 
     # == Step 1: MDN 给初值（无梯度） ==
     mdn_model_path = results_dir / f"mdn_{opamp_type}.pth"
-    x_scaler_path  = results_dir / f"{opamp_type}_x_scaler.gz"
-    y_scaler_path  = results_dir / f"{opamp_type}_y_scaler.gz"
+    x_scaler_path = results_dir / f"{opamp_type}_x_scaler.gz"
+    y_scaler_path = results_dir / f"{opamp_type}_y_scaler.gz"
 
     x_scaler = joblib.load(x_scaler_path)
     y_scaler = joblib.load(y_scaler_path)
@@ -341,10 +349,13 @@ def predict_inverse_hybrid(
 
     # MDN 推理 (无梯度)
     with torch.inference_mode():
-        y_target_t = torch.tensor(y_target_scaled, dtype=torch.float32, device=DEVICE)
-        pi, mu, _ = mdn_model(y_target_t)                 # pi: [B,K], mu: [B,K,Dx]
+        y_target_t = torch.tensor(
+            y_target_scaled, dtype=torch.float32, device=DEVICE)
+        # pi: [B,K], mu: [B,K,Dx]
+        pi, mu, _ = mdn_model(y_target_t)
         # 期望作为初值
-        x_init_scaled = torch.sum(pi.unsqueeze(-1) * mu, dim=1).cpu().numpy()  # [B,Dx]
+        x_init_scaled = torch.sum(
+            pi.unsqueeze(-1) * mu, dim=1).cpu().numpy()  # [B,Dx]
 
     # == Step 2: 用前向模型作为 cost，开启梯度优化 ==
     forward_model_path = results_dir / f"{opamp_type}_finetuned.pth"
@@ -388,7 +399,8 @@ def predict_inverse_hybrid(
         final_predictions_phys.append(x_phys)
 
     # == Step 3: 输出 CSV (物理域的设计参数) ==
-    final_pred_df = pd.DataFrame(final_predictions_phys, columns=INVERSE_OUTPUT_COLS[opamp_type])
+    final_pred_df = pd.DataFrame(
+        final_predictions_phys, columns=INVERSE_OUTPUT_COLS[opamp_type])
     final_pred_df.to_csv(output_csv, index=False)
     print(f"成功生成混合策略的提交文件: {output_csv.name}")
 
@@ -424,7 +436,8 @@ def offline_eval_forward_simple(
         raise ValueError("split 仅支持 train / val / all")
 
     # 模型
-    ckpt_path = results_dir / f"{opamp_type}_{'finetuned' if model_choice=='align' else 'target_only'}.pth"
+    ckpt_path = results_dir / \
+        f"{opamp_type}_{'finetuned' if model_choice=='align' else 'target_only'}.pth"
     model = _load_forward_model(opamp_type, ckpt_path)
 
     # 前向 (标准化空间)
@@ -442,13 +455,14 @@ def offline_eval_forward_simple(
     mse_list = []
     mae_list = []
     r2_list = []
-    print(f"\n=== Offline Eval (simple forward) [{opamp_type} | model={model_choice} | split={split}] ===")
+    print(
+        f"\n=== Offline Eval (simple forward) [{opamp_type} | model={model_choice} | split={split}] ===")
     for j, name in enumerate(y_cols):
         yt = y_true_phys[:, j]
         yp = y_pred_phys[:, j]
         mse_j = mean_squared_error(yt, yp)
         mae_j = mean_absolute_error(yt, yp)
-        r2_j  = r2_score(yt, yp)
+        r2_j = r2_score(yt, yp)
         mse_list.append(mse_j)
         mae_list.append(mae_j)
         r2_list.append(r2_j)
