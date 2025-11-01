@@ -24,33 +24,30 @@ TASK_CONFIGS = {
         # 训练设置
         'RESTART_PRETRAIN': 9,
         'PRETRAIN_SCHEDULER_CONFIGS': [  # 重复执行三次元优化
-            # --- 策略一：广泛探索 ---
-                {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第1次重启
-                {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第2次重启
-            # --- 策略二：精细打磨 ---
-                {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第3次重启
-            # --- 策略一：广泛探索 ---
-                {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第4次重启
-                {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第5次重启
-            # --- 策略二：精细打磨 ---
-                {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第6次重启
-            # --- 策略一：广泛探索 ---
-                {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第7次重启
-                {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第8次重启
-            # --- 策略二：精细打磨 ---
-                {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},  # 第9次重启
+            # # --- 策略一：广泛探索 ---
+            # {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第1次重启：
+            # {"T_0": 55, "T_mult": 1, "epochs_pretrain": 110},  # 第2次重启：
+            # {"T_0": 60, "T_mult": 1, "epochs_pretrain": 120},  # 第3次重启：
+
+            # # --- 策略二：精细打磨 ---
+            {"T_0": 80, "T_mult": 1, "epochs_pretrain": 80},
+            {"T_0": 100, "T_mult": 1, "epochs_pretrain": 100},
+            {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},
+            # {"T_0": 150, "T_mult": 1, "epochs_pretrain": 150},
+            # {"T_0": 175, "T_mult": 1, "epochs_pretrain": 175},
+            # {"T_0": 200, "T_mult": 1, "epochs_pretrain": 200},
         ],
         'lr_pretrain': 3e-3,
         'epochs_finetune': 100000,
-        'patience_finetune': 1000,
-        'lr_finetune': 3.8e-3,
+        'patience_finetune': 200,
+        'lr_finetune': 1e-3,
         'batch_a': 128,
         'batch_b': 64,
         'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
         # 模型设置
-        'hidden_dim': 256,
-        'num_layers': 4,
-        'dropout_rate': 0.2,
+        'hidden_dims': [128, 256, 512],
+        'num_layers': 3,
+        'dropout_rate': 0.1,
 
         # 损失函数权重
         'lambda_coral': 0.1,
@@ -88,7 +85,7 @@ TASK_CONFIGS = {
         'batch_b': 64,
         'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
         # 模型设置
-        'hidden_dim': 256,
+        'hidden_dims': [256, 256, 256, 256],
         'num_layers': 4,
         'dropout_rate': 0.2,
 
