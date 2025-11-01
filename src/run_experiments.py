@@ -25,24 +25,18 @@ CLEANUP_AFTER_RUN = True
 # --- 1. 定义你的实验搜索空间 ---
 # ==============================================================================
 BASE_EXPERIMENT_GRID = [
-    {"name": "256, 128, 256]", "hidden_dims": [
-        256, 128, 256], "dropout_rate": 0.2},
     {"name": "128, 256, 512]", "hidden_dims": [
         128, 256, 512], "dropout_rate": 0.2},
-    {"name": "128, 256, 256]", "hidden_dims": [
-        128, 256, 256], "dropout_rate": 0.2},
-    {"name": "128, 256, 768]", "hidden_dims": [
-        128, 256, 768], "dropout_rate": 0.2},
-    {"name": "128, 128, 256]", "hidden_dims": [
-        128, 128, 256], "dropout_rate": 0.2},
-    {"name": "128, 128, 128]", "hidden_dims": [
-        128, 128, 128], "dropout_rate": 0.2},
-    {"name": "128, 128, 512]", "hidden_dims": [
-        128, 128, 512], "dropout_rate": 0.2},
-    {"name": "64, 128, 128]", "hidden_dims": [
-        64, 128, 128], "dropout_rate": 0.2},
-    {"name": "64, 128, 256]", "hidden_dims": [
-        64, 128, 256], "dropout_rate": 0.2},
+    {"name": "128, 256, 512, 256]0.2", "hidden_dims": [
+        128, 256, 512, 256], "dropout_rate": 0.2},
+    {"name": "128, 256, 512, 256]0.3", "hidden_dims": [
+        128, 256, 512, 256], "dropout_rate": 0.3},
+    {"name": "128, 256, 512, 512]0.2", "hidden_dims": [
+        128, 256, 512, 512], "dropout_rate": 0.2},
+    {"name": "128, 256, 512, 512]0.3", "hidden_dims": [
+        128, 256, 512, 512], "dropout_rate": 0.3},
+    {"name": "128, 256, 512, 256, 128]", "hidden_dims": [
+        128, 256, 512, 256, 128], "dropout_rate": 0.35},
 ]
 
 # --- 实验控制设置 ---
