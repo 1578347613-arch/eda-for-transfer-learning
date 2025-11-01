@@ -35,6 +35,8 @@ BASE_EXPERIMENT_GRID = [
         128, 256, 512, 512], "dropout_rate": 0.2},
     {"name": "128, 256, 512, 512]0.3", "hidden_dims": [
         128, 256, 512, 512], "dropout_rate": 0.3},
+    {"name": "128, 256, 512, 768]", "hidden_dims": [
+        128, 256, 512, 768], "dropout_rate": 0.3},
     {"name": "128, 256, 512, 256, 128]", "hidden_dims": [
         128, 256, 512, 256, 128], "dropout_rate": 0.35},
 ]
