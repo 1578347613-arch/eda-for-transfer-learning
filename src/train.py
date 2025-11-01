@@ -250,9 +250,11 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
                 break
 
     print(f"--- [阶段二] 微调完成，最佳模型已保存至 {final_save_path} ---")
-
+    return best_val
 
 # ========== 4.（可选）获取最好模型的输出结果 ==========
+
+
 def get_predictions(model, dataloader, device):
     """
     使用训练好的模型在数据集上进行预测，并返回Numpy数组。
@@ -347,6 +349,7 @@ def main():
             print(f"--- [阶段一] 检测到已存在的预训练模型 {pretrained_path}，跳过元优化。---")
 
         # --- 阶段二：对唯一的最佳预训练模型进行微调 ---
+        best_finetune_nll = float('NaN')
         if not os.path.exists(pretrained_path):
             print("\n[错误] 预训练阶段未能产生任何有效模型。无法进行微调。")
         else:
@@ -366,8 +369,8 @@ def main():
                 'target_val': make_loader(data['target_val'][0], data['target_val'][1], args.batch_b, shuffle=False)
             }
 
-            run_finetuning(model, finetune_loaders,
-                           DEVICE, finetuned_path, args)
+            best_finetune_nll = run_finetuning(model, finetune_loaders,
+                                               DEVICE, finetuned_path, args)
 
     # --- (可选) 最终评估 ---
     if args.evaluate:
@@ -394,7 +397,8 @@ def main():
 
         final_results = {
             'opamp': args.opamp,
-            'evaluation_metrics_on_target_validation': eval_metrics
+            'best_finetune_val_nll': best_finetune_nll,  # <-- 添加捕获的 NLL
+            'evaluation_metrics': eval_metrics       # <-- 修正键名
         }
 
         if args.results_file:
