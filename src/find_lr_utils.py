@@ -50,6 +50,8 @@ def find_pretrain_lr(
         original_model.backbone.parameters(), lr=1e-7)
     criterion = nn.HuberLoss()
 
+    X_train, y_train = data['source_train']
+
     loader = DataLoader(
         TensorDataset(torch.tensor(X_train, dtype=torch.float32),
                       torch.tensor(y_train, dtype=torch.float32)),
