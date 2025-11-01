@@ -141,5 +141,7 @@ def get_data_and_scalers(
         "target_val": (Xb_va, yb_va),
         "x_scaler": x_scaler,
         "y_scaler": y_scaler,
+        "raw_source": (Xs, ys),  # <-- 新增：包含原始的Source DataFrame
+        "raw_target": (Xt, yt)  # <-- 新增：包含原始的Target DataFrame
     }
     return payload

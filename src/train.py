@@ -1,4 +1,4 @@
-# unified_train.py (已更新：支持 --finetune 和 --evaluate 独立模式)
+# src/train.py (已更新：支持 --pretrain-only 模式)
 import os
 import torch
 import argparse
@@ -20,7 +20,6 @@ import config
 
 
 def setup_args():
-    """设置和解析命令行参数，并将 config.py 中的设置作为默认值"""
     parser = argparse.ArgumentParser(description="统一的预训练与微调脚本")
 
     # --- 核心参数 ---
@@ -29,9 +28,9 @@ def setup_args():
     parser.add_argument("--device", type=str,
                         default=config.DEVICE, help="设备 'cuda' or 'cpu'")
     parser.add_argument("--save_path", type=str,
-                        default="../results", help="预训练模型存放地址")
-    parser.add_argument("--results_file", type=str, default=None,
-                        help="如果提供，则将最终评估结果保存到此JSON文件")
+                        default="../results", help="模型存放地址")
+    parser.add_argument("--results_file", type=str,
+                        default=None, help="如果提供，则将最终评估结果保存到此JSON文件")
 
     # --- 行为控制标志 (核心改动) ---
     parser.add_argument("--restart", action='store_true',
@@ -40,12 +39,14 @@ def setup_args():
                         help="强制重新执行微调阶段 (删除缓存的微调模型)")
     parser.add_argument("--evaluate", action='store_true',
                         help="评估最终模型。如果单独使用, 则只评估不训练。")
+    parser.add_argument("--pretrain-only", action='store_true',
+                        help="只运行预训练阶段并保存模型")  # <-- 新增
 
     # --- 模型结构参数 ---
-    parser.add_argument("--hidden_dims", type=str, default=str(config.HIDDEN_DIMS),
-                        help="MLP隐藏层维度列表, e.g., '[256, 256, 256]'")
-    parser.add_argument("--dropout_rate", type=float, default=config.DROPOUT_RATE,
-                        help="Dropout比率")
+    parser.add_argument("--hidden_dims", type=str, default=str(
+        config.HIDDEN_DIMS), help="MLP隐藏层维度列表, e.g., '[256, 256, 256]'")
+    parser.add_argument("--dropout_rate", type=float,
+                        default=config.DROPOUT_RATE, help="Dropout比率")
 
     # --- 训练超参数 ---
     parser.add_argument("--lr_pretrain", type=float,
@@ -74,10 +75,11 @@ def setup_args():
     args = parser.parse_args()
     return args
 
-
 # ========== 2. 辅助函数 (DataLoader, 预训练, 微调, 预测) ==========
 # (这些函数 run_pretraining, run_finetuning, get_predictions, make_loader 保持不变)
 # ... (此处省略了这些函数的代码，它们和您文件中的保持一致) ...
+
+
 def make_loader(x, y, bs, shuffle=True, drop_last=False):
     x = torch.tensor(x, dtype=torch.float32)
     y = torch.tensor(y, dtype=torch.float32)
@@ -229,7 +231,7 @@ def get_predictions(model, dataloader, device):
             all_labels.append(labels.numpy())
     return np.concatenate(all_preds), np.concatenate(all_labels)
 
-# ========== 5. 主函数 (已重构以支持新标志) ==========
+# ========== 5. 主函数 (已重构以支持 --pretrain-only) ==========
 
 
 def main():
@@ -238,13 +240,11 @@ def main():
     print(f"程序在：{DEVICE}  上运行")
     os.makedirs(args.save_path, exist_ok=True)
 
-    # --- 路径定义 ---
     pretrained_path = os.path.join(
         args.save_path, f'{args.opamp}_pretrained.pth')
     finetuned_path = os.path.join(
         args.save_path, f'{args.opamp}_finetuned.pth')
 
-    # --- 解析模型结构 ---
     try:
         hidden_dims_list = ast.literal_eval(args.hidden_dims)
         if not isinstance(hidden_dims_list, list):
@@ -253,30 +253,23 @@ def main():
         print(f"错误: --hidden_dims 参数格式不正确: {args.hidden_dims}")
         return
 
-    # --- 数据准备 ---
     data = get_data_and_scalers(opamp_type=args.opamp)
     input_dim = data['source'][0].shape[1]
     output_dim = data['source'][1].shape[1]
 
-    # 跟踪微调结果
     best_finetune_nll = float('NaN')
 
     # --- 核心逻辑分支 ---
 
     # 1. 检查是否为“评估-A” (Evaluate-Only) 模式
-    #    --evaluate 单独使用时，不训练，只评估
-    if args.evaluate and not args.restart and not args.finetune:
+    if args.evaluate and not args.restart and not args.finetune and not args.pretrain_only:
         print("--- [模式: 仅评估] ---")
-        if not os.path.exists(finetuned_path):
-            print(f"错误：未找到最终微调模型 {finetuned_path}。无法评估。")
-            return
         # (评估逻辑在脚本末尾的 'if args.evaluate:' 块中统一处理)
 
     else:
-        # 2. 训练模式 (默认, --restart, --finetune)
+        # 2. 训练模式 (默认, --restart, --finetune, --pretrain-only)
         print("--- [模式: 训练] ---")
 
-        # 2a. 处理文件删除
         if args.restart:
             print("--- --restart: 删除所有缓存的模型。---")
             if os.path.exists(pretrained_path):
@@ -291,7 +284,7 @@ def main():
         # 2b. 阶段一：预训练
         if not os.path.exists(pretrained_path):
             print(f"\n{'='*30} 阶段一: 预训练元优化 {'='*30}")
-            # ... (此处是完整的 run_pretraining 循环，与您文件中的一致) ...
+            # ... (完整的 run_pretraining 循环) ...
             global_best_pretrain_val_loss = float('inf')
             pretrain_loader_A = make_loader(
                 data['source_train'][0], data['source_train'][1], args.batch_a, shuffle=True)
@@ -320,6 +313,11 @@ def main():
         else:
             print("--- [阶段一] 跳过预训练 (文件已存在) ---")
 
+        # <<< --- 核心改动：检查 --pretrain-only 标志 --- >>>
+        if args.pretrain_only:
+            print("--- [模式: 仅预训练] 完成。正在退出。 ---")
+            return  # 在这里结束，跳过微调和评估
+
         # 2c. 阶段二：微调
         if not os.path.exists(finetuned_path):
             if not os.path.exists(pretrained_path):
@@ -338,14 +336,12 @@ def main():
                     'target_train': make_loader(data['target_train'][0], data['target_train'][1], args.batch_b, shuffle=True),
                     'target_val': make_loader(data['target_val'][0], data['target_val'][1], args.batch_b, shuffle=False)
                 }
-                # 捕获返回的 NLL
                 best_finetune_nll = run_finetuning(
                     model, finetune_loaders, DEVICE, finetuned_path, args)
         else:
             print("--- [阶段二] 跳过微调 (文件已存在) ---")
 
     # --- 3. (可选) 最终评估 ---
-    #    此块现在会处理 "评估-A" (Evaluate-Only) 和 "评估-B" (Post-Training) 两种情况
     if args.evaluate:
         print("\n--- [最终评估流程启动] ---")
         if not os.path.exists(finetuned_path):
@@ -356,26 +352,26 @@ def main():
             input_dim=input_dim, output_dim=output_dim,
             hidden_dims=hidden_dims_list, dropout_rate=args.dropout_rate
         ).to(DEVICE)
-
         print(f"加载最终模型 {finetuned_path} 进行评估...")
         model.load_state_dict(torch.load(finetuned_path, map_location=DEVICE))
-
         eval_loader = make_loader(
             data['target_val'][0], data['target_val'][1], args.batch_b, shuffle=False)
         pred_scaled, true_scaled = get_predictions(model, eval_loader, DEVICE)
+
+        # --- 打印评估结果到控制台 ---
         eval_metrics = calculate_and_print_metrics(
             pred_scaled, true_scaled, data['y_scaler'])
 
         final_results = {
             'opamp': args.opamp,
-            'best_finetune_val_nll': best_finetune_nll,  # 如果训练被跳过，这将是 'NaN'
+            'best_finetune_val_nll': best_finetune_nll,
             'evaluation_metrics': eval_metrics
         }
-
         if args.results_file:
             try:
+                # <<< --- 核心修正：移除 indent=4 --- >>>
                 with open(args.results_file, 'a', encoding='utf-8') as f:
-                    f.write(json.dumps(final_results, indent=4) + "\n")
+                    f.write(json.dumps(final_results) + "\n")  # 写入单行JSON
                 print(f"评估结果已成功追加至: {args.results_file}")
             except Exception as e:
                 print(f"错误: 保存结果文件失败 - {e}")
