@@ -29,14 +29,22 @@ SILENT_TRAINING = True
 # --- 1. 定义你的实验搜索空间 ---
 # ==============================================================================
 BASE_EXPERIMENT_GRID = [
-    {"name": "256, 256, 256, 256]", "hidden_dims": [
-        256, 256, 256, 256], "dropout_rate": 0.2},
-    {"name": "128, 256, 512]", "hidden_dims": [
-        128, 256, 512], "dropout_rate": 0.2},
-    {"name": "128, 256, 256, 256]", "hidden_dims": [
-        128, 256, 256, 256], "dropout_rate": 0.2},
-    {"name": "128, 256, 256, 512]", "hidden_dims": [
+    {"name": "0.1", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.1},
+    {"name": "0.15", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.15},
+    {"name": "0.2", "hidden_dims": [
         128, 256, 256, 512], "dropout_rate": 0.2},
+    {"name": "0.25", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.25},
+    {"name": "0.3", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.3},
+    {"name": "0.35", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.35},
+    {"name": "0.4", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4},
+    {"name": "0.45", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.45},
 ]
 
 # --- 实验控制设置 ---
