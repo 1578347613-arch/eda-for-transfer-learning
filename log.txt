@@ -1035,3 +1035,64 @@ cmrr            MSE=1.45e+05  MAE=86.63  R2=0.8789
 
 总结：[128, 256, 256, 512]更有潜力。
 太蠢了测了这么多次才发现
+
+
+=== 实验 1 (01_0.1_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=9.521e+09  MAE=5.429e+04  R2=0.9976
+dc_gain         MSE=68.37  MAE=4.812  R2=0.9598
+ugf             MSE=3.174e+10  MAE=1.097e+05  R2=0.9978
+phase_margin    MSE=0.06856  MAE=0.1958  R2=0.9932
+cmrr            MSE=2.952e+05  MAE=114.1  R2=0.7535
+
+=== 实验 2 (02_0.15_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.298e+10  MAE=6.172e+04  R2=0.9967
+dc_gain         MSE=87.54  MAE=5.017  R2=0.9485
+ugf             MSE=5.213e+10  MAE=1.418e+05  R2=0.9964
+phase_margin    MSE=0.07201  MAE=0.1992  R2=0.9929
+cmrr            MSE=3.273e+05  MAE=119.2  R2=0.7268
+
+=== 实验 3 (03_0.2_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.252e+10  MAE=6.769e+04  R2=0.9968
+dc_gain         MSE=69.18  MAE=5.311  R2=0.9593
+ugf             MSE=6.092e+10  MAE=1.434e+05  R2=0.9958
+phase_margin    MSE=0.08144  MAE=0.2087  R2=0.9919
+cmrr            MSE=2.166e+05  MAE=111.8  R2=0.8192
+
+=== 实验 4 (04_0.25_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.538e+10  MAE=7.818e+04  R2=0.9961
+dc_gain         MSE=110.1  MAE=6.452  R2=0.9352
+ugf             MSE=6.884e+10  MAE=1.67e+05  R2=0.9953
+phase_margin    MSE=0.09928  MAE=0.2322  R2=0.9902
+cmrr            MSE=2.527e+05  MAE=111.6  R2=0.7890
+
+=== 实验 5 (05_0.3_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.647e+10  MAE=8.771e+04  R2=0.9958
+dc_gain         MSE=129.7  MAE=7.633  R2=0.9237
+ugf             MSE=7.411e+10  MAE=1.801e+05  R2=0.9949
+phase_margin    MSE=0.183  MAE=0.3159  R2=0.9819
+cmrr            MSE=3.729e+05  MAE=146  R2=0.6886
+
+=== 实验 6 (06_0.35_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.626e+10  MAE=1.018e+05  R2=0.9934
+dc_gain         MSE=199.1  MAE=8.042  R2=0.8828
+ugf             MSE=1.045e+11  MAE=2.251e+05  R2=0.9929
+phase_margin    MSE=0.1287  MAE=0.2751  R2=0.9872
+cmrr            MSE=2.755e+05  MAE=126.6  R2=0.7700
+
+=== 实验 7 (07_0.4_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.804e+10  MAE=9.15e+04  R2=0.9954
+dc_gain         MSE=134.8  MAE=7.871  R2=0.9207
+ugf             MSE=9.385e+10  MAE=2.073e+05  R2=0.9936
+phase_margin    MSE=0.1759  MAE=0.3194  R2=0.9826
+cmrr            MSE=1.959e+05  MAE=123.2  R2=0.8365
+
+=== 实验 8 (08_0.45_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.5e+10  MAE=1.005e+05  R2=0.9937
+dc_gain         MSE=240.2  MAE=9.138  R2=0.8586
+ugf             MSE=1.494e+11  MAE=2.614e+05  R2=0.9898
+phase_margin    MSE=0.2225  MAE=0.3426  R2=0.9780
+cmrr            MSE=3.964e+05  MAE=145.8  R2=0.6690
+
+
+总结：dropout=0.4（或0.2）表现最好
+性能好像真的达到了瓶颈，而且成绩随机散布很难控制
