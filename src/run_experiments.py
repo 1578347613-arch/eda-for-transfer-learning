@@ -13,6 +13,7 @@ import re  # <-- 导入正则表达式模块
 from find_lr_utils import find_pretrain_lr
 from models.align_hetero import AlignHeteroMLP
 from data_loader import get_data_and_scalers
+from find_lr_utils import find_pretrain_lr, find_finetune_lr
 import config  # <-- 导入 config 以获取默认值
 
 # ==============================================================================
@@ -29,17 +30,38 @@ SILENT_TRAINING = True
 # --- 1. 定义你的实验搜索空间 ---
 # ==============================================================================
 BASE_EXPERIMENT_GRID = [
-    {"name": "0.2", "hidden_dims": [
-        128, 256, 256, 512], "dropout_rate": 0.2},
-    {"name": "0.4", "hidden_dims": [
-        128, 256, 256, 512], "dropout_rate": 0.4},
+    {"name": "0.2_ratio3", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 3.0},
+    {"name": "0.2_ratio4", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 4.0},
+    {"name": "0.2_ratio5", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 5.0},
+    {"name": "0.2_ratio6", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 6.0},
+    {"name": "0.2_ratio7", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 7.0},
+    {"name": "0.2_ratio8", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 8.0},
+    {"name": "0.2_ratio9", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 9.0},
+    {"name": "0.2_ratio10", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 10.0},
+    {"name": "0.2_ratio11", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 11.0},
+    {"name": "0.2_ratio12", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 12.0},
+    {"name": "0.2_ratio13", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 13.0},
+    {"name": "0.2_ratio14", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 14.0},
+    {"name": "0.2_ratio15", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 15.0},
 ]
 
 # --- 实验控制设置 ---
 NUM_REPETITIONS = 1
 OPAMP_TYPE = '5t_opamp'
-BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_fixed_lr"
-FIXED_LR_FINETUNE = 1e-4
+BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_auto_lr"
 
 # --- 提交文件设置 ---
 TEST_FILE_PATH = PROJECT_ROOT / "data/02_public_test_set/features/features_A.csv"
@@ -153,7 +175,6 @@ start_time = time.time()
 print(f"--- 实验开始：共 {len(EXPERIMENT_GRID)} 次运行 ---")
 print(f"--- 评估日志将保存到: {EVALUATION_LOG_FILE} ---")
 
-# --- 预先加载一次数据 ---
 print("正在预加载数据...")
 data = get_data_and_scalers(opamp_type=OPAMP_TYPE)
 input_dim = data['source'][0].shape[1]
@@ -168,36 +189,90 @@ for i, params in enumerate(EXPERIMENT_GRID):
     exp_results_path = BASE_RESULTS_DIR / exp_name
     exp_results_path.mkdir(parents=True, exist_ok=True)
 
-    print("\n--- 步骤 A: 正在为当前结构自动寻找最优预训练学习率... ---")
+    # 定义模型参数和路径
     model_params = {
         'input_dim': input_dim, 'output_dim': output_dim,
         'hidden_dims': params['hidden_dims'], 'dropout_rate': params['dropout_rate']
     }
-    optimal_lr_pretrain = find_pretrain_lr(AlignHeteroMLP, model_params, data)
+    pretrained_model_path = exp_results_path / f"{OPAMP_TYPE}_pretrained.pth"
+    final_model_path = exp_results_path / f"{OPAMP_TYPE}_finetuned.pth"
+    final_results_file = exp_results_path / "final_metrics.json"
+
+    # --------------------------------------------------------------------------
+    # --- 步骤 A: 寻找最优预训练学习率 ---
+    # --------------------------------------------------------------------------
+    print("\n--- 步骤 A: 正在寻找最优预训练学习率... ---")
+    optimal_lr_pretrain = find_pretrain_lr(
+        AlignHeteroMLP, model_params, data,
+        save_plot_path=str(exp_results_path / "lr_finder_pretrain.png")
+    )
     print(f"   - 找到的最优预训练学习率 (lr_pretrain): {optimal_lr_pretrain:.2e}")
 
-    final_results_file = exp_results_path / "final_metrics.json"
-    final_model_path = exp_results_path / f"{OPAMP_TYPE}_finetuned.pth"
-
-    command = [
+    # --------------------------------------------------------------------------
+    # --- 步骤 B: 运行 Pretrain-Only ---
+    # --------------------------------------------------------------------------
+    print("\n--- 步骤 B: 正在执行 Pretrain-Only... ---")
+    pretrain_command = [
         "python", "train.py", "--opamp", OPAMP_TYPE,
         "--hidden_dims", str(params['hidden_dims']),
         "--dropout_rate", str(params['dropout_rate']),
         "--lr_pretrain", str(optimal_lr_pretrain),
-        "--lr_finetune", str(FIXED_LR_FINETUNE),
         "--save_path", str(exp_results_path),
-        "--restart", "--evaluate",
-        "--results_file", str(final_results_file)
+        "--restart",  # 确保重新运行预训练
+        "--pretrain"  # <-- 关键：只运行预训练
+    ]
+    success, _, _ = run_command(pretrain_command, f"{exp_name}_Pretrain")
+
+    if not success or not pretrained_model_path.exists():
+        print(f"❌ 实验 {exp_name} 在预训练阶段失败。跳过此实验。")
+        continue
+    print(f"   - 预训练模型已保存至: {pretrained_model_path.name}")
+
+    # --------------------------------------------------------------------------
+    # --- 步骤 C: 寻找最优微调学习率 ---
+    # --------------------------------------------------------------------------
+    print("\n--- 步骤 C: 正在寻找最优微调学习率... ---")
+    current_ratio = params['backbone_lr_ratio']
+    optimal_lr_finetune = find_finetune_lr(
+        AlignHeteroMLP, model_params, data,
+        pretrained_weights_path=str(pretrained_model_path),
+        backbone_lr_ratio=current_ratio,  # <-- 传入当前实验的 ratio
+        save_plot_path=str(exp_results_path / "lr_finder_finetune.png")
+    )
+    print(f"   - 找到的最优微调学习率 (lr_finetune_head): {optimal_lr_finetune:.2e}")
+
+    # --------------------------------------------------------------------------
+    # --- 步骤 D: 运行 Finetune + Evaluate ---
+    # --------------------------------------------------------------------------
+    print(
+        f"\n--- 步骤 D: 正在执行 Finetune + Evaluate (Ratio={current_ratio})... ---")
+    finetune_command = [
+        "python", "train.py", "--opamp", OPAMP_TYPE,
+        "--hidden_dims", str(params['hidden_dims']),
+        "--dropout_rate", str(params['dropout_rate']),
+
+        # 传入自动找到的微调LR 和 网格中的Ratio
+        "--lr_finetune", str(optimal_lr_finetune),
+        "--backbone_lr_ratio", str(current_ratio),
+
+        "--save_path", str(exp_results_path),
+        "--results_file", str(final_results_file),
+
+        "--finetune",   # <-- 关键：跳过预训练，只微调
+        "--evaluate"    # <-- 关键：微调后立即评估
     ]
 
-    # --- 步骤 B: 运行完整训练和评估 ---
-    success, stdout_lines, _ = run_command(command, f"{exp_name}_FullTrain")
+    success, stdout_lines, _ = run_command(
+        finetune_command, f"{exp_name}_FinetuneEval")
 
     if not success:
-        print(f"❌ 实验 {exp_name} 在训练阶段失败。跳过此实验。")
+        print(f"❌ 实验 {exp_name} 在微调/评估阶段失败。跳过此实验。")
         continue
 
-    # --- 步骤 C: 提取日志并保存 ---
+    # --------------------------------------------------------------------------
+    # --- 步骤 E: 提取日志并保存 ---
+    # --------------------------------------------------------------------------
+    print(f"\n--- 步骤 E: 提取日志并保存... ---")
     evaluation_text = parse_evaluation_log(stdout_lines, exp_name, i+1)
     if evaluation_text:
         file_logger.info(evaluation_text + "\n")
@@ -205,8 +280,10 @@ for i, params in enumerate(EXPERIMENT_GRID):
     else:
         print(f"⚠️ 警告: 未能从 {exp_name} 的训练输出中捕获到评估日志。")
 
-    # --- 步骤 D: 生成提交文件 ---
-    print(f"--- 步骤 D: 正在为实验 {i+1} 生成提交文件... ---")
+    # --------------------------------------------------------------------------
+    # --- 步骤 F: 生成提交文件 ---
+    # --------------------------------------------------------------------------
+    print(f"\n--- 步骤 F: 正在为实验 {i+1} 生成提交文件... ---")
     submission_path = BASE_RESULTS_DIR / f"{SUBMISSION_FILE_PREFIX}_{i+1}"
 
     if not final_model_path.exists():
@@ -221,7 +298,7 @@ for i, params in enumerate(EXPERIMENT_GRID):
         "--test-file", str(TEST_FILE_PATH),
         "--hidden-dims", str(model_params['hidden_dims']),
         "--dropout-rate", str(model_params['dropout_rate']),
-        "--device", config.DEVICE  # 从 config 读取 device
+        "--device", config.DEVICE
     ]
     success, _, _ = run_command(submit_cmd, f"{exp_name}_Submit")
     if success:
@@ -229,14 +306,15 @@ for i, params in enumerate(EXPERIMENT_GRID):
     else:
         print(f"❌ 生成提交文件失败: {submission_path.name}")
 
-    # --- 步骤 E: 清理 (如果启用) ---
+    # --------------------------------------------------------------------------
+    # --- 步骤 G: 清理 (如果启用) ---
+    # --------------------------------------------------------------------------
     if CLEANUP_AFTER_RUN:
         try:
             shutil.rmtree(exp_results_path)
             print(f"清理完毕: 已删除临时文件夹 {exp_results_path}")
         except Exception as e:
             print(f"⚠️ 清理失败: 删除文件夹 {exp_results_path} 时出错 - {e}")
-
 # ==============================================================================
 # --- 5. 汇总并展示最终结果 ---
 # ==============================================================================

@@ -12,6 +12,8 @@ from ignite.handlers import FastaiLRFinder
 from models.align_hetero import AlignHeteroMLP
 from data_loader import get_data_and_scalers
 from loss_function import heteroscedastic_nll
+from optimizer_utils import create_discriminative_optimizer
+import config
 
 
 class _LRFinderWrapper(nn.Module):
@@ -108,6 +110,8 @@ def find_pretrain_lr(
     return suggested_lr
 
 
+# src/find_lr_utils.py (替换整个 find_finetune_lr 函数)
+
 def find_finetune_lr(
     model_class, model_params, data, pretrained_weights_path: str,
     end_lr=10.0, num_iter=1000, batch_size=128, device="cuda", save_plot_path: str = None
@@ -121,11 +125,14 @@ def find_finetune_lr(
         pretrained_weights_path, map_location=device))
 
     start_lr = 1e-7
-    optimizer_params = [
-        {"params": original_model.backbone.parameters(), "lr": start_lr / 10},
-        {"params": original_model.hetero_head.parameters(), "lr": start_lr}
-    ]
-    optimizer = torch.optim.AdamW(optimizer_params)
+
+    # <<< --- 核心修改：使用与 train.py 一致的优化器 --- >>>
+    optimizer = create_discriminative_optimizer(
+        model=original_model,
+        head_lr=start_lr,  # LR Finder 将从这里开始缩放
+        ratio=config.BACKBONE_LR_RATIO,  # 从 config.py 读取固定的比例
+        weight_decay=1e-4  # 保持一致
+    )
 
     def criterion(model_output, y_true): return heteroscedastic_nll(
         model_output[0], model_output[1], y_true)
@@ -150,7 +157,10 @@ def find_finetune_lr(
     results = lr_finder.get_results()
     lrs_list_of_lists = results["lr"]
     losses = results["loss"]
-    head_lrs = [lr_pair[1] for lr_pair in lrs_list_of_lists]
+
+    # <<< --- 核心修改：Head Group 现在是第 0 组 --- >>>
+    # 因为 create_discriminative_optimizer 把 head 放在了第一组
+    head_lrs = [lr_pair[0] for lr_pair in lrs_list_of_lists]
 
     if not head_lrs or not losses or len(head_lrs) < 5:
         print("警告: LRFinder未能产生足够的有效数据。")
@@ -161,7 +171,7 @@ def find_finetune_lr(
     min_loss = losses[min_loss_idx]
     min_loss_lr = head_lrs[min_loss_idx]  # 找到最低点的LR
 
-    # <<< --- 核心改动：应用 Min Loss / 2 规则 --- >>>
+    # <<< --- (这部分不变) 应用 Min Loss / 2 规则 --- >>>
     suggested_lr = min_loss_lr / 2.0
 
     print(f"--- [Finetune] 自动化分析完成 ---")

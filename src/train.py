@@ -1,6 +1,7 @@
 # src/train.py (已更新：支持 --pretrain-only 模式)
 import os
 import torch
+import torch.nn as nn
 import argparse
 import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
@@ -14,6 +15,7 @@ from data_loader import get_data_and_scalers
 from models.align_hetero import AlignHeteroMLP
 from loss_function import heteroscedastic_nll, batch_r2, coral_loss
 from evaluate import calculate_and_print_metrics
+from optimizer_utils import create_discriminative_optimizer
 import config
 
 # ========== 1. 参数定义与解析 (已更新) ==========
@@ -39,7 +41,7 @@ def setup_args():
                         help="强制重新执行微调阶段 (删除缓存的微调模型)")
     parser.add_argument("--evaluate", action='store_true',
                         help="评估最终模型。如果单独使用, 则只评估不训练。")
-    parser.add_argument("--pretrain-only", action='store_true',
+    parser.add_argument("--pretrain", action='store_true',
                         help="只运行预训练阶段并保存模型")  # <-- 新增
 
     # --- 模型结构参数 ---
@@ -53,6 +55,8 @@ def setup_args():
                         default=config.LEARNING_RATE_PRETRAIN, help="学习率")
     parser.add_argument("--lr_finetune", type=float,
                         default=config.LEARNING_RATE_FINETUNE, help="微调阶段 head 的学习率")
+    parser.add_argument("--backbone_lr_ratio", type=float, default=config.BACKBONE_LR_RATIO,
+                        help="用于微调Backbone的学习率缩放比例 (lr_finetune / ratio)")
     parser.add_argument("--epochs_finetune", type=int,
                         default=config.EPOCHS_FINETUNE, help="微调阶段的总轮数")
     parser.add_argument("--batch_a", type=int,
@@ -154,11 +158,12 @@ def run_pretraining(model, train_loader, val_loader, device, args, scheduler_con
 def run_finetuning(model, data_loaders, device, final_save_path, args):
     # ... (函数体与您文件中的完全一致)
     print("\n--- [阶段二] 开始整体模型微调 ---")
-    optimizer_params = [
-        {"params": model.backbone.parameters(), "lr": args.lr_finetune / 10},
-        {"params": model.hetero_head.parameters(), "lr": args.lr_finetune}
-    ]
-    opt = torch.optim.AdamW(optimizer_params, weight_decay=1e-4)
+
+    opt = create_discriminative_optimizer(
+        model=model,
+        head_lr=args.lr_finetune,
+        ratio=args.backbone_lr_ratio
+    )
     dl_A, dl_B, dl_val = data_loaders['source_full'], data_loaders['target_train'], data_loaders['target_val']
     dl_A_iter = iter(dl_A)
     best_val = float('inf')
@@ -262,7 +267,7 @@ def main():
     # --- 核心逻辑分支 ---
 
     # 1. 检查是否为“评估-A” (Evaluate-Only) 模式
-    if args.evaluate and not args.restart and not args.finetune and not args.pretrain_only:
+    if args.evaluate and not args.restart and not args.finetune and not args.pretrain:
         print("--- [模式: 仅评估] ---")
         # (评估逻辑在脚本末尾的 'if args.evaluate:' 块中统一处理)
 
@@ -314,7 +319,7 @@ def main():
             print("--- [阶段一] 跳过预训练 (文件已存在) ---")
 
         # <<< --- 核心改动：检查 --pretrain-only 标志 --- >>>
-        if args.pretrain_only:
+        if args.pretrain:
             print("--- [模式: 仅预训练] 完成。正在退出。 ---")
             return  # 在这里结束，跳过微调和评估
 
