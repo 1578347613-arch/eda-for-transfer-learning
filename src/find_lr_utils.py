@@ -189,7 +189,7 @@ if __name__ == '__main__':
     test_model_params = {
         'input_dim': test_input_dim,
         'output_dim': test_output_dim,
-        'hidden_dims': [256, 256, 256, 256],
+        'hidden_dims': [128, 256, 256, 512],
         'dropout_rate': 0.2
     }
     print("\n--- 测试 Pretrain Finder ---")
