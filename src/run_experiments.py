@@ -56,6 +56,34 @@ BASE_EXPERIMENT_GRID = [
         128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 14.0},
     {"name": "0.2_ratio15", "hidden_dims": [
         128, 256, 256, 512], "dropout_rate": 0.2, "backbone_lr_ratio": 15.0},
+
+    {"name": "0.4_ratio3", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 3.0},
+    {"name": "0.4_ratio4", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 4.0},
+    {"name": "0.4_ratio5", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 5.0},
+    {"name": "0.4_ratio6", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 6.0},
+    {"name": "0.4_ratio7", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 7.0},
+    {"name": "0.4_ratio8", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 8.0},
+    {"name": "0.4_ratio9", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 9.0},
+    {"name": "0.4_ratio10", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 10.0},
+    {"name": "0.4_ratio11", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 11.0},
+    {"name": "0.4_ratio12", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 12.0},
+    {"name": "0.4_ratio13", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 13.0},
+    {"name": "0.4_ratio14", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 14.0},
+    {"name": "0.4_ratio15", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 15.0},
+
 ]
 
 # --- 实验控制设置 ---
