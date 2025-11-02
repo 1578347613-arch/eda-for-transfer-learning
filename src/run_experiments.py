@@ -1,14 +1,19 @@
-# src/run_experiments.py (已更新：支持静默训练)
+# src/run_experiments.py (已更新：记录评估日志 + 自动提交)
 import subprocess
 import os
-import pandas as pd
 import time
 import json
 import shutil
 from pathlib import Path
+import logging  # <-- 导入日志模块
+import sys
+import re  # <-- 导入正则表达式模块
+
+# --- 从项目模块中导入 ---
 from find_lr_utils import find_pretrain_lr
 from models.align_hetero import AlignHeteroMLP
 from data_loader import get_data_and_scalers
+import config  # <-- 导入 config 以获取默认值
 
 # ==============================================================================
 # --- 0. 路径和实验控制 ---
@@ -16,27 +21,22 @@ from data_loader import get_data_and_scalers
 SRC_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SRC_DIR.parent
 
-CLEANUP_AFTER_RUN = True
-SILENT_TRAINING = True  # <-- 新增开关: 设置为 True 来禁用详细的训练日志
+# --- 核心修改：不再自动清理，因为 submit.py 需要 .pth 文件 ---
+CLEANUP_AFTER_RUN = False
+SILENT_TRAINING = True
 
 # ==============================================================================
 # --- 1. 定义你的实验搜索空间 ---
 # ==============================================================================
 BASE_EXPERIMENT_GRID = [
+    {"name": "256, 256, 256, 256]", "hidden_dims": [
+        256, 256, 256, 256], "dropout_rate": 0.2},
     {"name": "128, 256, 512]", "hidden_dims": [
         128, 256, 512], "dropout_rate": 0.2},
-    {"name": "128, 256, 512, 256]0.2", "hidden_dims": [
-        128, 256, 512, 256], "dropout_rate": 0.2},
-    {"name": "128, 256, 512, 256]0.3", "hidden_dims": [
-        128, 256, 512, 256], "dropout_rate": 0.3},
-    {"name": "128, 256, 512, 512]0.2", "hidden_dims": [
-        128, 256, 512, 512], "dropout_rate": 0.2},
-    {"name": "128, 256, 512, 512]0.3", "hidden_dims": [
-        128, 256, 512, 512], "dropout_rate": 0.3},
-    {"name": "128, 256, 512, 768]", "hidden_dims": [
-        128, 256, 512, 768], "dropout_rate": 0.3},
-    {"name": "128, 256, 512, 256, 128]", "hidden_dims": [
-        128, 256, 512, 256, 128], "dropout_rate": 0.35},
+    {"name": "128, 256, 256, 256]", "hidden_dims": [
+        128, 256, 256, 256], "dropout_rate": 0.2},
+    {"name": "128, 256, 256, 512]", "hidden_dims": [
+        128, 256, 256, 512], "dropout_rate": 0.2},
 ]
 
 # --- 实验控制设置 ---
@@ -45,8 +45,31 @@ OPAMP_TYPE = '5t_opamp'
 BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_fixed_lr"
 FIXED_LR_FINETUNE = 1e-4
 
+# --- 提交文件设置 ---
+TEST_FILE_PATH = PROJECT_ROOT / "data/02_public_test_set/features/features_A.csv"
+SUBMISSION_FILE_PREFIX = "predA"  # 将生成 predA_1, predA_2 ...
+
 # ==============================================================================
-# --- 2. 动态生成完整的实验列表 ---
+# --- 2. 设置日志系统 ---
+# ==============================================================================
+BASE_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+EVALUATION_LOG_FILE = BASE_RESULTS_DIR / "experiment_evaluation_log.txt"
+
+# 创建一个只写入文件的 logger
+file_logger = logging.getLogger('ExperimentLogger')
+file_logger.setLevel(logging.INFO)
+file_logger.propagate = False  # 防止日志向上传播
+# 移除所有现有的 handlers (如果在 notebook 中重跑)
+if file_logger.hasHandlers():
+    file_logger.handlers.clear()
+# 创建文件 handler
+file_handler = logging.FileHandler(
+    EVALUATION_LOG_FILE, mode='w', encoding='utf-8')
+file_handler.setFormatter(logging.Formatter('%(message)s'))
+file_logger.addHandler(file_handler)
+
+# ==============================================================================
+# --- 3. 动态生成完整的实验列表 ---
 # ==============================================================================
 # ... (这部分逻辑不变) ...
 EXPERIMENT_GRID = []
@@ -58,11 +81,81 @@ for exp_params in BASE_EXPERIMENT_GRID:
         EXPERIMENT_GRID.append(new_params)
 
 # ==============================================================================
-# --- 3. 实验执行与结果捕获 ---
+# --- 4. 辅助函数 ---
 # ==============================================================================
-RESULTS = []
+
+
+def run_command(command, log_prefix=""):
+    """
+    辅助函数：执行子进程并捕获所有输出。
+    返回: (bool: success, list: stdout_lines, str: stderr_output)
+    """
+    print(f"--- [CMD] {log_prefix} 正在执行: {' '.join(command)} ---")
+    process = subprocess.Popen(
+        command, cwd=SRC_DIR, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, text=True, encoding='utf-8'
+    )
+    stdout_lines = []
+
+    # 实时打印到控制台 (如果非静默)
+    if not SILENT_TRAINING:
+        for line in iter(process.stdout.readline, ''):
+            line = line.strip()
+            if line:
+                print(f"[{log_prefix}] {line}")
+            stdout_lines.append(line)
+        process.wait()
+        stderr_output = process.stderr.read()
+    else:
+        # 静默模式：只捕获，不打印
+        stdout_data, stderr_output = process.communicate()
+        stdout_lines = stdout_data.splitlines()
+
+    if process.returncode != 0:
+        print(f"⚠️ {log_prefix} 执行失败。")
+        if SILENT_TRAINING:  # 仅在静默模式下失败时打印错误
+            print("--- 错误日志开始 ---")
+            print(stderr_output)
+            print("--- 错误日志结束 ---")
+        return False, stdout_lines, stderr_output
+
+    print(f"--- [CMD] {log_prefix} 执行完毕 ---")
+    return True, stdout_lines, stderr_output
+
+
+def parse_evaluation_log(stdout_lines, exp_name, exp_num):
+    """
+    从 train.py 的 stdout 中提取评估日志块。
+    """
+    eval_block = []
+    capturing = False
+
+    # 匹配评估块的开始
+    start_marker = re.compile(r"===\s*目标域验证集指标（物理单位）\s*===")
+
+    for line in stdout_lines:
+        if start_marker.search(line):
+            capturing = True
+            eval_block.append(
+                f"=== 实验 {exp_num} ({exp_name})：目标域验证集指标（物理单位）===")
+            continue
+
+        if capturing and line.strip():  # 捕获所有非空行
+            eval_block.append(line)
+
+        if capturing and not line.strip():  # 遇到空行停止
+            capturing = False
+            break  # 评估块结束
+
+    return "\n".join(eval_block)
+
+
+# ==============================================================================
+# --- 5. 实验执行与结果捕获 ---
+# ==============================================================================
 start_time = time.time()
-BASE_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+print(f"--- 实验开始：共 {len(EXPERIMENT_GRID)} 次运行 ---")
+print(f"--- 评估日志将保存到: {EVALUATION_LOG_FILE} ---")
 
 # --- 预先加载一次数据 ---
 print("正在预加载数据...")
@@ -88,6 +181,7 @@ for i, params in enumerate(EXPERIMENT_GRID):
     print(f"   - 找到的最优预训练学习率 (lr_pretrain): {optimal_lr_pretrain:.2e}")
 
     final_results_file = exp_results_path / "final_metrics.json"
+    final_model_path = exp_results_path / f"{OPAMP_TYPE}_finetuned.pth"
 
     command = [
         "python", "train.py", "--opamp", OPAMP_TYPE,
@@ -100,115 +194,60 @@ for i, params in enumerate(EXPERIMENT_GRID):
         "--results_file", str(final_results_file)
     ]
 
-    # <<< --- 核心修改：控制训练日志输出 --- >>>
-    if SILENT_TRAINING:
-        print(f"正在静默执行训练... (详细日志已禁用)")
-        process = subprocess.Popen(
-            command, cwd=SRC_DIR, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE, text=True, encoding='utf-8'  # 捕获 stdout 和 stderr
-        )
-        # 等待进程结束并捕获所有输出，但不打印
-        stdout_output, stderr_output = process.communicate()
+    # --- 步骤 B: 运行完整训练和评估 ---
+    success, stdout_lines, _ = run_command(command, f"{exp_name}_FullTrain")
 
-        # 仅在发生错误时打印错误信息
-        if process.returncode != 0:
-            print(f"⚠️ 实验 {exp_name} 训练失败。以下是错误日志：")
-            print(stderr_output)
+    if not success:
+        print(f"❌ 实验 {exp_name} 在训练阶段失败。跳过此实验。")
+        continue
+
+    # --- 步骤 C: 提取日志并保存 ---
+    evaluation_text = parse_evaluation_log(stdout_lines, exp_name, i+1)
+    if evaluation_text:
+        file_logger.info(evaluation_text + "\n")
+        print(f"✅ 评估日志已保存到 {EVALUATION_LOG_FILE.name}")
     else:
-        # 保持原来的详细日志行为
-        print(f"正在执行训练... (详细日志已启用)")
-        process = subprocess.Popen(
-            command, cwd=SRC_DIR, stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT, text=True, encoding='utf-8'
-        )
-        for line in iter(process.stdout.readline, ''):
-            print(line.strip())
-        process.wait()
-    # --- 修改结束 ---
+        print(f"⚠️ 警告: 未能从 {exp_name} 的训练输出中捕获到评估日志。")
 
-    # --- 读取结果文件 ---
-    if final_results_file.exists():
-        with open(final_results_file, 'r', encoding='utf-8') as f:
-            # 读取文件内容，但注意我们是追加模式，可能包含多个JSON对象
-            # 我们只取最后一个
-            all_results = []
-            file_content = f.read().strip()
-            if file_content:
-                json_objects = file_content.split('\n')
-                for i, obj_str in enumerate(json_objects):
-                    if not obj_str.strip():
-                        continue
-                    try:
-                        all_results.append(json.loads(obj_str))
-                    except json.JSONDecodeError as e:
-                        print(
-                            f"警告: 解析 final_metrics.json 的第 {i+1} 行失败 (内容: '{obj_str[:50]}...'): {e}")
+    # --- 步骤 D: 生成提交文件 ---
+    print(f"--- 步骤 D: 正在为实验 {i+1} 生成提交文件... ---")
+    submission_path = BASE_RESULTS_DIR / f"{SUBMISSION_FILE_PREFIX}_{i+1}"
 
-            if not all_results:
-                print(
-                    f"⚠️ 实验 {exp_name} 完成，但 {final_results_file.name} 为空或无效。")
-                final_nll = float('NaN')
-                avg_mse = float('NaN')
-            else:
-                final_metrics = all_results[-1]  # 只取最后一个JSON对象
-                final_nll = final_metrics.get('best_finetune_val_nll')
-                avg_mse = final_metrics.get(
-                    'evaluation_metrics', {}).get('avg_mse')
+    if not final_model_path.exists():
+        print(f"❌ 实验 {exp_name} 未能生成 {final_model_path.name}。无法提交。")
+        continue
 
-        print(
-            f"✅ 实验 {exp_name} 完成。 最终 Val NLL: {final_nll:.6f}, Avg MSE: {avg_mse:.4g}")
-        RESULTS.append({
-            '完整实验名称': exp_name, '基础模型': params['base_name'],
-            'hidden_dims': str(params['hidden_dims']), 'dropout_rate': params['dropout_rate'],
-            'final_val_nll': final_nll, 'avg_mse': avg_mse
-        })
-
-        if CLEANUP_AFTER_RUN:
-            try:
-                shutil.rmtree(exp_results_path)
-                print(f"清理完毕: 已删除临时文件夹 {exp_results_path}")
-            except Exception as e:
-                print(f"⚠️ 清理失败: 删除文件夹 {exp_results_path} 时出错 - {e}")
+    submit_cmd = [
+        "python", "submit.py",
+        "--opamp", OPAMP_TYPE,
+        "--model-path", str(final_model_path),
+        "--output-file", str(submission_path),
+        "--test-file", str(TEST_FILE_PATH),
+        "--hidden-dims", str(model_params['hidden_dims']),
+        "--dropout-rate", str(model_params['dropout_rate']),
+        "--device", config.DEVICE  # 从 config 读取 device
+    ]
+    success, _, _ = run_command(submit_cmd, f"{exp_name}_Submit")
+    if success:
+        print(f"✅ 成功生成提交文件: {submission_path.name}")
     else:
-        print(f"⚠️ 实验 {exp_name} 完成，但未找到结果文件: {final_results_file}")
-        RESULTS.append({
-            '完整实验名称': exp_name, '基础模型': params['base_name'],
-            'hidden_dims': str(params['hidden_dims']), 'dropout_rate': params['dropout_rate'],
-            'final_val_nll': float('NaN'), 'avg_mse': float('NaN')
-        })
+        print(f"❌ 生成提交文件失败: {submission_path.name}")
+
+    # --- 步骤 E: 清理 (如果启用) ---
+    if CLEANUP_AFTER_RUN:
+        try:
+            shutil.rmtree(exp_results_path)
+            print(f"清理完毕: 已删除临时文件夹 {exp_results_path}")
+        except Exception as e:
+            print(f"⚠️ 清理失败: 删除文件夹 {exp_results_path} 时出错 - {e}")
 
 # ==============================================================================
-# --- 4. 汇总并展示最终结果 ---
+# --- 5. 汇总并展示最终结果 ---
 # ==============================================================================
-# ... (这部分代码无需修改) ...
 end_time = time.time()
 total_duration = end_time - start_time
-print(f"\n\n{'='*80}\n🎉 所有实验已完成！总耗时: {total_duration / 60:.2f} 分钟\n{'='*80}")
-
-if RESULTS:
-    results_df = pd.DataFrame(RESULTS)
-    print("\n📊 所有运行的详细结果 (从优到劣排序):")
-    detailed_results = results_df.sort_values(
-        by='final_val_nll', ascending=True)
-    print(detailed_results.to_string(index=False))
-    summary_path = BASE_RESULTS_DIR / "experiment_summary_detailed.csv"
-    detailed_results.to_csv(summary_path, index=False, encoding='utf-8-sig')
-    print(f"\n📄 详细结果已保存至: {summary_path}")
-
-    print("\n\n" + "="*80)
-    print("📈 按基础模型聚合的统计结果:")
-    aggregated_df = results_df.groupby('基础模型')['final_val_nll'].agg(
-        ['mean', 'std', 'min', 'max', 'count']).sort_values(by='mean', ascending=True)
-    aggregated_df.rename(columns={'mean': '平均NLL', 'std': 'NLL标准差',
-                         'min': '最佳NLL', 'max': '最差NLL', 'count': '运行次数'}, inplace=True)
-    print(aggregated_df)
-    agg_summary_path = BASE_RESULTS_DIR / "experiment_summary_aggregated.csv"
-    aggregated_df.to_csv(agg_summary_path, encoding='utf-8-sig')
-    print(f"\n📄 聚合统计结果已保存至: {agg_summary_path}")
-
-    best_model_name = aggregated_df.index[0]
-    best_model_stats = aggregated_df.iloc[0]
-    print("\n\n🏆 综合表现最佳的模型结构 (基于平均NLL):")
-    print(f"   - 名称: {best_model_name}")
-    print(f"   - 平均验证集NLL: {best_model_stats['平均NLL']:.6f}")
-    print(f"   - 稳定性 (标准差): {best_model_stats['NLL标准差']:.6f}")
+final_message = f"\n\n{'='*80}\n🎉 所有实验已完成！总耗时: {total_duration / 60:.2f} 分钟\n{'='*80}\n"
+final_message += f"评估日志已全部保存到: {EVALUATION_LOG_FILE}\n"
+final_message += f"提交文件已生成在: {BASE_RESULTS_DIR}\n"
+print(final_message)
+file_logger.info(final_message)  # 也在日志文件末尾写入总结
