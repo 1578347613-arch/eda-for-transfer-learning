@@ -114,7 +114,7 @@ def find_pretrain_lr(
 
 def find_finetune_lr(
     model_class, model_params, data, pretrained_weights_path: str, backbone_lr_ratio=config.BACKBONE_LR_RATIO,
-    end_lr=10.0, num_iter=1000, batch_size=128, device="cuda", save_plot_path: str = None
+    end_lr=10.0, num_iter=1000, batch_size=64, device="cuda", save_plot_path: str = None
 ):
     device = torch.device(device if torch.cuda.is_available() else "cpu")
     if not Path(pretrained_weights_path).exists():

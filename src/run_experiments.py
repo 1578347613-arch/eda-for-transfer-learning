@@ -24,7 +24,7 @@ PROJECT_ROOT = SRC_DIR.parent
 
 # --- 核心修改：不再自动清理，因为 submit.py 需要 .pth 文件 ---
 CLEANUP_AFTER_RUN = False
-SILENT_TRAINING = True
+SILENT_TRAINING = False
 
 # ==============================================================================
 # --- 1. 定义你的实验搜索空间 ---
