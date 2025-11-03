@@ -113,7 +113,7 @@ def find_pretrain_lr(
 # src/find_lr_utils.py (替换整个 find_finetune_lr 函数)
 
 def find_finetune_lr(
-    model_class, model_params, data, pretrained_weights_path: str,
+    model_class, model_params, data, pretrained_weights_path: str, backbone_lr_ratio=config.BACKBONE_LR_RATIO,
     end_lr=10.0, num_iter=1000, batch_size=128, device="cuda", save_plot_path: str = None
 ):
     device = torch.device(device if torch.cuda.is_available() else "cpu")
@@ -130,7 +130,7 @@ def find_finetune_lr(
     optimizer = create_discriminative_optimizer(
         model=original_model,
         head_lr=start_lr,  # LR Finder 将从这里开始缩放
-        ratio=config.BACKBONE_LR_RATIO,  # 从 config.py 读取固定的比例
+        ratio=backbone_lr_ratio,  # 从 config.py 读取固定的比例
         weight_decay=1e-4  # 保持一致
     )
 
