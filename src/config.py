@@ -11,7 +11,7 @@ LOG_TRANSFORMED_COLS = [
 ]
 
 # 训练设置
-RESTART_PRETRAIN = 5
+RESTART_PRETRAIN = 6
 PRETRAIN_SCHEDULER_CONFIGS = [  # 重复执行三次元优化
     # # --- 策略一：广泛探索 ---
     # {"T_0": 50, "T_mult": 1, "epochs_pretrain": 100},  # 第1次重启：
