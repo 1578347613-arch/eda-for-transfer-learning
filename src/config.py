@@ -20,11 +20,11 @@ PRETRAIN_SCHEDULER_CONFIGS = [  # 重复执行三次元优化
 
     # # --- 策略二：精细打磨 ---
     {"T_0": 90, "T_mult": 1, "epochs_pretrain": 90},
-    {"T_0": 95, "T_mult": 1, "epochs_pretrain": 95},
     {"T_0": 100, "T_mult": 1, "epochs_pretrain": 100},
-    {"T_0": 105, "T_mult": 1, "epochs_pretrain": 105},
     {"T_0": 110, "T_mult": 1, "epochs_pretrain": 110},
     {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},
+    {"T_0": 135, "T_mult": 1, "epochs_pretrain": 135},
+    {"T_0": 150, "T_mult": 1, "epochs_pretrain": 150},
 
 
 
