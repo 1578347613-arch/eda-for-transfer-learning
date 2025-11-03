@@ -1096,3 +1096,102 @@ cmrr            MSE=3.964e+05  MAE=145.8  R2=0.6690
 
 总结：dropout=0.4（或0.2）表现最好
 性能好像真的达到了瓶颈，而且成绩随机散布很难控制
+
+
+
+
+
+
+day7
+探究层差异的学习率
+=== 实验 1 (01_0.2_ratio3_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.325e+10  MAE=7.223e+04  R2=0.9967
+dc_gain         MSE=54.34  MAE=5.101  R2=0.9680
+ugf             MSE=5.406e+10  MAE=1.661e+05  R2=0.9963
+phase_margin    MSE=0.1653  MAE=0.3111  R2=0.9836
+cmrr            MSE=4.387e+05  MAE=278.1  R2=0.6337
+
+=== 实验 2 (02_0.2_ratio4_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.52e+10  MAE=8.102e+04  R2=0.9962
+dc_gain         MSE=50.26  MAE=4.978  R2=0.9704
+ugf             MSE=8.36e+10  MAE=2.177e+05  R2=0.9943
+phase_margin    MSE=0.1887  MAE=0.3406  R2=0.9813
+cmrr            MSE=2.742e+05  MAE=275.9  R2=0.7711
+
+=== 实验 3 (03_0.2_ratio5_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.943e+10  MAE=8.943e+04  R2=0.9951
+dc_gain         MSE=66.01  MAE=5.661  R2=0.9611
+ugf             MSE=8.791e+10  MAE=1.921e+05  R2=0.9940
+phase_margin    MSE=0.227  MAE=0.3647  R2=0.9775
+cmrr            MSE=2.786e+05  MAE=265.7  R2=0.7674
+
+=== 实验 4 (04_0.2_ratio6_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.143e+10  MAE=9.216e+04  R2=0.9946
+dc_gain         MSE=61.44  MAE=5.091  R2=0.9638
+ugf             MSE=9.948e+10  MAE=2.18e+05  R2=0.9932
+phase_margin    MSE=0.2146  MAE=0.3332  R2=0.9787
+cmrr            MSE=2.602e+05  MAE=245.3  R2=0.7828
+
+=== 实验 5 (05_0.2_ratio7_run1)：目标域验证集指标（物理单位）===*
+slewrate_pos    MSE=2.767e+10  MAE=1.158e+05  R2=0.9930
+dc_gain         MSE=54.94  MAE=5.338  R2=0.9677
+ugf             MSE=1.27e+11  MAE=2.684e+05  R2=0.9913
+phase_margin    MSE=0.2282  MAE=0.3587  R2=0.9774
+cmrr            MSE=1.462e+05  MAE=243.7  R2=0.8780
+
+=== 实验 6 (06_0.2_ratio8_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.16e+10  MAE=9.367e+04  R2=0.9945
+dc_gain         MSE=71.01  MAE=6.379  R2=0.9582
+ugf             MSE=6.44e+10  MAE=1.953e+05  R2=0.9956
+phase_margin    MSE=0.2141  MAE=0.3516  R2=0.9788
+cmrr            MSE=2.357e+05  MAE=268.6  R2=0.8032
+
+=== 实验 7 (07_0.2_ratio9_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.459e+10  MAE=8.057e+04  R2=0.9963
+dc_gain         MSE=54.76  MAE=5.51  R2=0.9678
+ugf             MSE=1.052e+11  MAE=2.355e+05  R2=0.9928
+phase_margin    MSE=0.1776  MAE=0.3212  R2=0.9824
+cmrr            MSE=2.795e+05  MAE=262.4  R2=0.7666
+
+=== 实验 8 (08_0.2_ratio10_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.83e+10  MAE=8.929e+04  R2=0.9954
+dc_gain         MSE=46.49  MAE=5.146  R2=0.9726
+ugf             MSE=7.31e+10  MAE=1.867e+05  R2=0.9950
+phase_margin    MSE=0.2084  MAE=0.3539  R2=0.9794
+cmrr            MSE=3.991e+05  MAE=256.1  R2=0.6668
+
+=== 实验 9 (09_0.2_ratio11_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.322e+10  MAE=9.044e+04  R2=0.9941
+dc_gain         MSE=58.54  MAE=5.075  R2=0.9655
+ugf             MSE=8.492e+10  MAE=2.13e+05  R2=0.9942
+phase_margin    MSE=0.2142  MAE=0.3614  R2=0.9788
+cmrr            MSE=1.908e+05  MAE=252.8  R2=0.8407
+
+=== 实验 10 (10_0.2_ratio12_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.175e+10  MAE=1.083e+05  R2=0.9945
+dc_gain         MSE=85.61  MAE=6.902  R2=0.9496
+ugf             MSE=8.469e+10  MAE=2.175e+05  R2=0.9942
+phase_margin    MSE=0.2201  MAE=0.3693  R2=0.9782
+cmrr            MSE=1.805e+05  MAE=268.2  R2=0.8493
+
+=== 实验 11 (11_0.2_ratio13_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=1.77e+10  MAE=8.39e+04  R2=0.9955
+dc_gain         MSE=78.68  MAE=6.242  R2=0.9537
+ugf             MSE=6.138e+10  MAE=1.858e+05  R2=0.9958
+phase_margin    MSE=0.2193  MAE=0.3606  R2=0.9783
+cmrr            MSE=1.923e+05  MAE=235.1  R2=0.8395
+
+=== 实验 12 (12_0.2_ratio14_run1)：目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.302e+10  MAE=9.455e+04  R2=0.9942
+dc_gain         MSE=54.36  MAE=5.296  R2=0.9680
+ugf             MSE=7.054e+10  MAE=1.893e+05  R2=0.9952
+phase_margin    MSE=0.2275  MAE=0.3685  R2=0.9775
+cmrr            MSE=2.057e+05  MAE=245.5  R2=0.8282
+
+=== 实验 13 (13_0.2_ratio15_run1)：目标域验证集指标（物理单位）===*
+slewrate_pos    MSE=1.54e+10  MAE=7.908e+04  R2=0.9961
+dc_gain         MSE=53  MAE=5.184  R2=0.9688
+ugf             MSE=6.914e+10  MAE=1.88e+05  R2=0.9953
+phase_margin    MSE=0.2258  MAE=0.3553  R2=0.9776
+cmrr            MSE=1.499e+05  MAE=221.3  R2=0.8748
+
