@@ -24,6 +24,8 @@ PRETRAIN_SCHEDULER_CONFIGS = [  # 重复执行三次元优化
     {"T_0": 100, "T_mult": 1, "epochs_pretrain": 100},
     {"T_0": 105, "T_mult": 1, "epochs_pretrain": 105},
     {"T_0": 110, "T_mult": 1, "epochs_pretrain": 110},
+    {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},
+
 
 
     # ... 您可以根据需要添加更多配置 ...
