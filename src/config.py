@@ -38,7 +38,8 @@ LEARNING_RATE_PRETRAIN = 2.2e-3
 EPOCHS_FINETUNE = 100000  # 配合早停
 PATIENCE_FINETUNE = 500
 LEARNING_RATE_FINETUNE = 7e-3
-BACKBONE_LR_RATIO = 10.0
+GAP_RATIO = 10.0          # Head 与 Backbone 顶层之间的比例
+INTERNAL_RATIO = 2.0      # Backbone 内部层与层之间的比例
 BATCH_A = 128
 BATCH_B = 64  # 线性缩放规则
 

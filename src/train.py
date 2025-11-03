@@ -55,8 +55,12 @@ def setup_args():
                         default=config.LEARNING_RATE_PRETRAIN, help="学习率")
     parser.add_argument("--lr_finetune", type=float,
                         default=config.LEARNING_RATE_FINETUNE, help="微调阶段 head 的学习率")
-    parser.add_argument("--backbone_lr_ratio", type=float, default=config.BACKBONE_LR_RATIO,
-                        help="用于微调Backbone的学习率缩放比例 (lr_finetune / ratio)")
+    parser.add_argument("--gap_ratio", type=float,
+                        default=config.GAP_RATIO,
+                        help="Head 与 Backbone 顶层之间的学习率比例")
+    parser.add_argument("--internal_ratio", type=float,
+                        default=config.INTERNAL_RATIO,
+                        help="Backbone 内部层与层之间的学习率比例")
     parser.add_argument("--epochs_finetune", type=int,
                         default=config.EPOCHS_FINETUNE, help="微调阶段的总轮数")
     parser.add_argument("--batch_a", type=int,
@@ -162,8 +166,10 @@ def run_finetuning(model, data_loaders, device, final_save_path, args):
     opt = create_discriminative_optimizer(
         model=model,
         head_lr=args.lr_finetune,
-        ratio=args.backbone_lr_ratio
+        gap_ratio=args.gap_ratio,
+        internal_ratio=args.internal_ratio
     )
+
     dl_A, dl_B, dl_val = data_loaders['source_full'], data_loaders['target_train'], data_loaders['target_val']
     dl_A_iter = iter(dl_A)
     best_val = float('inf')

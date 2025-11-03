@@ -260,11 +260,15 @@ for i, params in enumerate(EXPERIMENT_GRID):
     # --- 步骤 C: 寻找最优微调学习率 ---
     # --------------------------------------------------------------------------
     print("\n--- 步骤 C: 正在寻找最优微调学习率... ---")
-    current_ratio = params['backbone_lr_ratio']
+    current_gap_ratio = params['gap_ratio']
+    current_internal_ratio = params['internal_ratio']
+
+    # <<< --- 核心修改：传递 ratio 参数 --- >>>
     optimal_lr_finetune = find_finetune_lr(
         AlignHeteroMLP, model_params, data,
         pretrained_weights_path=str(pretrained_model_path),
-        backbone_lr_ratio=current_ratio,  # <-- 传入当前实验的 ratio
+        gap_ratio=current_gap_ratio,
+        internal_ratio=current_internal_ratio,
         save_plot_path=str(exp_results_path / "lr_finder_finetune.png")
     )
     print(f"   - 找到的最优微调学习率 (lr_finetune_head): {optimal_lr_finetune:.2e}")
@@ -273,21 +277,25 @@ for i, params in enumerate(EXPERIMENT_GRID):
     # --- 步骤 D: 运行 Finetune + Evaluate ---
     # --------------------------------------------------------------------------
     print(
-        f"\n--- 步骤 D: 正在执行 Finetune + Evaluate (Ratio={current_ratio})... ---")
+        f"\n--- 步骤 D: 正在执行 Finetune + Evaluate (Gap={current_gap_ratio}, Internal={current_internal_ratio})... ---")
+
     finetune_command = [
         "python", "train.py", "--opamp", OPAMP_TYPE,
         "--hidden_dims", str(params['hidden_dims']),
         "--dropout_rate", str(params['dropout_rate']),
 
-        # 传入自动找到的微调LR 和 网格中的Ratio
+        # 传入自动找到的微调LR
         "--lr_finetune", str(optimal_lr_finetune),
-        "--backbone_lr_ratio", str(current_ratio),
+
+        # <<< --- 核心修改：传递 ratio 参数 --- >>>
+        "--gap_ratio", str(current_gap_ratio),
+        "--internal_ratio", str(current_internal_ratio),
 
         "--save_path", str(exp_results_path),
         "--results_file", str(final_results_file),
 
-        "--finetune",   # <-- 关键：跳过预训练，只微调
-        "--evaluate"    # <-- 关键：微调后立即评估
+        "--finetune",
+        "--evaluate"
     ]
 
     success, stdout_lines, _ = run_command(

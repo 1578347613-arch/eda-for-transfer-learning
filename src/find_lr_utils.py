@@ -113,8 +113,10 @@ def find_pretrain_lr(
 # src/find_lr_utils.py (替换整个 find_finetune_lr 函数)
 
 def find_finetune_lr(
-    model_class, model_params, data, pretrained_weights_path: str, backbone_lr_ratio=config.BACKBONE_LR_RATIO,
-    end_lr=10.0, num_iter=1000, batch_size=64, device="cuda", save_plot_path: str = None
+    model_class, model_params, data, pretrained_weights_path: str,
+    gap_ratio: float = config.GAP_RATIO,
+    internal_ratio: float = config.INTERNAL_RATIO,
+    end_lr=10.0, num_iter=1000, batch_size=128, device="cuda", save_plot_path: str = None
 ):
     device = torch.device(device if torch.cuda.is_available() else "cpu")
     if not Path(pretrained_weights_path).exists():
@@ -126,12 +128,15 @@ def find_finetune_lr(
 
     start_lr = 1e-7
 
-    # <<< --- 核心修改：使用与 train.py 一致的优化器 --- >>>
+    # <<< --- 核心修改：使用传入的 ratio 参数 --- >>>
+    print(
+        f"--- [Finetune LR Finder] 使用 (v6 - Gap={gap_ratio}, Internal={internal_ratio}) ---")
     optimizer = create_discriminative_optimizer(
         model=original_model,
-        head_lr=start_lr,  # LR Finder 将从这里开始缩放
-        ratio=backbone_lr_ratio,  # 从 config.py 读取固定的比例
-        weight_decay=1e-4  # 保持一致
+        head_lr=start_lr,
+        gap_ratio=gap_ratio,
+        internal_ratio=internal_ratio,
+        weight_decay=1e-4
     )
 
     def criterion(model_output, y_true): return heteroscedastic_nll(
@@ -217,6 +222,6 @@ if __name__ == '__main__':
         suggested_lr_finetune = find_finetune_lr(
             AlignHeteroMLP, test_model_params, test_data,
             pretrained_weights_path=PRETRAINED_PATH,
-            num_iter=800, save_plot_path="lr_finder_finetune_test.png"
+            num_iter=1000, save_plot_path="lr_finder_finetune_test.png"
         )
         print(f"手动测试 (Finetune) 完成。建议学习率: {suggested_lr_finetune:.2e}")
