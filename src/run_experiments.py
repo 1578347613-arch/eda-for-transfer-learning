@@ -277,16 +277,18 @@ for i, params in enumerate(EXPERIMENT_GRID):
     print("\n--- 步骤 C: 正在寻找最优微调学习率... ---")
     current_gap_ratio = params['gap_ratio']
     current_internal_ratio = params['internal_ratio']
+    current_lr_hetero = params['lr_hetero']
 
-    # <<< --- 核心修改：传递 ratio 参数 --- >>>
-    optimal_lr_finetune = find_finetune_lr(
+    optimal_lr_bb_head = find_finetune_lr(
         AlignHeteroMLP, model_params, data,
         pretrained_weights_path=str(pretrained_model_path),
+        lr_hetero=current_lr_hetero,
         gap_ratio=current_gap_ratio,
         internal_ratio=current_internal_ratio,
         save_plot_path=str(exp_results_path / "lr_finder_finetune.png")
     )
-    print(f"   - 找到的最优微调学习率 (lr_finetune_head): {optimal_lr_finetune:.2e}")
+    print(f"   - 找到的最优 lr_backbone_head: {optimal_lr_bb_head:.2e}")
+    print(f"   - 使用的固定 lr_hetero: {current_lr_hetero:.2e}")
 
     # --------------------------------------------------------------------------
     # --- 步骤 D: 运行 Finetune + Evaluate ---
@@ -300,7 +302,8 @@ for i, params in enumerate(EXPERIMENT_GRID):
         "--dropout_rate", str(params['dropout_rate']),
 
         # 传入自动找到的微调LR
-        "--lr_finetune", str(optimal_lr_finetune),
+        "--lr_backbone_head", str(optimal_lr_bb_head),
+        "--lr_hetero", str(current_lr_hetero),
 
         # <<< --- 核心修改：传递 ratio 参数 --- >>>
         "--gap_ratio", str(current_gap_ratio),

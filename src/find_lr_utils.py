@@ -114,6 +114,7 @@ def find_pretrain_lr(
 
 def find_finetune_lr(
     model_class, model_params, data, pretrained_weights_path: str,
+    lr_hetero: float = config.LEARNING_RATE_HETERO,  # <-- 新增：固定的 Hetero LR
     gap_ratio: float = config.GAP_RATIO,
     internal_ratio: float = config.INTERNAL_RATIO,
     end_lr=10.0, num_iter=1000, batch_size=128, device="cuda", save_plot_path: str = None
@@ -126,14 +127,17 @@ def find_finetune_lr(
     original_model.load_state_dict(torch.load(
         pretrained_weights_path, map_location=device))
 
-    start_lr = 1e-7
+    start_lr = 1e-7  # 这将是 lr_backbone_head 的起始值
 
-    # <<< --- 核心修改：使用传入的 ratio 参数 --- >>>
-    print(
-        f"--- [Finetune LR Finder] 使用 (v6 - Gap={gap_ratio}, Internal={internal_ratio}) ---")
+    # <<< --- 核心修改：使用 v7 优化器 --- >>>
+    print(f"--- [Finetune LR Finder] (v7) ---")
+    print(f"    - 正在搜索: lr_backbone_head (从 {start_lr:.1e} 开始)")
+    print(f"    - 固定: lr_hetero = {lr_hetero:.2e}")
+
     optimizer = create_discriminative_optimizer(
         model=original_model,
-        head_lr=start_lr,
+        lr_backbone_head=start_lr,       # <-- 搜索目标
+        lr_hetero=lr_hetero,             # <-- 固定值
         gap_ratio=gap_ratio,
         internal_ratio=internal_ratio,
         weight_decay=1e-4
@@ -141,6 +145,7 @@ def find_finetune_lr(
 
     def criterion(model_output, y_true): return heteroscedastic_nll(
         model_output[0], model_output[1], y_true)
+
     X_train, y_train = data['target_train']
     loader = DataLoader(
         TensorDataset(torch.tensor(X_train, dtype=torch.float32),
@@ -163,8 +168,7 @@ def find_finetune_lr(
     lrs_list_of_lists = results["lr"]
     losses = results["loss"]
 
-    # <<< --- 核心修改：Head Group 现在是第 0 组 --- >>>
-    # 因为 create_discriminative_optimizer 把 head 放在了第一组
+    # <<< --- 核心修改：LR 在第 0 组 (Backbone Head) --- >>>
     head_lrs = [lr_pair[0] for lr_pair in lrs_list_of_lists]
 
     if not head_lrs or not losses or len(head_lrs) < 5:
@@ -174,21 +178,23 @@ def find_finetune_lr(
     skip_first = 5
     min_loss_idx = np.argmin(losses[skip_first:]) + skip_first
     min_loss = losses[min_loss_idx]
-    min_loss_lr = head_lrs[min_loss_idx]  # 找到最低点的LR
+    min_loss_lr = head_lrs[min_loss_idx]
 
-    # <<< --- (这部分不变) 应用 Min Loss / 2 规则 --- >>>
     suggested_lr = min_loss_lr / 2.0
 
     print(f"--- [Finetune] 自动化分析完成 ---")
     print(f"最小损失 {min_loss:.4e} 出现在 LR={min_loss_lr:.2e}")
-    print(f"自动化建议 (Min Loss / 2 规则): {suggested_lr:.2e}")
+    print(
+        f"自动化建议 (Min Loss / 2 规则): {suggested_lr:.2e} (将用于 lr_backbone_head)")
 
     _save_plot(head_lrs, losses, suggested_lr, min_loss,
-               "LR Finder (Finetune)", save_plot_path)
+               "LR Finder (Finetune - Backbone Head)", save_plot_path)
 
     del original_model, optimizer, loader, lr_finder, trainer
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
+
+    # 返回的是 lr_backbone_head
     return suggested_lr
 
 
