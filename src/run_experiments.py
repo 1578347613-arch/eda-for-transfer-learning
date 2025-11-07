@@ -30,74 +30,8 @@ SILENT_TRAINING = False
 # --- 1. 定义你的实验搜索空间 ---
 # ==============================================================================
 BASE_EXPERIMENT_GRID = [
-    {"name": "0.2_G7_I7", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 7.0, "internal_ratio": 7.0},
-    {"name": "0.2_G8_I8", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 8.0, "internal_ratio": 8.0},
-    {"name": "0.2_G8_I11", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 11.0, "internal_ratio": 11.0},
-    {"name": "0.2_G8_I12", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 12.0, "internal_ratio": 12.0},
-    {"name": "0.2_G8_I13", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 13.0, "internal_ratio": 13.0},
-    {"name": "0.2_G8_I14", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 14.0, "internal_ratio": 14.0},
-    {"name": "0.2_G8_I15", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 15.0, "internal_ratio": 15.0},
-    {"name": "0.2_G8_I16", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 16.0, "internal_ratio": 16.0},
-    {"name": "0.2_G8_I17", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 17.0, "internal_ratio": 17.0},
-    {"name": "0.2_G10_I1", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 1.0},
-    {"name": "0.2_G10_I1.5", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 1.5},
-    {"name": "0.2_G10_I2", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 2.0},
-    {"name": "0.2_G10_I2.5", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 2.5},
-    {"name": "0.2_G10_I3", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 3.0},
-    {"name": "0.2_G10_I4", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 4.0},
-    {"name": "0.2_G10_I5", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 5.0},
-    {"name": "0.2_G10_I6", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 6.0},
-    {"name": "0.2_G10_I7", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 7.0},
-    {"name": "0.2_G10_I8", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 8.0},
-    {"name": "0.2_G10_I9", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 9.0},
-
-
-    # {"name": "0.4_ratio3", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 3.0},
-    # {"name": "0.4_ratio4", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 4.0},
-    # {"name": "0.4_ratio5", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 5.0},
-    # {"name": "0.4_ratio6", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 6.0},
-    # {"name": "0.4_ratio7", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 7.0},
-    # {"name": "0.4_ratio8", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 8.0},
-    # {"name": "0.4_ratio9", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 9.0},
-    # {"name": "0.4_ratio10", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 10.0},
-    # {"name": "0.4_ratio11", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 11.0},
-    # {"name": "0.4_ratio12", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 12.0},
-    # {"name": "0.4_ratio13", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 13.0},
-    # {"name": "0.4_ratio14", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 14.0},
-    # {"name": "0.4_ratio15", "hidden_dims": [
-    #     128, 256, 256, 512], "dropout_rate": 0.4, "backbone_lr_ratio": 15.0},
+    {"name": "0.2_G10_I2_H_x1", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
+     "gap_ratio": 10.0, "internal_ratio": 2.0, "hetero_lr_scale": 1.0},
 
 ]
 
@@ -277,18 +211,18 @@ for i, params in enumerate(EXPERIMENT_GRID):
     print("\n--- 步骤 C: 正在寻找最优微调学习率... ---")
     current_gap_ratio = params['gap_ratio']
     current_internal_ratio = params['internal_ratio']
-    current_lr_hetero = params['lr_hetero']
+    current_hetero_scale = params['hetero_lr_scale']
 
     optimal_lr_bb_head = find_finetune_lr(
         AlignHeteroMLP, model_params, data,
         pretrained_weights_path=str(pretrained_model_path),
-        lr_hetero=current_lr_hetero,
+        hetero_lr_scale=current_hetero_scale,
         gap_ratio=current_gap_ratio,
         internal_ratio=current_internal_ratio,
         save_plot_path=str(exp_results_path / "lr_finder_finetune.png")
     )
     print(f"   - 找到的最优 lr_backbone_head: {optimal_lr_bb_head:.2e}")
-    print(f"   - 使用的固定 lr_hetero: {current_lr_hetero:.2e}")
+    print(f"   - 使用的 hetero_lr_scale: {current_hetero_scale}")
 
     # --------------------------------------------------------------------------
     # --- 步骤 D: 运行 Finetune + Evaluate ---
@@ -301,9 +235,8 @@ for i, params in enumerate(EXPERIMENT_GRID):
         "--hidden_dims", str(params['hidden_dims']),
         "--dropout_rate", str(params['dropout_rate']),
 
-        # 传入自动找到的微调LR
         "--lr_backbone_head", str(optimal_lr_bb_head),
-        "--lr_hetero", str(current_lr_hetero),
+        "--hetero_lr_scale", str(current_hetero_scale),
 
         # <<< --- 核心修改：传递 ratio 参数 --- >>>
         "--gap_ratio", str(current_gap_ratio),

@@ -12,7 +12,6 @@ from ignite.handlers import FastaiLRFinder
 from models.align_hetero import AlignHeteroMLP
 from data_loader import get_data_and_scalers
 from loss_function import heteroscedastic_nll
-from optimizer_utils import create_discriminative_optimizer
 import config
 
 
@@ -110,91 +109,122 @@ def find_pretrain_lr(
     return suggested_lr
 
 
-# src/find_lr_utils.py (替换整个 find_finetune_lr 函数)
-
+# src/find_lr_utils.py
 def find_finetune_lr(
     model_class, model_params, data, pretrained_weights_path: str,
-    lr_hetero: float = config.LEARNING_RATE_HETERO,  # <-- 新增：固定的 Hetero LR
-    gap_ratio: float = config.GAP_RATIO,
-    internal_ratio: float = config.INTERNAL_RATIO,
+    # <<< --- 核心修改：我们只关心这个比例 --- >>>
+    backbone_head_scale: float = config.BACKBONE_HEAD_SCALE,
     end_lr=10.0, num_iter=1000, batch_size=64, device="cuda", save_plot_path: str = None
 ):
     device = torch.device(device if torch.cuda.is_available() else "cpu")
     if not Path(pretrained_weights_path).exists():
         raise FileNotFoundError(f"错误: 未找到预训练模型路径: {pretrained_weights_path}")
 
+    # 1. 加载预训练模型
     original_model = model_class(**model_params).to(device)
     original_model.load_state_dict(torch.load(
         pretrained_weights_path, map_location=device))
 
-    start_lr = 1e-9  # 这将是 lr_backbone_head 的起始值
-
-    # <<< --- 核心修改：使用 v7 优化器 --- >>>
-    print(f"--- [Finetune LR Finder] (v7) ---")
-    print(f"    - 正在搜索: lr_backbone_head (从 {start_lr:.1e} 开始)")
-    print(f"    - 固定: lr_hetero = {lr_hetero:.2e}")
-
-    optimizer = create_discriminative_optimizer(
-        model=original_model,
-        lr_backbone_head=start_lr,       # <-- 搜索目标
-        lr_hetero=lr_hetero,             # <-- 固定值
-        gap_ratio=gap_ratio,
-        internal_ratio=internal_ratio,
-        weight_decay=1e-4
-    )
-
-    def criterion(model_output, y_true): return heteroscedastic_nll(
-        model_output[0], model_output[1], y_true)
-
     X_train, y_train = data['target_train']
-    loader = DataLoader(
+    warmup_loader = DataLoader(
         TensorDataset(torch.tensor(X_train, dtype=torch.float32),
                       torch.tensor(y_train, dtype=torch.float32)),
         batch_size=batch_size, shuffle=True
     )
+
+    # ========== 步骤 1: 预热 Hetero Head (保持不变) ==========
+    print("--- [Finetune LR Finder] (十分之一策略) ---")
+    print(f"--- 步骤 1: 正在预热 Hetero Head (共 20 epochs)... ---")
+    # (预热代码... 保持不变)
+    for param in original_model.backbone.parameters():
+        param.requires_grad = False
+    head_lr = 1e-4
+    optimizer_head = torch.optim.AdamW(
+        original_model.hetero_head.parameters(), lr=head_lr)
+    warmup_epochs = 20
+    original_model.train()
+    for epoch in range(warmup_epochs):
+        for x, y in warmup_loader:
+            x, y = x.to(device), y.to(device)
+            optimizer_head.zero_grad()
+            mu, logvar, _ = original_model(x)
+            loss = heteroscedastic_nll(mu.detach(), logvar, y)
+            if not torch.isnan(loss):
+                loss.backward()
+                optimizer_head.step()
+    for param in original_model.backbone.parameters():
+        param.requires_grad = True
+    print("--- 步骤 1: 预热完成。---")
+
+    # ========== 步骤 2: 手动创建 "十分之一" 优化器 ==========
+    print(f"--- 步骤 2: 正在运行 LR Finder (搜索 lr_hetero)... ---")
+
+    start_lr_hetero = 1e-10  # (一个安全的起始点)
+
+    print(f"    - 正在搜索: lr_hetero (从 {start_lr_hetero:.1e} 开始)")
+    print(f"    - 固定比例: lr_backbone = lr_hetero * {backbone_head_scale}")
+
+    # <<< --- "十分之一策略" 的实现 --- >>>
+    optimizer_params = [
+        {"params": original_model.hetero_head.parameters(), "lr": start_lr_hetero},
+        {"params": original_model.backbone.parameters(
+        ), "lr": start_lr_hetero * backbone_head_scale}
+    ]
+    optimizer = torch.optim.AdamW(optimizer_params, weight_decay=1e-4)
+
+    # (...后续的 trainer, criterion, attach, L型图 分析... 保持不变)
+    def criterion(model_output, y_true):
+        return heteroscedastic_nll(
+            model_output[0], model_output[1], y_true)
+    loader = warmup_loader
     lr_finder = FastaiLRFinder()
     trainer = create_supervised_trainer(
         original_model, optimizer, criterion, device=device,
-        output_transform=lambda x, y, y_pred, loss: loss.item()
+        output_transform=lambda x, y, y_g, loss: loss.item()
     )
     to_save = {"model": original_model, "optimizer": optimizer}
-    print(f"--- [Finetune] 正在运行 LR Finder (共 {num_iter} 步)... ---")
     with lr_finder.attach(
         trainer, to_save=to_save, end_lr=end_lr, num_iter=num_iter
     ) as trainer_with_lr_finder:
         trainer_with_lr_finder.run(loader, max_epochs=1)
 
+    # 4. 分析结果
     results = lr_finder.get_results()
-    lrs_list_of_lists = results["lr"]
+    if isinstance(results["lr"], list) and isinstance(results["lr"][0], list):
+        lrs = [lr_pair[0] for lr_pair in results["lr"]]  # Group 0 (Hetero)
+    else:
+        lrs = results["lr"]
     losses = results["loss"]
 
-    # <<< --- 核心修改：LR 在第 0 组 (Backbone Head) --- >>>
-    head_lrs = [lr_pair[0] for lr_pair in lrs_list_of_lists]
-
-    if not head_lrs or not losses or len(head_lrs) < 5:
-        print("警告: LRFinder未能产生足够的有效数据。")
+    # (过滤 Nan)
+    valid_indices = ~np.isnan(losses)
+    if not np.any(valid_indices):
         return 1e-4
+    lrs = np.array(lrs)[valid_indices]
+    losses = np.array(losses)[valid_indices]
 
     skip_first = 5
-    min_loss_idx = np.argmin(losses[skip_first:]) + skip_first
-    min_loss = losses[min_loss_idx]
-    min_loss_lr = head_lrs[min_loss_idx]
+    if len(losses[skip_first:]) == 0:
+        min_loss_idx = np.argmin(losses)
+    else:
+        min_loss_idx = np.argmin(losses[skip_first:]) + skip_first
 
+    min_loss = losses[min_loss_idx]
+    min_loss_lr = lrs[min_loss_idx]
     suggested_lr = min_loss_lr / 2.0
 
     print(f"--- [Finetune] 自动化分析完成 ---")
     print(f"最小损失 {min_loss:.4e} 出现在 LR={min_loss_lr:.2e}")
-    print(
-        f"自动化建议 (Min Loss / 2 规则): {suggested_lr:.2e} (将用于 lr_backbone_head)")
+    print(f"自动化建议 (Min Loss / 2 规则): {suggested_lr:.2e} (将用于 lr_hetero)")
 
-    _save_plot(head_lrs, losses, suggested_lr, min_loss,
-               "LR Finder (Finetune - Backbone Head)", save_plot_path)
+    _save_plot(lrs, losses, suggested_lr, min_loss,
+               "LR Finder (Finetune - Hetero Base 1-10th)", save_plot_path)
 
     del original_model, optimizer, loader, lr_finder, trainer
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-    # 返回的是 lr_backbone_head
+    # 返回的是 lr_hetero
     return suggested_lr
 
 
