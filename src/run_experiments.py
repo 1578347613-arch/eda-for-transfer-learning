@@ -1,20 +1,18 @@
-# src/run_experiments.py (已更新：记录评估日志 + 自动提交)
+# src/run_experiments.py (已简化：跳过预训练和LR查找)
 import subprocess
 import os
 import time
 import json
 import shutil
 from pathlib import Path
-import logging  # <-- 导入日志模块
+import logging
 import sys
-import re  # <-- 导入正则表达式模块
+import re
 
 # --- 从项目模块中导入 ---
-from find_lr_utils import find_pretrain_lr
-from models.align_hetero import AlignHeteroMLP
+# (不再需要 find_lr_utils)
 from data_loader import get_data_and_scalers
-from find_lr_utils import find_pretrain_lr, find_finetune_lr
-import config  # <-- 导入 config 以获取默认值
+import config  # <-- 导入 config 以获取默认值和路径
 
 # ==============================================================================
 # --- 0. 路径和实验控制 ---
@@ -22,51 +20,52 @@ import config  # <-- 导入 config 以获取默认值
 SRC_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SRC_DIR.parent
 
-# --- 核心修改：不再自动清理，因为 submit.py 需要 .pth 文件 ---
+# <<< --- 核心修改：指向您已有的预训练模型 --- >>>
+# (确保 config.OPAMP_TYPE 正确)
+EXISTING_PRETRAIN_FILE = PROJECT_ROOT / "results" / \
+    f"{config.OPAMP_TYPE}_pretrained.pth"
+
 CLEANUP_AFTER_RUN = False
 SILENT_TRAINING = False
 
 # ==============================================================================
 # --- 1. 定义你的实验搜索空间 ---
 # ==============================================================================
+# (此网格现在是您唯一要调整的)
 BASE_EXPERIMENT_GRID = [
-    {"name": "0.2_G10_I2_H_x1", "hidden_dims": [128, 256, 256, 512], "dropout_rate": 0.2,
-     "gap_ratio": 10.0, "internal_ratio": 2.0, "hetero_lr_scale": 1.0},
-
+    {"name": "HBase_Scale_0.5", "backbone_lr_scale": 0.2},
+    {"name": "HBase_Scale_0.1", "backbone_lr_scale": 0.1},
+    {"name": "HBase_Scale_0.05", "backbone_lr_scale": 0.05},
+    {"name": "HBase_Scale_0.01", "backbone_lr_scale": 0.01},
 ]
 
 # --- 实验控制设置 ---
-NUM_REPETITIONS = 1
-OPAMP_TYPE = '5t_opamp'
-BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_auto_lr"
+NUM_REPETITIONS = 3
+OPAMP_TYPE = config.OPAMP_TYPE  # (从 config 加载)
+BASE_RESULTS_DIR = PROJECT_ROOT / "results_experiments_finetune_only"
 
 # --- 提交文件设置 ---
 TEST_FILE_PATH = PROJECT_ROOT / "data/02_public_test_set/features/features_A.csv"
-SUBMISSION_FILE_PREFIX = "predA"  # 将生成 predA_1, predA_2 ...
+SUBMISSION_FILE_PREFIX = "predA"
 
 # ==============================================================================
-# --- 2. 设置日志系统 ---
+# --- 2. 设置日志系统 (保持不变) ---
 # ==============================================================================
 BASE_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 EVALUATION_LOG_FILE = BASE_RESULTS_DIR / "experiment_evaluation_log.txt"
-
-# 创建一个只写入文件的 logger
 file_logger = logging.getLogger('ExperimentLogger')
 file_logger.setLevel(logging.INFO)
-file_logger.propagate = False  # 防止日志向上传播
-# 移除所有现有的 handlers (如果在 notebook 中重跑)
+file_logger.propagate = False
 if file_logger.hasHandlers():
     file_logger.handlers.clear()
-# 创建文件 handler
 file_handler = logging.FileHandler(
     EVALUATION_LOG_FILE, mode='w', encoding='utf-8')
 file_handler.setFormatter(logging.Formatter('%(message)s'))
 file_logger.addHandler(file_handler)
 
 # ==============================================================================
-# --- 3. 动态生成完整的实验列表 ---
+# --- 3. 动态生成完整的实验列表 (保持不变) ---
 # ==============================================================================
-# ... (这部分逻辑不变) ...
 EXPERIMENT_GRID = []
 for exp_params in BASE_EXPERIMENT_GRID:
     for run_num in range(1, NUM_REPETITIONS + 1):
@@ -76,14 +75,13 @@ for exp_params in BASE_EXPERIMENT_GRID:
         EXPERIMENT_GRID.append(new_params)
 
 # ==============================================================================
-# --- 4. 辅助函数 ---
+# --- 4. 辅助函数 (保持不变) ---
 # ==============================================================================
 
 
 def run_command(command, log_prefix=""):
     """
     辅助函数：执行子进程并捕获所有输出。
-    返回: (bool: success, list: stdout_lines, str: stderr_output)
     """
     print(f"--- [CMD] {log_prefix} 正在执行: {' '.join(command)} ---")
     process = subprocess.Popen(
@@ -91,8 +89,6 @@ def run_command(command, log_prefix=""):
         stderr=subprocess.PIPE, text=True, encoding='utf-8'
     )
     stdout_lines = []
-
-    # 实时打印到控制台 (如果非静默)
     if not SILENT_TRAINING:
         for line in iter(process.stdout.readline, ''):
             line = line.strip()
@@ -102,18 +98,15 @@ def run_command(command, log_prefix=""):
         process.wait()
         stderr_output = process.stderr.read()
     else:
-        # 静默模式：只捕获，不打印
         stdout_data, stderr_output = process.communicate()
         stdout_lines = stdout_data.splitlines()
-
     if process.returncode != 0:
         print(f"⚠️ {log_prefix} 执行失败。")
-        if SILENT_TRAINING:  # 仅在静默模式下失败时打印错误
+        if SILENT_TRAINING:
             print("--- 错误日志开始 ---")
             print(stderr_output)
             print("--- 错误日志结束 ---")
         return False, stdout_lines, stderr_output
-
     print(f"--- [CMD] {log_prefix} 执行完毕 ---")
     return True, stdout_lines, stderr_output
 
@@ -124,39 +117,29 @@ def parse_evaluation_log(stdout_lines, exp_name, exp_num):
     """
     eval_block = []
     capturing = False
-
-    # 匹配评估块的开始
     start_marker = re.compile(r"===\s*目标域验证集指标（物理单位）\s*===")
-
     for line in stdout_lines:
         if start_marker.search(line):
             capturing = True
             eval_block.append(
                 f"=== 实验 {exp_num} ({exp_name})：目标域验证集指标（物理单位）===")
             continue
-
-        if capturing and line.strip():  # 捕获所有非空行
+        if capturing and line.strip():
             eval_block.append(line)
-
-        if capturing and not line.strip():  # 遇到空行停止
+        if capturing and not line.strip():
             capturing = False
-            break  # 评估块结束
-
+            break
     return "\n".join(eval_block)
 
 
 # ==============================================================================
-# --- 5. 实验执行与结果捕获 ---
+# --- 5. 实验执行与结果捕获 (已简化) ---
 # ==============================================================================
 start_time = time.time()
 print(f"--- 实验开始：共 {len(EXPERIMENT_GRID)} 次运行 ---")
 print(f"--- 评估日志将保存到: {EVALUATION_LOG_FILE} ---")
-
-print("正在预加载数据...")
-data = get_data_and_scalers(opamp_type=OPAMP_TYPE)
-input_dim = data['source'][0].shape[1]
-output_dim = data['source'][1].shape[1]
-print("数据加载完成。")
+print(f"--- 将使用固定的预训练模型: {EXISTING_PRETRAIN_FILE.name} ---")
+print(f"--- 将使用固定的基础学习率: {config.LEARNING_RATE_HETERO:.2e} ---")
 
 for i, params in enumerate(EXPERIMENT_GRID):
     exp_name = f"{i+1:02d}_{params['name']}"
@@ -166,86 +149,57 @@ for i, params in enumerate(EXPERIMENT_GRID):
     exp_results_path = BASE_RESULTS_DIR / exp_name
     exp_results_path.mkdir(parents=True, exist_ok=True)
 
-    # 定义模型参数和路径
-    model_params = {
-        'input_dim': input_dim, 'output_dim': output_dim,
-        'hidden_dims': params['hidden_dims'], 'dropout_rate': params['dropout_rate']
-    }
+    # 定义模型路径
     pretrained_model_path = exp_results_path / f"{OPAMP_TYPE}_pretrained.pth"
     final_model_path = exp_results_path / f"{OPAMP_TYPE}_finetuned.pth"
     final_results_file = exp_results_path / "final_metrics.json"
 
     # --------------------------------------------------------------------------
-    # --- 步骤 A: 寻找最优预训练学习率 ---
+    # --- 步骤 A & B: (已禁用) 复制现有的 .pth 文件 ---
     # --------------------------------------------------------------------------
-    print("\n--- 步骤 A: 正在寻找最优预训练学习率... ---")
-    optimal_lr_pretrain = find_pretrain_lr(
-        AlignHeteroMLP, model_params, data,
-        save_plot_path=str(exp_results_path / "lr_finder_pretrain.png")
-    )
-    print(f"   - 找到的最优预训练学习率 (lr_pretrain): {optimal_lr_pretrain:.2e}")
-
-    # --------------------------------------------------------------------------
-    # --- 步骤 B: 运行 Pretrain-Only ---
-    # --------------------------------------------------------------------------
-    print("\n--- 步骤 B: 正在执行 Pretrain-Only... ---")
-    pretrain_command = [
-        "python", "train.py", "--opamp", OPAMP_TYPE,
-        "--hidden_dims", str(params['hidden_dims']),
-        "--dropout_rate", str(params['dropout_rate']),
-        "--lr_pretrain", str(optimal_lr_pretrain),
-        "--save_path", str(exp_results_path),
-        "--restart",  # 确保重新运行预训练
-        "--pretrain"  # <-- 关键：只运行预训练
-    ]
-    success, _, _ = run_command(pretrain_command, f"{exp_name}_Pretrain")
-
-    if not success or not pretrained_model_path.exists():
-        print(f"❌ 实验 {exp_name} 在预训练阶段失败。跳过此实验。")
+    print(f"\n--- 步骤 AB: 正在复制预训练模型... ---")
+    if not EXISTING_PRETRAIN_FILE.exists():
+        print(f"❌ 错误: 未找到您指定的预训练文件: {EXISTING_PRETRAIN_FILE}")
         continue
-    print(f"   - 预训练模型已保存至: {pretrained_model_path.name}")
+    try:
+        shutil.copy(EXISTING_PRETRAIN_FILE, pretrained_model_path)
+        print(
+            f"   - 成功复制 {EXISTING_PRETRAIN_FILE.name} 到 {exp_results_path.name}")
+    except Exception as e:
+        print(f"❌ 复制文件失败: {e}")
+        continue
 
     # --------------------------------------------------------------------------
-    # --- 步骤 C: 寻找最优微调学习率 ---
+    # --- 步骤 C: (已禁用) 寻找最优微调学习率 ---
     # --------------------------------------------------------------------------
-    print("\n--- 步骤 C: 正在寻找最优微调学习率... ---")
-    current_gap_ratio = params['gap_ratio']
-    current_internal_ratio = params['internal_ratio']
-    current_hetero_scale = params['hetero_lr_scale']
-
-    optimal_lr_bb_head = find_finetune_lr(
-        AlignHeteroMLP, model_params, data,
-        pretrained_weights_path=str(pretrained_model_path),
-        hetero_lr_scale=current_hetero_scale,
-        gap_ratio=current_gap_ratio,
-        internal_ratio=current_internal_ratio,
-        save_plot_path=str(exp_results_path / "lr_finder_finetune.png")
-    )
-    print(f"   - 找到的最优 lr_backbone_head: {optimal_lr_bb_head:.2e}")
-    print(f"   - 使用的 hetero_lr_scale: {current_hetero_scale}")
+    # (已跳过)
 
     # --------------------------------------------------------------------------
-    # --- 步骤 D: 运行 Finetune + Evaluate ---
+    # --- 步骤 D: 运行 Finetune + Evaluate (使用固定 LR) ---
     # --------------------------------------------------------------------------
+
+    # <<< --- 核心修改：从 config 和 grid 读取 --- >>>
+    current_lr_hetero = config.LEARNING_RATE_HETERO
+    current_hidden_dims = config.HIDDEN_DIMS
+    current_dropout_rate = config.DROPOUT_RATE
+    current_backbone_scale = params['backbone_lr_scale']
+
     print(
-        f"\n--- 步骤 D: 正在执行 Finetune + Evaluate (Gap={current_gap_ratio}, Internal={current_internal_ratio})... ---")
+        f"\n--- 步骤 D: 正在执行 Finetune + Evaluate (LR={current_lr_hetero:.2e}, Scale={current_backbone_scale})... ---")
 
     finetune_command = [
         "python", "train.py", "--opamp", OPAMP_TYPE,
-        "--hidden_dims", str(params['hidden_dims']),
-        "--dropout_rate", str(params['dropout_rate']),
+        "--hidden_dims", str(current_hidden_dims),
+        "--dropout_rate", str(current_dropout_rate),
 
-        "--lr_backbone_head", str(optimal_lr_bb_head),
-        "--hetero_lr_scale", str(current_hetero_scale),
-
-        # <<< --- 核心修改：传递 ratio 参数 --- >>>
-        "--gap_ratio", str(current_gap_ratio),
-        "--internal_ratio", str(current_internal_ratio),
+        # <<< --- 使用固定的 LR 和 grid-searched scale --- >>>
+        "--lr_hetero", str(current_lr_hetero),
+        "--backbone_lr_scale", str(current_backbone_scale),
 
         "--save_path", str(exp_results_path),
         "--results_file", str(final_results_file),
 
-        "--finetune",
+        "--finetune",  # 强制重新微调
         "--evaluate"
     ]
 
@@ -257,7 +211,7 @@ for i, params in enumerate(EXPERIMENT_GRID):
         continue
 
     # --------------------------------------------------------------------------
-    # --- 步骤 E: 提取日志并保存 ---
+    # --- 步骤 E: 提取日志并保存 (保持不变) ---
     # --------------------------------------------------------------------------
     print(f"\n--- 步骤 E: 提取日志并保存... ---")
     evaluation_text = parse_evaluation_log(stdout_lines, exp_name, i+1)
@@ -268,7 +222,7 @@ for i, params in enumerate(EXPERIMENT_GRID):
         print(f"⚠️ 警告: 未能从 {exp_name} 的训练输出中捕获到评估日志。")
 
     # --------------------------------------------------------------------------
-    # --- 步骤 F: 生成提交文件 ---
+    # --- 步骤 F: 生成提交文件 (保持不变) ---
     # --------------------------------------------------------------------------
     print(f"\n--- 步骤 F: 正在为实验 {i+1} 生成提交文件... ---")
     submission_path = BASE_RESULTS_DIR / f"{SUBMISSION_FILE_PREFIX}_{i+1}"
@@ -283,8 +237,8 @@ for i, params in enumerate(EXPERIMENT_GRID):
         "--model-path", str(final_model_path),
         "--output-file", str(submission_path),
         "--test-file", str(TEST_FILE_PATH),
-        "--hidden-dims", str(model_params['hidden_dims']),
-        "--dropout-rate", str(model_params['dropout_rate']),
+        "--hidden-dims", str(params['hidden_dims']),
+        "--dropout-rate", str(params['dropout_rate']),
         "--device", config.DEVICE
     ]
     success, _, _ = run_command(submit_cmd, f"{exp_name}_Submit")
@@ -294,7 +248,7 @@ for i, params in enumerate(EXPERIMENT_GRID):
         print(f"❌ 生成提交文件失败: {submission_path.name}")
 
     # --------------------------------------------------------------------------
-    # --- 步骤 G: 清理 (如果启用) ---
+    # --- 步骤 G: 清理 (保持不变) ---
     # --------------------------------------------------------------------------
     if CLEANUP_AFTER_RUN:
         try:
@@ -302,8 +256,9 @@ for i, params in enumerate(EXPERIMENT_GRID):
             print(f"清理完毕: 已删除临时文件夹 {exp_results_path}")
         except Exception as e:
             print(f"⚠️ 清理失败: 删除文件夹 {exp_results_path} 时出错 - {e}")
+
 # ==============================================================================
-# --- 5. 汇总并展示最终结果 ---
+# --- 5. 汇总并展示最终结果 (保持不变) ---
 # ==============================================================================
 end_time = time.time()
 total_duration = end_time - start_time
@@ -311,4 +266,4 @@ final_message = f"\n\n{'='*80}\n🎉 所有实验已完成！总耗时: {total_d
 final_message += f"评估日志已全部保存到: {EVALUATION_LOG_FILE}\n"
 final_message += f"提交文件已生成在: {BASE_RESULTS_DIR}\n"
 print(final_message)
-file_logger.info(final_message)  # 也在日志文件末尾写入总结
+file_logger.info(final_message)
