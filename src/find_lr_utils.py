@@ -127,7 +127,7 @@ def find_finetune_lr(
     original_model.load_state_dict(torch.load(
         pretrained_weights_path, map_location=device))
 
-    start_lr = 1e-7  # 这将是 lr_backbone_head 的起始值
+    start_lr = 1e-15  # 这将是 lr_backbone_head 的起始值
 
     # <<< --- 核心修改：使用 v7 优化器 --- >>>
     print(f"--- [Finetune LR Finder] (v7) ---")

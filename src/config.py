@@ -37,10 +37,10 @@ LEARNING_RATE_PRETRAIN = 2.2e-3
 
 EPOCHS_FINETUNE = 100000  # 配合早停
 PATIENCE_FINETUNE = 500
-LEARNING_RATE_BB_HEAD = 3.5e-3    # 新：Backbone Head 的学习率
-LEARNING_RATE_HETERO = 3.5e-3     # 新：Hetero Head 的学习率 (默认值设为相同)
-GAP_RATIO = 10.0          # Head 与 Backbone 顶层之间的比例
-INTERNAL_RATIO = 1.0      # Backbone 内部层与层之间的比例
+LEARNING_RATE_BB_HEAD = 1e-4    # 新：Backbone Head 的学习率
+LEARNING_RATE_HETERO = 1e-4     # 新：Hetero Head 的学习率 (默认值设为相同)
+GAP_RATIO = 5.0          # Head 与 Backbone 顶层之间的比例
+INTERNAL_RATIO = 10.0      # Backbone 内部层与层之间的比例
 BATCH_A = 128
 BATCH_B = 64  # 线性缩放规则
 
