@@ -237,8 +237,8 @@ for i, params in enumerate(EXPERIMENT_GRID):
         "--model-path", str(final_model_path),
         "--output-file", str(submission_path),
         "--test-file", str(TEST_FILE_PATH),
-        "--hidden-dims", str(params['hidden_dims']),
-        "--dropout-rate", str(params['dropout_rate']),
+        "--hidden-dims", str(current_hidden_dims),
+        "--dropout-rate", str(current_dropout_rate),
         "--device", config.DEVICE
     ]
     success, _, _ = run_command(submit_cmd, f"{exp_name}_Submit")
