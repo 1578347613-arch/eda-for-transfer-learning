@@ -117,7 +117,7 @@ def find_finetune_lr(
     lr_hetero: float = config.LEARNING_RATE_HETERO,  # <-- 新增：固定的 Hetero LR
     gap_ratio: float = config.GAP_RATIO,
     internal_ratio: float = config.INTERNAL_RATIO,
-    end_lr=10.0, num_iter=1000, batch_size=128, device="cuda", save_plot_path: str = None
+    end_lr=10.0, num_iter=1000, batch_size=64, device="cuda", save_plot_path: str = None
 ):
     device = torch.device(device if torch.cuda.is_available() else "cpu")
     if not Path(pretrained_weights_path).exists():
@@ -127,7 +127,7 @@ def find_finetune_lr(
     original_model.load_state_dict(torch.load(
         pretrained_weights_path, map_location=device))
 
-    start_lr = 1e-15  # 这将是 lr_backbone_head 的起始值
+    start_lr = 1e-9  # 这将是 lr_backbone_head 的起始值
 
     # <<< --- 核心修改：使用 v7 优化器 --- >>>
     print(f"--- [Finetune LR Finder] (v7) ---")
