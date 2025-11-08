@@ -45,9 +45,9 @@ TASK_CONFIGS = {
         'batch_b': 64,
         'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
         # 模型设置
-        'hidden_dims': [128, 256, 512],
-        'num_layers': 3,
-        'dropout_rate': 0.1,
+        'hidden_dims': [128, 256, 256, 512],
+        'num_layers': 4,
+        'dropout_rate': 0.2,
 
         # 损失函数权重
         'lambda_coral': 0.1,
