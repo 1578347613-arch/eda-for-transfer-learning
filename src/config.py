@@ -31,21 +31,35 @@ PRETRAIN_SCHEDULER_CONFIGS = [  # 重复执行三次元优化
     # ... 您可以根据需要添加更多配置 ...
 ]
 
+CMRR_RESTART_PRETRAIN = 3
+CMRR_PRETRAIN_SCHEDULER_CONFIGS = [
+    {"T_0": 110, "T_mult": 1, "epochs_pretrain": 110},
+    {"T_0": 125, "T_mult": 1, "epochs_pretrain": 125},
+    {"T_0": 150, "T_mult": 1, "epochs_pretrain": 150},
+]
+
 PATIENCE_PRETRAIN = 200  # 无早停
-LEARNING_RATE_PRETRAIN = 2.2e-3
-
-
 EPOCHS_FINETUNE = 100000  # 配合早停
 PATIENCE_FINETUNE = 500
-LEARNING_RATE_HETERO = 1e-3
+
+LEARNING_RATE_PRETRAIN = 2.7e-3
+LEARNING_RATE_HETERO = 3.5e-3
 BACKBONE_LR_SCALE = 0.1
+
+
+CMRR_LEARNING_RATE_PRETRAIN = 1e-2
+CMRR_LEARNING_RATE_HETERO = 3e-3
+CMRR_BACKBONE_LR_SCALE = 0.1
+
 BATCH_A = 128
 BATCH_B = 64  # 线性缩放规则
 
 # 模型设置
 HIDDEN_DIMS = [128, 256, 256, 512]
-NUM_LAYERS = 4
 DROPOUT_RATE = 0.2
+
+CMRR_HIDDEN_DIMS = [128, 128, 128]
+CMRR_DROPOUT_RATE = 0.25
 
 # 权重 / 优化设置
 LAMBDA_NLL = 1.0  # NLL 损失的权重 (主任务)

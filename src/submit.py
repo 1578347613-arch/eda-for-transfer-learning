@@ -17,7 +17,7 @@ if str(SRC_DIR) not in sys.path:
 # --- 从您的项目模块中导入 ---
 try:
     from models.align_hetero import AlignHeteroMLP
-    from data_loader import get_data_and_scalers
+    from data_loader import get_data_and_scalers, _add_physics_features
     import config
 except ImportError as e:
     print(f"错误: 无法导入必要的模块。请确保此脚本位于 'src' 目录中。")
@@ -62,8 +62,9 @@ def run_inference(opamp_type, model_path_str, output_file_str, test_file_str, hi
 
     print(f"--- [submit.py] 正在读取和预处理测试数据... ---")
     X_test_df = pd.read_csv(test_file_path)
-    X_test_df_reordered = X_test_df[train_x_cols]
-    X_test_scaled = x_scaler.transform(X_test_df_reordered)
+    print(f"--- [submit.py] 正在对测试集应用物理感知特征... ---")
+    X_test_df_engineered = _add_physics_features(X_test_df, opamp_type)
+    X_test_scaled = x_scaler.transform(X_test_df_engineered)
     X_test_tensor = torch.tensor(X_test_scaled, dtype=torch.float32).to(device)
 
     print(f"--- [submit.py] 正在执行模型推理... ---")

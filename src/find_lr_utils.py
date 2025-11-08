@@ -113,7 +113,7 @@ def find_pretrain_lr(
 def find_finetune_lr(
     model_class, model_params, data, pretrained_weights_path: str,
     # <<< --- 核心修改：我们只关心这个比例 --- >>>
-    backbone_head_scale: float = config.BACKBONE_HEAD_SCALE,
+    backbone_head_scale: float = config.BACKBONE_LR_SCALE,
     end_lr=10.0, num_iter=1000, batch_size=64, device="cuda", save_plot_path: str = None
 ):
     device = torch.device(device if torch.cuda.is_available() else "cpu")

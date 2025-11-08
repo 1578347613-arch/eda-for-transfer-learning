@@ -26,12 +26,58 @@ def load_data(opamp_type: str = "5t_opamp"):
     return X_source, y_source, X_target, y_target
 
 
+def _add_physics_features(df: pd.DataFrame, opamp_type: str) -> pd.DataFrame:
+    """
+    在原始 DataFrame 上添加物理感知特征。
+    """
+    if opamp_type == '5t_opamp':
+        # 假设列顺序为: w1, w2, w3, l1, l2, l3, ibias
+        # 为安全起见，我们使用列名（CSV应包含表头）
+        required_cols = ['w1', 'w2', 'w3', 'l1', 'l2', 'l3', 'ibias']
+        if not all(col in df.columns for col in required_cols):
+            print(f"警告: 5t_opamp 特征工程失败，缺少列: {required_cols}。跳过特征工程。")
+            return df
+
+        print("... 正在为 5t_opamp 添加物理感知特征 ...")
+        # 创建副本以避免 SettingWithCopyWarning
+        df = df.copy()
+
+        # Epsilon for safe division
+        eps = 1e-9
+
+        # 1. W/L Ratios
+        df['w1_over_l1'] = df['w1'] / (df['l1'] + eps)
+        df['w2_over_l2'] = df['w2'] / (df['l2'] + eps)  # 负载
+        df['w3_over_l3'] = df['w3'] / (df['l3'] + eps)  # 尾电流源
+
+        # 2. gm1 代理 (gm ~ sqrt(W/L * I))
+        # 假设 I_D1 ~ ibias
+        df['g_m1_proxy'] = np.sqrt(df['w1_over_l1'] * df['ibias'])
+
+        # 3. ro5 (尾电流) 代理 (ro ~ L / I)
+        df['r_o5_proxy'] = df['l3'] / (df['ibias'] + eps)
+
+        # 4. CMRR 代理 (CMRR ~ gm1 * ro5)
+        df['cmrr_proxy'] = df['g_m1_proxy'] * df['r_o5_proxy']
+
+        # 5. 增益 (Av) 代理
+        # Av ~ gm1 * ro_load. ro_load(M2) ~ L2 / I_D2
+        df['r_o_load_proxy'] = df['l2'] / (df['ibias'] + eps)
+        df['gain_proxy'] = df['g_m1_proxy'] * df['r_o_load_proxy']
+
+    elif opamp_type == 'two_stage_opamp':
+        print("... two_stage_opamp 的特征工程暂未实现 ...")
+
+    return df
+
+
 def preprocess_data(
     X_source: pd.DataFrame,
     y_source: pd.DataFrame,
     X_target: pd.DataFrame,
     y_target: pd.DataFrame,
     skewed_cols=SKEWED_COLS_DEFAULT,
+    opamp_type: str = "5t_opamp"
 ):
     """
     预处理：对目标中偏斜列做 log1p，仅在 A 域拟合 StandardScaler，并应用到 A/B。
@@ -47,6 +93,10 @@ def preprocess_data(
             y_target[col] = np.log1p(y_target[col])
     if skewed_cols:
         print(f"已对列 {list(skewed_cols)} 进行 log1p 变换。")
+
+    X_source = _add_physics_features(X_source, opamp_type)
+    X_target = _add_physics_features(X_target, opamp_type)
+    print(f"特征工程完毕。新 X_source 维度: {X_source.shape}")
 
     # 2) 仅在 A 域拟合 scaler
     x_scaler = StandardScaler()
@@ -123,7 +173,9 @@ def get_data_and_scalers(
     Xs, ys, Xt, yt = load_data(opamp_type)
     (
         Xs_s, ys_s, Xt_s, yt_s, x_scaler, y_scaler
-    ) = preprocess_data(Xs, ys, Xt, yt, skewed_cols=skewed_cols)
+    ) = preprocess_data(Xs, ys, Xt, yt,
+                        skewed_cols=skewed_cols,
+                        opamp_type=opamp_type)
 
     Xa_tr, Xa_va, ya_tr, ya_va = split_source_data(
         Xs_s, ys_s, source_val_split=source_val_split, random_state=random_state
