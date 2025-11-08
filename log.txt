@@ -1195,3 +1195,100 @@ ugf             MSE=6.914e+10  MAE=1.88e+05  R2=0.9953
 phase_margin    MSE=0.2258  MAE=0.3553  R2=0.9776
 cmrr            MSE=1.499e+05  MAE=221.3  R2=0.8748
 
+
+
+
+
+day8
+测试了backbone/hetero_head的学习率之比
+=== 瀹為獙 1 (01_HBase_Scale_0.5_run1)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=2.1e+10  MAE=7.457e+04  R2=0.9947
+dc_gain         MSE=39.87  MAE=3.956  R2=0.9765
+ugf             MSE=8.303e+10  MAE=1.579e+05  R2=0.9943
+phase_margin    MSE=0.1519  MAE=0.2842  R2=0.9849
+cmrr            MSE=1.808e+05  MAE=93.4  R2=0.8490
+
+=== 瀹為獙 2 (02_HBase_Scale_0.5_run2)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=2.136e+10  MAE=7.375e+04  R2=0.9946
+dc_gain         MSE=42.14  MAE=3.952  R2=0.9752
+ugf             MSE=8.105e+10  MAE=1.615e+05  R2=0.9945
+phase_margin    MSE=0.1634  MAE=0.2818  R2=0.9838
+cmrr            MSE=1.846e+05  MAE=99.79  R2=0.8459
+
+=== 瀹為獙 3 (03_HBase_Scale_0.5_run3)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=2.083e+10  MAE=7.341e+04  R2=0.9947
+dc_gain         MSE=39.18  MAE=3.811  R2=0.9769
+ugf             MSE=8.313e+10  MAE=1.642e+05  R2=0.9943
+phase_margin    MSE=0.1294  MAE=0.2519  R2=0.9872
+cmrr            MSE=1.723e+05  MAE=92  R2=0.8561
+
+=== 瀹為獙 4 (04_HBase_Scale_0.1_run1)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.887e+10  MAE=7.111e+04  R2=0.9952
+dc_gain         MSE=42.17  MAE=4.062  R2=0.9752
+ugf             MSE=7.115e+10  MAE=1.575e+05  R2=0.9951
+phase_margin    MSE=0.1299  MAE=0.2581  R2=0.9871
+cmrr            MSE=1.554e+05  MAE=97  R2=0.8703
+
+=== 瀹為獙 5 (05_HBase_Scale_0.1_run2)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.743e+10  MAE=7.045e+04  R2=0.9956
+dc_gain         MSE=40.17  MAE=3.76  R2=0.9764
+ugf             MSE=7.315e+10  MAE=1.612e+05  R2=0.9950
+phase_margin    MSE=0.1346  MAE=0.2644  R2=0.9867
+cmrr            MSE=1.56e+05  MAE=93.14  R2=0.8698
+
+=== 瀹為獙 6 (06_HBase_Scale_0.1_run3)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.809e+10  MAE=7.182e+04  R2=0.9954
+dc_gain         MSE=44.63  MAE=4.111  R2=0.9737
+ugf             MSE=7.07e+10  MAE=1.546e+05  R2=0.9952
+phase_margin    MSE=0.1257  MAE=0.2526  R2=0.9875
+cmrr            MSE=1.612e+05  MAE=96.56  R2=0.8654
+
+=== 瀹為獙 7 (07_HBase_Scale_0.05_run1)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.764e+10  MAE=7.471e+04  R2=0.9955
+dc_gain         MSE=51.17  MAE=4.451  R2=0.9699
+ugf             MSE=6.696e+10  MAE=1.558e+05  R2=0.9954
+phase_margin    MSE=0.121  MAE=0.2549  R2=0.9880
+cmrr            MSE=1.532e+05  MAE=99.05  R2=0.8721
+
+=== 瀹為獙 8 (08_HBase_Scale_0.05_run2)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.713e+10  MAE=7.31e+04  R2=0.9957
+dc_gain         MSE=47.06  MAE=4.163  R2=0.9723
+ugf             MSE=5.875e+10  MAE=1.478e+05  R2=0.9960
+phase_margin    MSE=0.1228  MAE=0.249  R2=0.9878
+cmrr            MSE=1.626e+05  MAE=95.53  R2=0.8643
+
+=== 瀹為獙 9 (09_HBase_Scale_0.05_run3)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.617e+10  MAE=7.218e+04  R2=0.9959
+dc_gain         MSE=58.62  MAE=4.803  R2=0.9655
+ugf             MSE=5.747e+10  MAE=1.464e+05  R2=0.9961
+phase_margin    MSE=0.1249  MAE=0.2573  R2=0.9876
+cmrr            MSE=1.793e+05  MAE=99.75  R2=0.8503
+
+=== 瀹為獙 10 (10_HBase_Scale_0.01_run1)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.379e+10  MAE=7.12e+04  R2=0.9965
+dc_gain         MSE=71.34  MAE=5.614  R2=0.9580
+ugf             MSE=5.392e+10  MAE=1.46e+05  R2=0.9963
+phase_margin    MSE=0.1246  MAE=0.2498  R2=0.9877
+cmrr            MSE=1.765e+05  MAE=103.7  R2=0.8526
+
+=== 瀹為獙 11 (11_HBase_Scale_0.01_run2)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.281e+10  MAE=7.043e+04  R2=0.9968
+dc_gain         MSE=71.42  MAE=5.626  R2=0.9580
+ugf             MSE=5.418e+10  MAE=1.462e+05  R2=0.9963
+phase_margin    MSE=0.1198  MAE=0.2467  R2=0.9881
+cmrr            MSE=1.788e+05  MAE=102.5  R2=0.8507
+
+=== 瀹為獙 12 (12_HBase_Scale_0.01_run3)锛氱洰鏍囧煙楠岃瘉闆嗘寚鏍囷紙鐗╃悊鍗曚綅锛�===
+slewrate_pos    MSE=1.378e+10  MAE=7.157e+04  R2=0.9965
+dc_gain         MSE=65.13  MAE=5.364  R2=0.9617
+ugf             MSE=5.647e+10  MAE=1.516e+05  R2=0.9961
+phase_margin    MSE=0.1263  MAE=0.2509  R2=0.9875
+cmrr            MSE=1.729e+05  MAE=102.8  R2=0.8557
+
+
+
+================================================================================
+馃帀 鎵€鏈夊疄楠屽凡瀹屾垚锛佹€昏€楁椂: 77.26 鍒嗛挓
+================================================================================
+璇勪及鏃ュ織宸插叏閮ㄤ繚瀛樺埌: /kaggle/working/eda-for-transfer-learning/results_experiments_finetune_only/experiment_evaluation_log.txt
+鎻愪氦鏂囦欢宸茬敓鎴愬湪: /kaggle/working/eda-for-transfer-learning/results_experiments_finetune_only
