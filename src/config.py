@@ -43,7 +43,7 @@ TASK_CONFIGS = {
         'lr_finetune': 1e-3,
         'batch_a': 128,
         'batch_b': 64,
-        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        'ensemble_alpha': [0.4, 0.4, 0.3, 0.4, 0.9],
         # 模型设置
         'hidden_dims': [128, 256, 256, 512],
         'num_layers': 4,
