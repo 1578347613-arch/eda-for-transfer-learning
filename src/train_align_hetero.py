@@ -1,4 +1,4 @@
-# unified_train.py (版本 4.0 - 配置驱动 - 已更新)
+# train_align_hetero.py (版本 4.0 - 配置驱动 - 已更新)
 import os
 import torch
 import argparse
