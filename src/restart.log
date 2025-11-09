@@ -1,0 +1,2427 @@
+
+==================================================
+=== AUTOMATED TRAINING (MODE: ALL) ===
+==================================================
+Tasks: two_stage_opamp
+Scripts: train_align_hetero, train_target_only, unified_inverse_train
+
+==================================================
+=== STARTING TASK: TWO_STAGE_OPAMP ===
+==================================================
+
+--- Running: train_align_hetero for two_stage_opamp ---
+
+[CMD] In directory '/home/mario1578347613/eda-for-transfer-learning-1/src', running: python -m train_align_hetero --opamp two_stage_opamp --restart
+--- 任务启动: two_stage_opamp | 设备: cpu ---
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+--- [阶段一] 启动预训练流程 (1 次独立实验) ---
+
+============================== 独立实验 1/1 ==============================
+
+--- [子运行] 使用配置: {'T_0': 200, 'T_mult': 1, 'epochs_pretrain': 400} ---
+Pre-train Epoch [1/400], Train Loss: 0.236537, Val Loss: 0.147507, LR: 1.00e-03
+- 本次运行最佳损失更新: 0.147507
+Pre-train Epoch [2/400], Train Loss: 0.142529, Val Loss: 0.113226, LR: 1.00e-03
+- 本次运行最佳损失更新: 0.113226
+Pre-train Epoch [3/400], Train Loss: 0.123274, Val Loss: 0.102304, LR: 9.99e-04
+- 本次运行最佳损失更新: 0.102304
+Pre-train Epoch [4/400], Train Loss: 0.111315, Val Loss: 0.092564, LR: 9.99e-04
+- 本次运行最佳损失更新: 0.092564
+Pre-train Epoch [5/400], Train Loss: 0.104031, Val Loss: 0.084033, LR: 9.98e-04
+- 本次运行最佳损失更新: 0.084033
+Pre-train Epoch [6/400], Train Loss: 0.099861, Val Loss: 0.078478, LR: 9.98e-04
+- 本次运行最佳损失更新: 0.078478
+Pre-train Epoch [7/400], Train Loss: 0.095709, Val Loss: 0.077043, LR: 9.97e-04
+- 本次运行最佳损失更新: 0.077043
+Pre-train Epoch [8/400], Train Loss: 0.091684, Val Loss: 0.077915, LR: 9.96e-04
+Pre-train Epoch [9/400], Train Loss: 0.089241, Val Loss: 0.072381, LR: 9.95e-04
+- 本次运行最佳损失更新: 0.072381
+Pre-train Epoch [10/400], Train Loss: 0.088791, Val Loss: 0.070572, LR: 9.94e-04
+- 本次运行最佳损失更新: 0.070572
+Pre-train Epoch [11/400], Train Loss: 0.084165, Val Loss: 0.068973, LR: 9.93e-04
+- 本次运行最佳损失更新: 0.068973
+Pre-train Epoch [12/400], Train Loss: 0.081609, Val Loss: 0.076097, LR: 9.91e-04
+Pre-train Epoch [13/400], Train Loss: 0.080928, Val Loss: 0.068242, LR: 9.90e-04
+- 本次运行最佳损失更新: 0.068242
+Pre-train Epoch [14/400], Train Loss: 0.078401, Val Loss: 0.070881, LR: 9.88e-04
+Pre-train Epoch [15/400], Train Loss: 0.078036, Val Loss: 0.061711, LR: 9.86e-04
+- 本次运行最佳损失更新: 0.061711
+Pre-train Epoch [16/400], Train Loss: 0.073141, Val Loss: 0.068998, LR: 9.84e-04
+Pre-train Epoch [17/400], Train Loss: 0.075041, Val Loss: 0.062876, LR: 9.82e-04
+Pre-train Epoch [18/400], Train Loss: 0.072308, Val Loss: 0.066789, LR: 9.80e-04
+Pre-train Epoch [19/400], Train Loss: 0.071070, Val Loss: 0.060704, LR: 9.78e-04
+- 本次运行最佳损失更新: 0.060704
+Pre-train Epoch [20/400], Train Loss: 0.073086, Val Loss: 0.066842, LR: 9.76e-04
+Pre-train Epoch [21/400], Train Loss: 0.071797, Val Loss: 0.062295, LR: 9.73e-04
+Pre-train Epoch [22/400], Train Loss: 0.068012, Val Loss: 0.061596, LR: 9.70e-04
+Pre-train Epoch [23/400], Train Loss: 0.070017, Val Loss: 0.067583, LR: 9.68e-04
+Pre-train Epoch [24/400], Train Loss: 0.067431, Val Loss: 0.060028, LR: 9.65e-04
+- 本次运行最佳损失更新: 0.060028
+Pre-train Epoch [25/400], Train Loss: 0.066973, Val Loss: 0.056435, LR: 9.62e-04
+- 本次运行最佳损失更新: 0.056435
+Pre-train Epoch [26/400], Train Loss: 0.070215, Val Loss: 0.066237, LR: 9.59e-04
+Pre-train Epoch [27/400], Train Loss: 0.064952, Val Loss: 0.056929, LR: 9.56e-04
+Pre-train Epoch [28/400], Train Loss: 0.067239, Val Loss: 0.068420, LR: 9.52e-04
+Pre-train Epoch [29/400], Train Loss: 0.062918, Val Loss: 0.059502, LR: 9.49e-04
+Pre-train Epoch [30/400], Train Loss: 0.063034, Val Loss: 0.061409, LR: 9.46e-04
+Pre-train Epoch [31/400], Train Loss: 0.060136, Val Loss: 0.059818, LR: 9.42e-04
+Pre-train Epoch [32/400], Train Loss: 0.059799, Val Loss: 0.055906, LR: 9.38e-04
+- 本次运行最佳损失更新: 0.055906
+Pre-train Epoch [33/400], Train Loss: 0.061811, Val Loss: 0.055554, LR: 9.34e-04
+- 本次运行最佳损失更新: 0.055554
+Pre-train Epoch [34/400], Train Loss: 0.061123, Val Loss: 0.057895, LR: 9.30e-04
+Pre-train Epoch [35/400], Train Loss: 0.058235, Val Loss: 0.058789, LR: 9.26e-04
+Pre-train Epoch [36/400], Train Loss: 0.058490, Val Loss: 0.065705, LR: 9.22e-04
+Pre-train Epoch [37/400], Train Loss: 0.056806, Val Loss: 0.066145, LR: 9.18e-04
+Pre-train Epoch [38/400], Train Loss: 0.057694, Val Loss: 0.060916, LR: 9.14e-04
+Pre-train Epoch [39/400], Train Loss: 0.056421, Val Loss: 0.060013, LR: 9.09e-04
+Pre-train Epoch [40/400], Train Loss: 0.057929, Val Loss: 0.056142, LR: 9.05e-04
+Pre-train Epoch [41/400], Train Loss: 0.054932, Val Loss: 0.053100, LR: 9.00e-04
+- 本次运行最佳损失更新: 0.053100
+Pre-train Epoch [42/400], Train Loss: 0.053030, Val Loss: 0.058354, LR: 8.95e-04
+Pre-train Epoch [43/400], Train Loss: 0.053737, Val Loss: 0.055022, LR: 8.90e-04
+Pre-train Epoch [44/400], Train Loss: 0.054180, Val Loss: 0.061269, LR: 8.85e-04
+Pre-train Epoch [45/400], Train Loss: 0.054925, Val Loss: 0.058308, LR: 8.80e-04
+Pre-train Epoch [46/400], Train Loss: 0.053477, Val Loss: 0.058027, LR: 8.75e-04
+Pre-train Epoch [47/400], Train Loss: 0.050856, Val Loss: 0.058686, LR: 8.70e-04
+Pre-train Epoch [48/400], Train Loss: 0.049449, Val Loss: 0.053731, LR: 8.65e-04
+Pre-train Epoch [49/400], Train Loss: 0.049308, Val Loss: 0.057639, LR: 8.59e-04
+Pre-train Epoch [50/400], Train Loss: 0.049614, Val Loss: 0.054027, LR: 8.54e-04
+Pre-train Epoch [51/400], Train Loss: 0.048685, Val Loss: 0.057481, LR: 8.48e-04
+Pre-train Epoch [52/400], Train Loss: 0.048720, Val Loss: 0.054230, LR: 8.42e-04
+Pre-train Epoch [53/400], Train Loss: 0.048481, Val Loss: 0.054598, LR: 8.37e-04
+Pre-train Epoch [54/400], Train Loss: 0.049059, Val Loss: 0.052408, LR: 8.31e-04
+- 本次运行最佳损失更新: 0.052408
+Pre-train Epoch [55/400], Train Loss: 0.045715, Val Loss: 0.050698, LR: 8.25e-04
+- 本次运行最佳损失更新: 0.050698
+Pre-train Epoch [56/400], Train Loss: 0.046272, Val Loss: 0.050405, LR: 8.19e-04
+- 本次运行最佳损失更新: 0.050405
+Pre-train Epoch [57/400], Train Loss: 0.046076, Val Loss: 0.057068, LR: 8.13e-04
+Pre-train Epoch [58/400], Train Loss: 0.046038, Val Loss: 0.055157, LR: 8.07e-04
+Pre-train Epoch [59/400], Train Loss: 0.044006, Val Loss: 0.049189, LR: 8.00e-04
+- 本次运行最佳损失更新: 0.049189
+Pre-train Epoch [60/400], Train Loss: 0.044149, Val Loss: 0.051324, LR: 7.94e-04
+Pre-train Epoch [61/400], Train Loss: 0.047528, Val Loss: 0.048145, LR: 7.88e-04
+- 本次运行最佳损失更新: 0.048145
+Pre-train Epoch [62/400], Train Loss: 0.045701, Val Loss: 0.049585, LR: 7.81e-04
+Pre-train Epoch [63/400], Train Loss: 0.043453, Val Loss: 0.049658, LR: 7.75e-04
+Pre-train Epoch [64/400], Train Loss: 0.043784, Val Loss: 0.050018, LR: 7.68e-04
+Pre-train Epoch [65/400], Train Loss: 0.041749, Val Loss: 0.048915, LR: 7.61e-04
+Pre-train Epoch [66/400], Train Loss: 0.043209, Val Loss: 0.054850, LR: 7.55e-04
+Pre-train Epoch [67/400], Train Loss: 0.041200, Val Loss: 0.050729, LR: 7.48e-04
+Pre-train Epoch [68/400], Train Loss: 0.039510, Val Loss: 0.052688, LR: 7.41e-04
+Pre-train Epoch [69/400], Train Loss: 0.042571, Val Loss: 0.051460, LR: 7.34e-04
+Pre-train Epoch [70/400], Train Loss: 0.040295, Val Loss: 0.050739, LR: 7.27e-04
+Pre-train Epoch [71/400], Train Loss: 0.039537, Val Loss: 0.047057, LR: 7.20e-04
+- 本次运行最佳损失更新: 0.047057
+Pre-train Epoch [72/400], Train Loss: 0.041579, Val Loss: 0.051274, LR: 7.13e-04
+Pre-train Epoch [73/400], Train Loss: 0.040225, Val Loss: 0.050807, LR: 7.06e-04
+Pre-train Epoch [74/400], Train Loss: 0.040814, Val Loss: 0.052715, LR: 6.99e-04
+Pre-train Epoch [75/400], Train Loss: 0.038231, Val Loss: 0.047696, LR: 6.92e-04
+Pre-train Epoch [76/400], Train Loss: 0.038425, Val Loss: 0.046452, LR: 6.84e-04
+- 本次运行最佳损失更新: 0.046452
+Pre-train Epoch [77/400], Train Loss: 0.040626, Val Loss: 0.051652, LR: 6.77e-04
+Pre-train Epoch [78/400], Train Loss: 0.038946, Val Loss: 0.051820, LR: 6.70e-04
+Pre-train Epoch [79/400], Train Loss: 0.039607, Val Loss: 0.048721, LR: 6.62e-04
+Pre-train Epoch [80/400], Train Loss: 0.037586, Val Loss: 0.046971, LR: 6.55e-04
+Pre-train Epoch [81/400], Train Loss: 0.037171, Val Loss: 0.047720, LR: 6.47e-04
+Pre-train Epoch [82/400], Train Loss: 0.035294, Val Loss: 0.047282, LR: 6.40e-04
+Pre-train Epoch [83/400], Train Loss: 0.036563, Val Loss: 0.051089, LR: 6.32e-04
+Pre-train Epoch [84/400], Train Loss: 0.035655, Val Loss: 0.045574, LR: 6.25e-04
+- 本次运行最佳损失更新: 0.045574
+Pre-train Epoch [85/400], Train Loss: 0.035808, Val Loss: 0.046766, LR: 6.17e-04
+Pre-train Epoch [86/400], Train Loss: 0.034811, Val Loss: 0.046187, LR: 6.09e-04
+Pre-train Epoch [87/400], Train Loss: 0.034587, Val Loss: 0.049198, LR: 6.02e-04
+Pre-train Epoch [88/400], Train Loss: 0.033484, Val Loss: 0.047815, LR: 5.94e-04
+Pre-train Epoch [89/400], Train Loss: 0.034263, Val Loss: 0.048331, LR: 5.86e-04
+Pre-train Epoch [90/400], Train Loss: 0.032901, Val Loss: 0.047340, LR: 5.79e-04
+Pre-train Epoch [91/400], Train Loss: 0.032615, Val Loss: 0.051508, LR: 5.71e-04
+Pre-train Epoch [92/400], Train Loss: 0.033783, Val Loss: 0.051671, LR: 5.63e-04
+Pre-train Epoch [93/400], Train Loss: 0.032521, Val Loss: 0.054440, LR: 5.55e-04
+Pre-train Epoch [94/400], Train Loss: 0.034849, Val Loss: 0.048874, LR: 5.48e-04
+Pre-train Epoch [95/400], Train Loss: 0.033132, Val Loss: 0.045612, LR: 5.40e-04
+Pre-train Epoch [96/400], Train Loss: 0.032201, Val Loss: 0.049657, LR: 5.32e-04
+Pre-train Epoch [97/400], Train Loss: 0.032637, Val Loss: 0.049624, LR: 5.24e-04
+Pre-train Epoch [98/400], Train Loss: 0.033063, Val Loss: 0.047138, LR: 5.16e-04
+Pre-train Epoch [99/400], Train Loss: 0.032612, Val Loss: 0.045109, LR: 5.08e-04
+- 本次运行最佳损失更新: 0.045109
+Pre-train Epoch [100/400], Train Loss: 0.032518, Val Loss: 0.050965, LR: 5.01e-04
+Pre-train Epoch [101/400], Train Loss: 0.031669, Val Loss: 0.046617, LR: 4.93e-04
+Pre-train Epoch [102/400], Train Loss: 0.030281, Val Loss: 0.047121, LR: 4.85e-04
+Pre-train Epoch [103/400], Train Loss: 0.030910, Val Loss: 0.050669, LR: 4.77e-04
+Pre-train Epoch [104/400], Train Loss: 0.031521, Val Loss: 0.048642, LR: 4.69e-04
+Pre-train Epoch [105/400], Train Loss: 0.032239, Val Loss: 0.051832, LR: 4.61e-04
+Pre-train Epoch [106/400], Train Loss: 0.032269, Val Loss: 0.048223, LR: 4.53e-04
+Pre-train Epoch [107/400], Train Loss: 0.030620, Val Loss: 0.044696, LR: 4.46e-04
+- 本次运行最佳损失更新: 0.044696
+Pre-train Epoch [108/400], Train Loss: 0.030158, Val Loss: 0.046597, LR: 4.38e-04
+Pre-train Epoch [109/400], Train Loss: 0.029962, Val Loss: 0.047405, LR: 4.30e-04
+Pre-train Epoch [110/400], Train Loss: 0.029628, Val Loss: 0.044148, LR: 4.22e-04
+- 本次运行最佳损失更新: 0.044148
+Pre-train Epoch [111/400], Train Loss: 0.028569, Val Loss: 0.043940, LR: 4.15e-04
+- 本次运行最佳损失更新: 0.043940
+Pre-train Epoch [112/400], Train Loss: 0.028422, Val Loss: 0.044141, LR: 4.07e-04
+Pre-train Epoch [113/400], Train Loss: 0.029839, Val Loss: 0.044902, LR: 3.99e-04
+Pre-train Epoch [114/400], Train Loss: 0.028920, Val Loss: 0.047025, LR: 3.92e-04
+Pre-train Epoch [115/400], Train Loss: 0.028716, Val Loss: 0.049301, LR: 3.84e-04
+Pre-train Epoch [116/400], Train Loss: 0.028389, Val Loss: 0.046039, LR: 3.76e-04
+Pre-train Epoch [117/400], Train Loss: 0.030525, Val Loss: 0.050092, LR: 3.69e-04
+Pre-train Epoch [118/400], Train Loss: 0.027895, Val Loss: 0.045096, LR: 3.61e-04
+Pre-train Epoch [119/400], Train Loss: 0.027478, Val Loss: 0.047990, LR: 3.54e-04
+Pre-train Epoch [120/400], Train Loss: 0.027932, Val Loss: 0.046739, LR: 3.46e-04
+Pre-train Epoch [121/400], Train Loss: 0.029267, Val Loss: 0.046257, LR: 3.39e-04
+Pre-train Epoch [122/400], Train Loss: 0.028518, Val Loss: 0.044266, LR: 3.31e-04
+Pre-train Epoch [123/400], Train Loss: 0.026648, Val Loss: 0.045103, LR: 3.24e-04
+Pre-train Epoch [124/400], Train Loss: 0.026982, Val Loss: 0.045842, LR: 3.17e-04
+Pre-train Epoch [125/400], Train Loss: 0.027117, Val Loss: 0.044904, LR: 3.09e-04
+Pre-train Epoch [126/400], Train Loss: 0.027755, Val Loss: 0.046943, LR: 3.02e-04
+Pre-train Epoch [127/400], Train Loss: 0.026539, Val Loss: 0.047010, LR: 2.95e-04
+Pre-train Epoch [128/400], Train Loss: 0.026705, Val Loss: 0.046563, LR: 2.88e-04
+Pre-train Epoch [129/400], Train Loss: 0.027054, Val Loss: 0.049785, LR: 2.81e-04
+Pre-train Epoch [130/400], Train Loss: 0.025438, Val Loss: 0.045216, LR: 2.74e-04
+Pre-train Epoch [131/400], Train Loss: 0.025951, Val Loss: 0.048558, LR: 2.67e-04
+Pre-train Epoch [132/400], Train Loss: 0.026098, Val Loss: 0.046999, LR: 2.60e-04
+Pre-train Epoch [133/400], Train Loss: 0.026292, Val Loss: 0.044306, LR: 2.53e-04
+Pre-train Epoch [134/400], Train Loss: 0.025911, Val Loss: 0.048172, LR: 2.46e-04
+Pre-train Epoch [135/400], Train Loss: 0.024750, Val Loss: 0.049410, LR: 2.40e-04
+Pre-train Epoch [136/400], Train Loss: 0.026670, Val Loss: 0.049644, LR: 2.33e-04
+Pre-train Epoch [137/400], Train Loss: 0.024055, Val Loss: 0.049032, LR: 2.26e-04
+Pre-train Epoch [138/400], Train Loss: 0.026419, Val Loss: 0.047825, LR: 2.20e-04
+Pre-train Epoch [139/400], Train Loss: 0.025363, Val Loss: 0.045775, LR: 2.13e-04
+Pre-train Epoch [140/400], Train Loss: 0.024838, Val Loss: 0.044968, LR: 2.07e-04
+Pre-train Epoch [141/400], Train Loss: 0.024862, Val Loss: 0.044601, LR: 2.01e-04
+Pre-train Epoch [142/400], Train Loss: 0.025423, Val Loss: 0.047218, LR: 1.94e-04
+Pre-train Epoch [143/400], Train Loss: 0.024977, Val Loss: 0.046305, LR: 1.88e-04
+Pre-train Epoch [144/400], Train Loss: 0.024247, Val Loss: 0.046657, LR: 1.82e-04
+Pre-train Epoch [145/400], Train Loss: 0.023967, Val Loss: 0.047360, LR: 1.76e-04
+Pre-train Epoch [146/400], Train Loss: 0.023948, Val Loss: 0.048964, LR: 1.70e-04
+Pre-train Epoch [147/400], Train Loss: 0.023959, Val Loss: 0.047635, LR: 1.64e-04
+Pre-train Epoch [148/400], Train Loss: 0.024323, Val Loss: 0.047909, LR: 1.59e-04
+Pre-train Epoch [149/400], Train Loss: 0.023553, Val Loss: 0.047395, LR: 1.53e-04
+Pre-train Epoch [150/400], Train Loss: 0.023157, Val Loss: 0.046365, LR: 1.47e-04
+Pre-train Epoch [151/400], Train Loss: 0.023792, Val Loss: 0.046489, LR: 1.42e-04
+Pre-train Epoch [152/400], Train Loss: 0.023326, Val Loss: 0.046418, LR: 1.36e-04
+Pre-train Epoch [153/400], Train Loss: 0.023335, Val Loss: 0.045772, LR: 1.31e-04
+Pre-train Epoch [154/400], Train Loss: 0.022947, Val Loss: 0.045816, LR: 1.26e-04
+Pre-train Epoch [155/400], Train Loss: 0.023304, Val Loss: 0.046206, LR: 1.21e-04
+Pre-train Epoch [156/400], Train Loss: 0.023610, Val Loss: 0.045391, LR: 1.16e-04
+Pre-train Epoch [157/400], Train Loss: 0.023607, Val Loss: 0.045775, LR: 1.11e-04
+Pre-train Epoch [158/400], Train Loss: 0.023268, Val Loss: 0.045471, LR: 1.06e-04
+Pre-train Epoch [159/400], Train Loss: 0.023085, Val Loss: 0.046643, LR: 1.01e-04
+Pre-train Epoch [160/400], Train Loss: 0.023038, Val Loss: 0.046436, LR: 9.64e-05
+Pre-train Epoch [161/400], Train Loss: 0.022933, Val Loss: 0.046281, LR: 9.18e-05
+Pre-train Epoch [162/400], Train Loss: 0.023082, Val Loss: 0.046042, LR: 8.74e-05
+Pre-train Epoch [163/400], Train Loss: 0.022128, Val Loss: 0.047134, LR: 8.30e-05
+Pre-train Epoch [164/400], Train Loss: 0.022893, Val Loss: 0.046500, LR: 7.88e-05
+Pre-train Epoch [165/400], Train Loss: 0.022200, Val Loss: 0.045730, LR: 7.46e-05
+Pre-train Epoch [166/400], Train Loss: 0.022103, Val Loss: 0.045624, LR: 7.06e-05
+Pre-train Epoch [167/400], Train Loss: 0.022373, Val Loss: 0.046633, LR: 6.66e-05
+Pre-train Epoch [168/400], Train Loss: 0.022300, Val Loss: 0.046313, LR: 6.28e-05
+Pre-train Epoch [169/400], Train Loss: 0.022559, Val Loss: 0.045475, LR: 5.91e-05
+Pre-train Epoch [170/400], Train Loss: 0.022391, Val Loss: 0.045458, LR: 5.54e-05
+Pre-train Epoch [171/400], Train Loss: 0.022846, Val Loss: 0.046226, LR: 5.19e-05
+Pre-train Epoch [172/400], Train Loss: 0.022270, Val Loss: 0.046334, LR: 4.85e-05
+Pre-train Epoch [173/400], Train Loss: 0.022995, Val Loss: 0.046302, LR: 4.53e-05
+Pre-train Epoch [174/400], Train Loss: 0.021770, Val Loss: 0.046924, LR: 4.21e-05
+Pre-train Epoch [175/400], Train Loss: 0.022214, Val Loss: 0.045996, LR: 3.90e-05
+Pre-train Epoch [176/400], Train Loss: 0.021737, Val Loss: 0.047206, LR: 3.61e-05
+Pre-train Epoch [177/400], Train Loss: 0.022563, Val Loss: 0.046208, LR: 3.32e-05
+Pre-train Epoch [178/400], Train Loss: 0.022622, Val Loss: 0.045790, LR: 3.05e-05
+Pre-train Epoch [179/400], Train Loss: 0.022491, Val Loss: 0.046367, LR: 2.79e-05
+Pre-train Epoch [180/400], Train Loss: 0.022131, Val Loss: 0.046405, LR: 2.54e-05
+Pre-train Epoch [181/400], Train Loss: 0.022110, Val Loss: 0.046723, LR: 2.31e-05
+Pre-train Epoch [182/400], Train Loss: 0.021267, Val Loss: 0.046564, LR: 2.08e-05
+Pre-train Epoch [183/400], Train Loss: 0.022155, Val Loss: 0.046362, LR: 1.87e-05
+Pre-train Epoch [184/400], Train Loss: 0.021801, Val Loss: 0.046602, LR: 1.67e-05
+Pre-train Epoch [185/400], Train Loss: 0.021711, Val Loss: 0.046431, LR: 1.48e-05
+Pre-train Epoch [186/400], Train Loss: 0.022593, Val Loss: 0.046531, LR: 1.30e-05
+Pre-train Epoch [187/400], Train Loss: 0.021819, Val Loss: 0.046919, LR: 1.14e-05
+Pre-train Epoch [188/400], Train Loss: 0.022404, Val Loss: 0.046751, LR: 9.85e-06
+Pre-train Epoch [189/400], Train Loss: 0.021477, Val Loss: 0.046659, LR: 8.44e-06
+Pre-train Epoch [190/400], Train Loss: 0.021862, Val Loss: 0.046659, LR: 7.15e-06
+Pre-train Epoch [191/400], Train Loss: 0.021743, Val Loss: 0.046772, LR: 5.98e-06
+Pre-train Epoch [192/400], Train Loss: 0.022544, Val Loss: 0.046646, LR: 4.94e-06
+Pre-train Epoch [193/400], Train Loss: 0.022299, Val Loss: 0.046703, LR: 4.02e-06
+Pre-train Epoch [194/400], Train Loss: 0.022135, Val Loss: 0.046636, LR: 3.22e-06
+Pre-train Epoch [195/400], Train Loss: 0.021473, Val Loss: 0.046694, LR: 2.54e-06
+Pre-train Epoch [196/400], Train Loss: 0.022245, Val Loss: 0.046691, LR: 1.99e-06
+Pre-train Epoch [197/400], Train Loss: 0.021776, Val Loss: 0.046686, LR: 1.55e-06
+Pre-train Epoch [198/400], Train Loss: 0.021970, Val Loss: 0.046618, LR: 1.25e-06
+Pre-train Epoch [199/400], Train Loss: 0.021400, Val Loss: 0.046586, LR: 1.06e-06
+Pre-train Epoch [200/400], Train Loss: 0.021433, Val Loss: 0.046582, LR: 1.00e-03
+Pre-train Epoch [201/400], Train Loss: 0.030541, Val Loss: 0.051679, LR: 1.00e-03
+Pre-train Epoch [202/400], Train Loss: 0.047092, Val Loss: 0.059153, LR: 1.00e-03
+Pre-train Epoch [203/400], Train Loss: 0.049390, Val Loss: 0.059666, LR: 9.99e-04
+Pre-train Epoch [204/400], Train Loss: 0.050818, Val Loss: 0.061801, LR: 9.99e-04
+Pre-train Epoch [205/400], Train Loss: 0.048829, Val Loss: 0.058928, LR: 9.98e-04
+Pre-train Epoch [206/400], Train Loss: 0.046678, Val Loss: 0.053091, LR: 9.98e-04
+Pre-train Epoch [207/400], Train Loss: 0.042318, Val Loss: 0.052684, LR: 9.97e-04
+Pre-train Epoch [208/400], Train Loss: 0.040572, Val Loss: 0.049907, LR: 9.96e-04
+Pre-train Epoch [209/400], Train Loss: 0.039062, Val Loss: 0.052867, LR: 9.95e-04
+Pre-train Epoch [210/400], Train Loss: 0.042545, Val Loss: 0.054275, LR: 9.94e-04
+Pre-train Epoch [211/400], Train Loss: 0.040771, Val Loss: 0.050790, LR: 9.93e-04
+Pre-train Epoch [212/400], Train Loss: 0.038306, Val Loss: 0.052183, LR: 9.91e-04
+Pre-train Epoch [213/400], Train Loss: 0.037557, Val Loss: 0.056709, LR: 9.90e-04
+Pre-train Epoch [214/400], Train Loss: 0.036742, Val Loss: 0.053917, LR: 9.88e-04
+Pre-train Epoch [215/400], Train Loss: 0.037670, Val Loss: 0.057010, LR: 9.86e-04
+Pre-train Epoch [216/400], Train Loss: 0.035878, Val Loss: 0.052559, LR: 9.84e-04
+Pre-train Epoch [217/400], Train Loss: 0.035261, Val Loss: 0.048396, LR: 9.82e-04
+Pre-train Epoch [218/400], Train Loss: 0.038006, Val Loss: 0.051525, LR: 9.80e-04
+Pre-train Epoch [219/400], Train Loss: 0.037624, Val Loss: 0.058361, LR: 9.78e-04
+Pre-train Epoch [220/400], Train Loss: 0.037234, Val Loss: 0.048683, LR: 9.76e-04
+Pre-train Epoch [221/400], Train Loss: 0.034197, Val Loss: 0.050890, LR: 9.73e-04
+Pre-train Epoch [222/400], Train Loss: 0.034290, Val Loss: 0.053476, LR: 9.70e-04
+Pre-train Epoch [223/400], Train Loss: 0.035900, Val Loss: 0.047808, LR: 9.68e-04
+Pre-train Epoch [224/400], Train Loss: 0.033731, Val Loss: 0.053423, LR: 9.65e-04
+Pre-train Epoch [225/400], Train Loss: 0.034684, Val Loss: 0.047177, LR: 9.62e-04
+Pre-train Epoch [226/400], Train Loss: 0.035809, Val Loss: 0.048043, LR: 9.59e-04
+Pre-train Epoch [227/400], Train Loss: 0.035389, Val Loss: 0.051404, LR: 9.56e-04
+Pre-train Epoch [228/400], Train Loss: 0.034127, Val Loss: 0.049613, LR: 9.52e-04
+Pre-train Epoch [229/400], Train Loss: 0.032125, Val Loss: 0.050419, LR: 9.49e-04
+Pre-train Epoch [230/400], Train Loss: 0.033015, Val Loss: 0.051615, LR: 9.46e-04
+Pre-train Epoch [231/400], Train Loss: 0.033696, Val Loss: 0.053678, LR: 9.42e-04
+Pre-train Epoch [232/400], Train Loss: 0.034136, Val Loss: 0.048352, LR: 9.38e-04
+Pre-train Epoch [233/400], Train Loss: 0.031033, Val Loss: 0.048809, LR: 9.34e-04
+Pre-train Epoch [234/400], Train Loss: 0.031184, Val Loss: 0.053802, LR: 9.30e-04
+Pre-train Epoch [235/400], Train Loss: 0.032694, Val Loss: 0.054166, LR: 9.26e-04
+Pre-train Epoch [236/400], Train Loss: 0.032874, Val Loss: 0.048505, LR: 9.22e-04
+Pre-train Epoch [237/400], Train Loss: 0.032675, Val Loss: 0.046730, LR: 9.18e-04
+Pre-train Epoch [238/400], Train Loss: 0.032832, Val Loss: 0.051197, LR: 9.14e-04
+Pre-train Epoch [239/400], Train Loss: 0.032806, Val Loss: 0.048750, LR: 9.09e-04
+Pre-train Epoch [240/400], Train Loss: 0.032448, Val Loss: 0.048736, LR: 9.05e-04
+Pre-train Epoch [241/400], Train Loss: 0.032812, Val Loss: 0.049975, LR: 9.00e-04
+Pre-train Epoch [242/400], Train Loss: 0.033033, Val Loss: 0.049776, LR: 8.95e-04
+Pre-train Epoch [243/400], Train Loss: 0.033315, Val Loss: 0.051868, LR: 8.90e-04
+Pre-train Epoch [244/400], Train Loss: 0.029852, Val Loss: 0.046483, LR: 8.85e-04
+Pre-train Epoch [245/400], Train Loss: 0.029740, Val Loss: 0.045922, LR: 8.80e-04
+Pre-train Epoch [246/400], Train Loss: 0.029522, Val Loss: 0.051003, LR: 8.75e-04
+Pre-train Epoch [247/400], Train Loss: 0.030124, Val Loss: 0.051323, LR: 8.70e-04
+Pre-train Epoch [248/400], Train Loss: 0.030357, Val Loss: 0.049494, LR: 8.65e-04
+Pre-train Epoch [249/400], Train Loss: 0.031180, Val Loss: 0.046973, LR: 8.59e-04
+Pre-train Epoch [250/400], Train Loss: 0.030326, Val Loss: 0.047259, LR: 8.54e-04
+Pre-train Epoch [251/400], Train Loss: 0.030039, Val Loss: 0.050777, LR: 8.48e-04
+Pre-train Epoch [252/400], Train Loss: 0.029835, Val Loss: 0.050997, LR: 8.42e-04
+Pre-train Epoch [253/400], Train Loss: 0.030348, Val Loss: 0.050472, LR: 8.37e-04
+Pre-train Epoch [254/400], Train Loss: 0.030950, Val Loss: 0.049792, LR: 8.31e-04
+Pre-train Epoch [255/400], Train Loss: 0.030459, Val Loss: 0.050491, LR: 8.25e-04
+Pre-train Epoch [256/400], Train Loss: 0.030524, Val Loss: 0.050743, LR: 8.19e-04
+Pre-train Epoch [257/400], Train Loss: 0.030540, Val Loss: 0.049677, LR: 8.13e-04
+Pre-train Epoch [258/400], Train Loss: 0.029692, Val Loss: 0.048161, LR: 8.07e-04
+Pre-train Epoch [259/400], Train Loss: 0.028220, Val Loss: 0.049615, LR: 8.00e-04
+Pre-train Epoch [260/400], Train Loss: 0.027482, Val Loss: 0.048355, LR: 7.94e-04
+Pre-train Epoch [261/400], Train Loss: 0.027427, Val Loss: 0.048007, LR: 7.88e-04
+Pre-train Epoch [262/400], Train Loss: 0.027653, Val Loss: 0.047895, LR: 7.81e-04
+Pre-train Epoch [263/400], Train Loss: 0.029444, Val Loss: 0.045148, LR: 7.75e-04
+Pre-train Epoch [264/400], Train Loss: 0.027934, Val Loss: 0.051070, LR: 7.68e-04
+Pre-train Epoch [265/400], Train Loss: 0.028163, Val Loss: 0.050844, LR: 7.61e-04
+Pre-train Epoch [266/400], Train Loss: 0.029293, Val Loss: 0.053638, LR: 7.55e-04
+Pre-train Epoch [267/400], Train Loss: 0.028761, Val Loss: 0.047867, LR: 7.48e-04
+Pre-train Epoch [268/400], Train Loss: 0.027609, Val Loss: 0.051570, LR: 7.41e-04
+Pre-train Epoch [269/400], Train Loss: 0.026709, Val Loss: 0.050110, LR: 7.34e-04
+Pre-train Epoch [270/400], Train Loss: 0.026099, Val Loss: 0.048308, LR: 7.27e-04
+Pre-train Epoch [271/400], Train Loss: 0.026830, Val Loss: 0.050464, LR: 7.20e-04
+Pre-train Epoch [272/400], Train Loss: 0.025243, Val Loss: 0.048834, LR: 7.13e-04
+Pre-train Epoch [273/400], Train Loss: 0.025619, Val Loss: 0.048666, LR: 7.06e-04
+Pre-train Epoch [274/400], Train Loss: 0.025989, Val Loss: 0.049572, LR: 6.99e-04
+Pre-train Epoch [275/400], Train Loss: 0.026754, Val Loss: 0.050873, LR: 6.92e-04
+Pre-train Epoch [276/400], Train Loss: 0.026325, Val Loss: 0.047368, LR: 6.84e-04
+Pre-train Epoch [277/400], Train Loss: 0.026946, Val Loss: 0.046509, LR: 6.77e-04
+Pre-train Epoch [278/400], Train Loss: 0.024918, Val Loss: 0.052586, LR: 6.70e-04
+Pre-train Epoch [279/400], Train Loss: 0.025656, Val Loss: 0.049993, LR: 6.62e-04
+Pre-train Epoch [280/400], Train Loss: 0.024382, Val Loss: 0.049157, LR: 6.55e-04
+Pre-train Epoch [281/400], Train Loss: 0.025433, Val Loss: 0.050348, LR: 6.47e-04
+Pre-train Epoch [282/400], Train Loss: 0.025001, Val Loss: 0.047510, LR: 6.40e-04
+Pre-train Epoch [283/400], Train Loss: 0.025982, Val Loss: 0.053029, LR: 6.32e-04
+Pre-train Epoch [284/400], Train Loss: 0.024099, Val Loss: 0.051462, LR: 6.25e-04
+Pre-train Epoch [285/400], Train Loss: 0.024827, Val Loss: 0.046820, LR: 6.17e-04
+Pre-train Epoch [286/400], Train Loss: 0.024718, Val Loss: 0.047846, LR: 6.09e-04
+Pre-train Epoch [287/400], Train Loss: 0.023740, Val Loss: 0.051086, LR: 6.02e-04
+Pre-train Epoch [288/400], Train Loss: 0.023866, Val Loss: 0.048127, LR: 5.94e-04
+Pre-train Epoch [289/400], Train Loss: 0.025182, Val Loss: 0.051565, LR: 5.86e-04
+Pre-train Epoch [290/400], Train Loss: 0.023867, Val Loss: 0.049163, LR: 5.79e-04
+Pre-train Epoch [291/400], Train Loss: 0.023920, Val Loss: 0.049082, LR: 5.71e-04
+Pre-train Epoch [292/400], Train Loss: 0.022961, Val Loss: 0.051895, LR: 5.63e-04
+Pre-train Epoch [293/400], Train Loss: 0.023489, Val Loss: 0.049840, LR: 5.55e-04
+Pre-train Epoch [294/400], Train Loss: 0.024816, Val Loss: 0.050884, LR: 5.48e-04
+Pre-train Epoch [295/400], Train Loss: 0.023406, Val Loss: 0.050694, LR: 5.40e-04
+Pre-train Epoch [296/400], Train Loss: 0.025128, Val Loss: 0.052181, LR: 5.32e-04
+Pre-train Epoch [297/400], Train Loss: 0.022592, Val Loss: 0.051184, LR: 5.24e-04
+Pre-train Epoch [298/400], Train Loss: 0.022046, Val Loss: 0.050321, LR: 5.16e-04
+Pre-train Epoch [299/400], Train Loss: 0.022656, Val Loss: 0.050937, LR: 5.08e-04
+Pre-train Epoch [300/400], Train Loss: 0.021206, Val Loss: 0.052612, LR: 5.01e-04
+Pre-train Epoch [301/400], Train Loss: 0.021975, Val Loss: 0.050522, LR: 4.93e-04
+Pre-train Epoch [302/400], Train Loss: 0.022403, Val Loss: 0.050016, LR: 4.85e-04
+Pre-train Epoch [303/400], Train Loss: 0.021541, Val Loss: 0.047575, LR: 4.77e-04
+Pre-train Epoch [304/400], Train Loss: 0.022686, Val Loss: 0.051539, LR: 4.69e-04
+Pre-train Epoch [305/400], Train Loss: 0.022089, Val Loss: 0.049831, LR: 4.61e-04
+Pre-train Epoch [306/400], Train Loss: 0.022432, Val Loss: 0.050029, LR: 4.53e-04
+Pre-train Epoch [307/400], Train Loss: 0.023255, Val Loss: 0.052792, LR: 4.46e-04
+Pre-train Epoch [308/400], Train Loss: 0.022346, Val Loss: 0.049171, LR: 4.38e-04
+Pre-train Epoch [309/400], Train Loss: 0.023397, Val Loss: 0.049506, LR: 4.30e-04
+Pre-train Epoch [310/400], Train Loss: 0.021973, Val Loss: 0.048173, LR: 4.22e-04
+Pre-train Epoch [311/400], Train Loss: 0.021845, Val Loss: 0.050374, LR: 4.15e-04
+Pre-train Epoch [312/400], Train Loss: 0.021134, Val Loss: 0.048152, LR: 4.07e-04
+Pre-train Epoch [313/400], Train Loss: 0.021334, Val Loss: 0.049636, LR: 3.99e-04
+Pre-train Epoch [314/400], Train Loss: 0.020229, Val Loss: 0.049510, LR: 3.92e-04
+Pre-train Epoch [315/400], Train Loss: 0.020510, Val Loss: 0.049532, LR: 3.84e-04
+Pre-train Epoch [316/400], Train Loss: 0.021264, Val Loss: 0.049431, LR: 3.76e-04
+Pre-train Epoch [317/400], Train Loss: 0.020609, Val Loss: 0.049435, LR: 3.69e-04
+Pre-train Epoch [318/400], Train Loss: 0.020575, Val Loss: 0.049023, LR: 3.61e-04
+Pre-train Epoch [319/400], Train Loss: 0.020497, Val Loss: 0.050484, LR: 3.54e-04
+Pre-train Epoch [320/400], Train Loss: 0.019822, Val Loss: 0.049393, LR: 3.46e-04
+Pre-train Epoch [321/400], Train Loss: 0.020414, Val Loss: 0.047946, LR: 3.39e-04
+Pre-train Epoch [322/400], Train Loss: 0.019931, Val Loss: 0.047869, LR: 3.31e-04
+Pre-train Epoch [323/400], Train Loss: 0.020038, Val Loss: 0.048877, LR: 3.24e-04
+Pre-train Epoch [324/400], Train Loss: 0.020567, Val Loss: 0.050760, LR: 3.17e-04
+Pre-train Epoch [325/400], Train Loss: 0.020215, Val Loss: 0.049647, LR: 3.09e-04
+Pre-train Epoch [326/400], Train Loss: 0.019540, Val Loss: 0.046921, LR: 3.02e-04
+Pre-train Epoch [327/400], Train Loss: 0.019741, Val Loss: 0.049619, LR: 2.95e-04
+Pre-train Epoch [328/400], Train Loss: 0.019510, Val Loss: 0.049335, LR: 2.88e-04
+Pre-train Epoch [329/400], Train Loss: 0.021172, Val Loss: 0.049028, LR: 2.81e-04
+Pre-train Epoch [330/400], Train Loss: 0.019985, Val Loss: 0.045713, LR: 2.74e-04
+Pre-train Epoch [331/400], Train Loss: 0.018752, Val Loss: 0.046150, LR: 2.67e-04
+Pre-train Epoch [332/400], Train Loss: 0.019018, Val Loss: 0.048612, LR: 2.60e-04
+Pre-train Epoch [333/400], Train Loss: 0.019503, Val Loss: 0.047445, LR: 2.53e-04
+Pre-train Epoch [334/400], Train Loss: 0.020152, Val Loss: 0.048519, LR: 2.46e-04
+Pre-train Epoch [335/400], Train Loss: 0.018755, Val Loss: 0.050142, LR: 2.40e-04
+Pre-train Epoch [336/400], Train Loss: 0.019917, Val Loss: 0.048268, LR: 2.33e-04
+Pre-train Epoch [337/400], Train Loss: 0.018655, Val Loss: 0.046370, LR: 2.26e-04
+Pre-train Epoch [338/400], Train Loss: 0.020030, Val Loss: 0.047862, LR: 2.20e-04
+Pre-train Epoch [339/400], Train Loss: 0.018328, Val Loss: 0.047991, LR: 2.13e-04
+Pre-train Epoch [340/400], Train Loss: 0.018930, Val Loss: 0.045708, LR: 2.07e-04
+Pre-train Epoch [341/400], Train Loss: 0.018582, Val Loss: 0.047101, LR: 2.01e-04
+Pre-train Epoch [342/400], Train Loss: 0.018493, Val Loss: 0.047347, LR: 1.94e-04
+Pre-train Epoch [343/400], Train Loss: 0.017927, Val Loss: 0.045953, LR: 1.88e-04
+Pre-train Epoch [344/400], Train Loss: 0.017865, Val Loss: 0.045012, LR: 1.82e-04
+Pre-train Epoch [345/400], Train Loss: 0.018707, Val Loss: 0.046289, LR: 1.76e-04
+Pre-train Epoch [346/400], Train Loss: 0.018033, Val Loss: 0.047035, LR: 1.70e-04
+Pre-train Epoch [347/400], Train Loss: 0.018144, Val Loss: 0.049167, LR: 1.64e-04
+Pre-train Epoch [348/400], Train Loss: 0.018781, Val Loss: 0.048778, LR: 1.59e-04
+Pre-train Epoch [349/400], Train Loss: 0.018075, Val Loss: 0.049507, LR: 1.53e-04
+Pre-train Epoch [350/400], Train Loss: 0.018330, Val Loss: 0.048046, LR: 1.47e-04
+Pre-train Epoch [351/400], Train Loss: 0.017692, Val Loss: 0.047129, LR: 1.42e-04
+Pre-train Epoch [352/400], Train Loss: 0.018405, Val Loss: 0.046866, LR: 1.36e-04
+Pre-train Epoch [353/400], Train Loss: 0.017900, Val Loss: 0.047925, LR: 1.31e-04
+Pre-train Epoch [354/400], Train Loss: 0.017403, Val Loss: 0.049478, LR: 1.26e-04
+Pre-train Epoch [355/400], Train Loss: 0.018018, Val Loss: 0.050220, LR: 1.21e-04
+Pre-train Epoch [356/400], Train Loss: 0.017323, Val Loss: 0.050296, LR: 1.16e-04
+Pre-train Epoch [357/400], Train Loss: 0.017995, Val Loss: 0.050398, LR: 1.11e-04
+Pre-train Epoch [358/400], Train Loss: 0.017780, Val Loss: 0.049353, LR: 1.06e-04
+Pre-train Epoch [359/400], Train Loss: 0.017596, Val Loss: 0.049854, LR: 1.01e-04
+Pre-train Epoch [360/400], Train Loss: 0.017631, Val Loss: 0.049812, LR: 9.64e-05
+Pre-train Epoch [361/400], Train Loss: 0.017734, Val Loss: 0.048272, LR: 9.18e-05
+Pre-train Epoch [362/400], Train Loss: 0.017408, Val Loss: 0.048407, LR: 8.74e-05
+Pre-train Epoch [363/400], Train Loss: 0.017114, Val Loss: 0.048351, LR: 8.30e-05
+Pre-train Epoch [364/400], Train Loss: 0.016838, Val Loss: 0.047881, LR: 7.88e-05
+Pre-train Epoch [365/400], Train Loss: 0.018197, Val Loss: 0.048901, LR: 7.46e-05
+Pre-train Epoch [366/400], Train Loss: 0.017261, Val Loss: 0.048293, LR: 7.06e-05
+Pre-train Epoch [367/400], Train Loss: 0.018306, Val Loss: 0.049007, LR: 6.66e-05
+Pre-train Epoch [368/400], Train Loss: 0.017824, Val Loss: 0.048817, LR: 6.28e-05
+Pre-train Epoch [369/400], Train Loss: 0.017274, Val Loss: 0.049353, LR: 5.91e-05
+Pre-train Epoch [370/400], Train Loss: 0.017465, Val Loss: 0.049208, LR: 5.54e-05
+Pre-train Epoch [371/400], Train Loss: 0.016802, Val Loss: 0.049153, LR: 5.19e-05
+Pre-train Epoch [372/400], Train Loss: 0.017178, Val Loss: 0.049378, LR: 4.85e-05
+Pre-train Epoch [373/400], Train Loss: 0.017566, Val Loss: 0.049545, LR: 4.53e-05
+Pre-train Epoch [374/400], Train Loss: 0.017507, Val Loss: 0.049363, LR: 4.21e-05
+Pre-train Epoch [375/400], Train Loss: 0.017191, Val Loss: 0.049461, LR: 3.90e-05
+Pre-train Epoch [376/400], Train Loss: 0.017101, Val Loss: 0.049270, LR: 3.61e-05
+Pre-train Epoch [377/400], Train Loss: 0.017101, Val Loss: 0.049142, LR: 3.32e-05
+Pre-train Epoch [378/400], Train Loss: 0.017574, Val Loss: 0.049161, LR: 3.05e-05
+Pre-train Epoch [379/400], Train Loss: 0.016991, Val Loss: 0.049089, LR: 2.79e-05
+Pre-train Epoch [380/400], Train Loss: 0.016544, Val Loss: 0.048851, LR: 2.54e-05
+Pre-train Epoch [381/400], Train Loss: 0.017018, Val Loss: 0.048974, LR: 2.31e-05
+Pre-train Epoch [382/400], Train Loss: 0.016494, Val Loss: 0.049107, LR: 2.08e-05
+Pre-train Epoch [383/400], Train Loss: 0.017113, Val Loss: 0.048905, LR: 1.87e-05
+Pre-train Epoch [384/400], Train Loss: 0.017194, Val Loss: 0.048884, LR: 1.67e-05
+Pre-train Epoch [385/400], Train Loss: 0.016632, Val Loss: 0.048771, LR: 1.48e-05
+Pre-train Epoch [386/400], Train Loss: 0.016408, Val Loss: 0.048550, LR: 1.30e-05
+Pre-train Epoch [387/400], Train Loss: 0.017658, Val Loss: 0.048696, LR: 1.14e-05
+Pre-train Epoch [388/400], Train Loss: 0.016969, Val Loss: 0.048726, LR: 9.85e-06
+Pre-train Epoch [389/400], Train Loss: 0.016915, Val Loss: 0.048585, LR: 8.44e-06
+Pre-train Epoch [390/400], Train Loss: 0.017013, Val Loss: 0.048680, LR: 7.15e-06
+Pre-train Epoch [391/400], Train Loss: 0.016751, Val Loss: 0.048672, LR: 5.98e-06
+Pre-train Epoch [392/400], Train Loss: 0.016856, Val Loss: 0.048657, LR: 4.94e-06
+Pre-train Epoch [393/400], Train Loss: 0.016679, Val Loss: 0.048620, LR: 4.02e-06
+Pre-train Epoch [394/400], Train Loss: 0.017045, Val Loss: 0.048676, LR: 3.22e-06
+Pre-train Epoch [395/400], Train Loss: 0.017009, Val Loss: 0.048677, LR: 2.54e-06
+Pre-train Epoch [396/400], Train Loss: 0.017220, Val Loss: 0.048676, LR: 1.99e-06
+Pre-train Epoch [397/400], Train Loss: 0.017301, Val Loss: 0.048677, LR: 1.55e-06
+Pre-train Epoch [398/400], Train Loss: 0.017238, Val Loss: 0.048652, LR: 1.25e-06
+Pre-train Epoch [399/400], Train Loss: 0.016976, Val Loss: 0.048649, LR: 1.06e-06
+Pre-train Epoch [400/400], Train Loss: 0.016514, Val Loss: 0.048625, LR: 1.00e-03
+[BEST] 新的全局最佳损失 0.043940，保存至 results/two_stage_opamp_pretrained.pth
+
+所有独立实验完成，最终最佳预训练模型损失: 0.043940
+--- [阶段一完成] 加载最佳预训练模型: results/two_stage_opamp_pretrained.pth ---
+[Finetune] two_stage_opamp: 使用等权重 NLL。
+
+--- [阶段二] 开始整体模型微调 ---
+Fine-tune Epoch [1/5000], Train Loss: 1.0610, Val NLL: 0.3907, LR_head: 2.00e-03
+- 微调验证损失改善 (inf -> 0.3907)，保存模型...
+Fine-tune Epoch [2/5000], Train Loss: 0.4437, Val NLL: 0.2108, LR_head: 2.00e-03
+- 微调验证损失改善 (0.3907 -> 0.2108)，保存模型...
+Fine-tune Epoch [3/5000], Train Loss: 0.2942, Val NLL: 0.0947, LR_head: 2.00e-03
+- 微调验证损失改善 (0.2108 -> 0.0947)，保存模型...
+Fine-tune Epoch [4/5000], Train Loss: 0.1529, Val NLL: 0.0119, LR_head: 2.00e-03
+- 微调验证损失改善 (0.0947 -> 0.0119)，保存模型...
+Fine-tune Epoch [5/5000], Train Loss: 0.0772, Val NLL: -0.0590, LR_head: 2.00e-03
+- 微调验证损失改善 (0.0119 -> -0.0590)，保存模型...
+Fine-tune Epoch [6/5000], Train Loss: -0.0211, Val NLL: -0.1365, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.0590 -> -0.1365)，保存模型...
+Fine-tune Epoch [7/5000], Train Loss: -0.0764, Val NLL: -0.2029, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.1365 -> -0.2029)，保存模型...
+Fine-tune Epoch [8/5000], Train Loss: -0.1494, Val NLL: -0.2739, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.2029 -> -0.2739)，保存模型...
+Fine-tune Epoch [9/5000], Train Loss: -0.2046, Val NLL: -0.3323, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.2739 -> -0.3323)，保存模型...
+Fine-tune Epoch [10/5000], Train Loss: -0.2767, Val NLL: -0.3925, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.3323 -> -0.3925)，保存模型...
+Fine-tune Epoch [11/5000], Train Loss: -0.3254, Val NLL: -0.4450, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.3925 -> -0.4450)，保存模型...
+Fine-tune Epoch [12/5000], Train Loss: -0.3793, Val NLL: -0.4964, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.4450 -> -0.4964)，保存模型...
+Fine-tune Epoch [13/5000], Train Loss: -0.4106, Val NLL: -0.5396, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.4964 -> -0.5396)，保存模型...
+Fine-tune Epoch [14/5000], Train Loss: -0.4638, Val NLL: -0.5905, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.5396 -> -0.5905)，保存模型...
+Fine-tune Epoch [15/5000], Train Loss: -0.5034, Val NLL: -0.6180, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.5905 -> -0.6180)，保存模型...
+Fine-tune Epoch [16/5000], Train Loss: -0.5217, Val NLL: -0.6592, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.6180 -> -0.6592)，保存模型...
+Fine-tune Epoch [17/5000], Train Loss: -0.5610, Val NLL: -0.6969, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.6592 -> -0.6969)，保存模型...
+Fine-tune Epoch [18/5000], Train Loss: -0.5931, Val NLL: -0.7223, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.6969 -> -0.7223)，保存模型...
+Fine-tune Epoch [19/5000], Train Loss: -0.6201, Val NLL: -0.7595, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.7223 -> -0.7595)，保存模型...
+Fine-tune Epoch [20/5000], Train Loss: -0.6482, Val NLL: -0.7729, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.7595 -> -0.7729)，保存模型...
+Fine-tune Epoch [21/5000], Train Loss: -0.6652, Val NLL: -0.8134, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.7729 -> -0.8134)，保存模型...
+Fine-tune Epoch [22/5000], Train Loss: -0.7089, Val NLL: -0.8368, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.8134 -> -0.8368)，保存模型...
+Fine-tune Epoch [23/5000], Train Loss: -0.7392, Val NLL: -0.8558, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.8368 -> -0.8558)，保存模型...
+Fine-tune Epoch [24/5000], Train Loss: -0.7386, Val NLL: -0.8927, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.8558 -> -0.8927)，保存模型...
+Fine-tune Epoch [25/5000], Train Loss: -0.7615, Val NLL: -0.9023, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.8927 -> -0.9023)，保存模型...
+Fine-tune Epoch [26/5000], Train Loss: -0.7766, Val NLL: -0.9203, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.9023 -> -0.9203)，保存模型...
+Fine-tune Epoch [27/5000], Train Loss: -0.8034, Val NLL: -0.9240, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.9203 -> -0.9240)，保存模型...
+Fine-tune Epoch [28/5000], Train Loss: -0.8241, Val NLL: -0.9516, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.9240 -> -0.9516)，保存模型...
+Fine-tune Epoch [29/5000], Train Loss: -0.8393, Val NLL: -0.9662, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.9516 -> -0.9662)，保存模型...
+Fine-tune Epoch [30/5000], Train Loss: -0.8298, Val NLL: -0.9815, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.9662 -> -0.9815)，保存模型...
+Fine-tune Epoch [31/5000], Train Loss: -0.8631, Val NLL: -1.0055, LR_head: 2.00e-03
+- 微调验证损失改善 (-0.9815 -> -1.0055)，保存模型...
+Fine-tune Epoch [32/5000], Train Loss: -0.8565, Val NLL: -1.0127, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.0055 -> -1.0127)，保存模型...
+Fine-tune Epoch [33/5000], Train Loss: -0.8918, Val NLL: -1.0379, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.0127 -> -1.0379)，保存模型...
+Fine-tune Epoch [34/5000], Train Loss: -0.9024, Val NLL: -1.0402, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.0379 -> -1.0402)，保存模型...
+Fine-tune Epoch [35/5000], Train Loss: -0.9046, Val NLL: -1.0575, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.0402 -> -1.0575)，保存模型...
+Fine-tune Epoch [36/5000], Train Loss: -0.9249, Val NLL: -1.0655, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.0575 -> -1.0655)，保存模型...
+Fine-tune Epoch [37/5000], Train Loss: -0.9196, Val NLL: -1.0884, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.0655 -> -1.0884)，保存模型...
+Fine-tune Epoch [38/5000], Train Loss: -0.9444, Val NLL: -1.1065, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.0884 -> -1.1065)，保存模型...
+Fine-tune Epoch [39/5000], Train Loss: -0.9599, Val NLL: -1.1095, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1065 -> -1.1095)，保存模型...
+Fine-tune Epoch [40/5000], Train Loss: -0.9483, Val NLL: -1.1002, LR_head: 2.00e-03
+Fine-tune Epoch [41/5000], Train Loss: -0.9589, Val NLL: -1.1366, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1095 -> -1.1366)，保存模型...
+Fine-tune Epoch [42/5000], Train Loss: -0.9801, Val NLL: -1.1384, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1366 -> -1.1384)，保存模型...
+Fine-tune Epoch [43/5000], Train Loss: -0.9868, Val NLL: -1.1481, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1384 -> -1.1481)，保存模型...
+Fine-tune Epoch [44/5000], Train Loss: -0.9894, Val NLL: -1.1529, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1481 -> -1.1529)，保存模型...
+Fine-tune Epoch [45/5000], Train Loss: -0.9998, Val NLL: -1.1617, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1529 -> -1.1617)，保存模型...
+Fine-tune Epoch [46/5000], Train Loss: -1.0221, Val NLL: -1.1554, LR_head: 2.00e-03
+Fine-tune Epoch [47/5000], Train Loss: -1.0091, Val NLL: -1.1842, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1617 -> -1.1842)，保存模型...
+Fine-tune Epoch [48/5000], Train Loss: -1.0371, Val NLL: -1.1899, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1842 -> -1.1899)，保存模型...
+Fine-tune Epoch [49/5000], Train Loss: -1.0116, Val NLL: -1.1650, LR_head: 2.00e-03
+Fine-tune Epoch [50/5000], Train Loss: -1.0326, Val NLL: -1.2166, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.1899 -> -1.2166)，保存模型...
+Fine-tune Epoch [51/5000], Train Loss: -1.0360, Val NLL: -1.1980, LR_head: 2.00e-03
+Fine-tune Epoch [52/5000], Train Loss: -1.0451, Val NLL: -1.2253, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2166 -> -1.2253)，保存模型...
+Fine-tune Epoch [53/5000], Train Loss: -1.0521, Val NLL: -1.2315, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2253 -> -1.2315)，保存模型...
+Fine-tune Epoch [54/5000], Train Loss: -1.0651, Val NLL: -1.2410, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2315 -> -1.2410)，保存模型...
+Fine-tune Epoch [55/5000], Train Loss: -1.0675, Val NLL: -1.2408, LR_head: 2.00e-03
+Fine-tune Epoch [56/5000], Train Loss: -1.0913, Val NLL: -1.2406, LR_head: 2.00e-03
+Fine-tune Epoch [57/5000], Train Loss: -1.0746, Val NLL: -1.2263, LR_head: 2.00e-03
+Fine-tune Epoch [58/5000], Train Loss: -1.0722, Val NLL: -1.2506, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2410 -> -1.2506)，保存模型...
+Fine-tune Epoch [59/5000], Train Loss: -1.0859, Val NLL: -1.2470, LR_head: 2.00e-03
+Fine-tune Epoch [60/5000], Train Loss: -1.0731, Val NLL: -1.2598, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2506 -> -1.2598)，保存模型...
+Fine-tune Epoch [61/5000], Train Loss: -1.0911, Val NLL: -1.2659, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2598 -> -1.2659)，保存模型...
+Fine-tune Epoch [62/5000], Train Loss: -1.1009, Val NLL: -1.2874, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2659 -> -1.2874)，保存模型...
+Fine-tune Epoch [63/5000], Train Loss: -1.0916, Val NLL: -1.2759, LR_head: 2.00e-03
+Fine-tune Epoch [64/5000], Train Loss: -1.1108, Val NLL: -1.2904, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2874 -> -1.2904)，保存模型...
+Fine-tune Epoch [65/5000], Train Loss: -1.1099, Val NLL: -1.2932, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2904 -> -1.2932)，保存模型...
+Fine-tune Epoch [66/5000], Train Loss: -1.1127, Val NLL: -1.3009, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.2932 -> -1.3009)，保存模型...
+Fine-tune Epoch [67/5000], Train Loss: -1.1118, Val NLL: -1.3044, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3009 -> -1.3044)，保存模型...
+Fine-tune Epoch [68/5000], Train Loss: -1.1387, Val NLL: -1.3219, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3044 -> -1.3219)，保存模型...
+Fine-tune Epoch [69/5000], Train Loss: -1.1409, Val NLL: -1.3135, LR_head: 2.00e-03
+Fine-tune Epoch [70/5000], Train Loss: -1.1202, Val NLL: -1.3330, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3219 -> -1.3330)，保存模型...
+Fine-tune Epoch [71/5000], Train Loss: -1.1325, Val NLL: -1.3231, LR_head: 2.00e-03
+Fine-tune Epoch [72/5000], Train Loss: -1.1482, Val NLL: -1.3416, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3330 -> -1.3416)，保存模型...
+Fine-tune Epoch [73/5000], Train Loss: -1.1700, Val NLL: -1.3442, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3416 -> -1.3442)，保存模型...
+Fine-tune Epoch [74/5000], Train Loss: -1.1439, Val NLL: -1.3324, LR_head: 2.00e-03
+Fine-tune Epoch [75/5000], Train Loss: -1.1626, Val NLL: -1.3585, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3442 -> -1.3585)，保存模型...
+Fine-tune Epoch [76/5000], Train Loss: -1.1643, Val NLL: -1.3450, LR_head: 2.00e-03
+Fine-tune Epoch [77/5000], Train Loss: -1.1532, Val NLL: -1.3570, LR_head: 2.00e-03
+Fine-tune Epoch [78/5000], Train Loss: -1.1733, Val NLL: -1.3711, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3585 -> -1.3711)，保存模型...
+Fine-tune Epoch [79/5000], Train Loss: -1.1625, Val NLL: -1.3665, LR_head: 2.00e-03
+Fine-tune Epoch [80/5000], Train Loss: -1.1663, Val NLL: -1.3601, LR_head: 2.00e-03
+Fine-tune Epoch [81/5000], Train Loss: -1.1634, Val NLL: -1.3742, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3711 -> -1.3742)，保存模型...
+Fine-tune Epoch [82/5000], Train Loss: -1.1627, Val NLL: -1.3620, LR_head: 2.00e-03
+Fine-tune Epoch [83/5000], Train Loss: -1.1995, Val NLL: -1.3829, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3742 -> -1.3829)，保存模型...
+Fine-tune Epoch [84/5000], Train Loss: -1.1881, Val NLL: -1.3913, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3829 -> -1.3913)，保存模型...
+Fine-tune Epoch [85/5000], Train Loss: -1.1971, Val NLL: -1.3880, LR_head: 2.00e-03
+Fine-tune Epoch [86/5000], Train Loss: -1.1998, Val NLL: -1.3797, LR_head: 2.00e-03
+Fine-tune Epoch [87/5000], Train Loss: -1.1964, Val NLL: -1.3744, LR_head: 2.00e-03
+Fine-tune Epoch [88/5000], Train Loss: -1.1813, Val NLL: -1.3689, LR_head: 2.00e-03
+Fine-tune Epoch [89/5000], Train Loss: -1.1876, Val NLL: -1.3847, LR_head: 2.00e-03
+Fine-tune Epoch [90/5000], Train Loss: -1.2103, Val NLL: -1.3953, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3913 -> -1.3953)，保存模型...
+Fine-tune Epoch [91/5000], Train Loss: -1.2101, Val NLL: -1.4182, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.3953 -> -1.4182)，保存模型...
+Fine-tune Epoch [92/5000], Train Loss: -1.1929, Val NLL: -1.4040, LR_head: 2.00e-03
+Fine-tune Epoch [93/5000], Train Loss: -1.2116, Val NLL: -1.4019, LR_head: 2.00e-03
+Fine-tune Epoch [94/5000], Train Loss: -1.2217, Val NLL: -1.4164, LR_head: 2.00e-03
+Fine-tune Epoch [95/5000], Train Loss: -1.2233, Val NLL: -1.4099, LR_head: 2.00e-03
+Fine-tune Epoch [96/5000], Train Loss: -1.2223, Val NLL: -1.4015, LR_head: 2.00e-03
+Fine-tune Epoch [97/5000], Train Loss: -1.2432, Val NLL: -1.3989, LR_head: 2.00e-03
+Fine-tune Epoch [98/5000], Train Loss: -1.2129, Val NLL: -1.4145, LR_head: 2.00e-03
+Fine-tune Epoch [99/5000], Train Loss: -1.2281, Val NLL: -1.4070, LR_head: 2.00e-03
+Fine-tune Epoch [100/5000], Train Loss: -1.2170, Val NLL: -1.4057, LR_head: 2.00e-03
+Fine-tune Epoch [101/5000], Train Loss: -1.2587, Val NLL: -1.4228, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4182 -> -1.4228)，保存模型...
+Fine-tune Epoch [102/5000], Train Loss: -1.2341, Val NLL: -1.4284, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4228 -> -1.4284)，保存模型...
+Fine-tune Epoch [103/5000], Train Loss: -1.2326, Val NLL: -1.4183, LR_head: 2.00e-03
+Fine-tune Epoch [104/5000], Train Loss: -1.2328, Val NLL: -1.4345, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4284 -> -1.4345)，保存模型...
+Fine-tune Epoch [105/5000], Train Loss: -1.2338, Val NLL: -1.4241, LR_head: 2.00e-03
+Fine-tune Epoch [106/5000], Train Loss: -1.2284, Val NLL: -1.4414, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4345 -> -1.4414)，保存模型...
+Fine-tune Epoch [107/5000], Train Loss: -1.2431, Val NLL: -1.4426, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4414 -> -1.4426)，保存模型...
+Fine-tune Epoch [108/5000], Train Loss: -1.2451, Val NLL: -1.4545, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4426 -> -1.4545)，保存模型...
+Fine-tune Epoch [109/5000], Train Loss: -1.2554, Val NLL: -1.4442, LR_head: 2.00e-03
+Fine-tune Epoch [110/5000], Train Loss: -1.2319, Val NLL: -1.4623, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4545 -> -1.4623)，保存模型...
+Fine-tune Epoch [111/5000], Train Loss: -1.2572, Val NLL: -1.4441, LR_head: 2.00e-03
+Fine-tune Epoch [112/5000], Train Loss: -1.2605, Val NLL: -1.4494, LR_head: 2.00e-03
+Fine-tune Epoch [113/5000], Train Loss: -1.2826, Val NLL: -1.4587, LR_head: 2.00e-03
+Fine-tune Epoch [114/5000], Train Loss: -1.2874, Val NLL: -1.4677, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4623 -> -1.4677)，保存模型...
+Fine-tune Epoch [115/5000], Train Loss: -1.2447, Val NLL: -1.4452, LR_head: 2.00e-03
+Fine-tune Epoch [116/5000], Train Loss: -1.2744, Val NLL: -1.4733, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4677 -> -1.4733)，保存模型...
+Fine-tune Epoch [117/5000], Train Loss: -1.2887, Val NLL: -1.4509, LR_head: 2.00e-03
+Fine-tune Epoch [118/5000], Train Loss: -1.2605, Val NLL: -1.4666, LR_head: 2.00e-03
+Fine-tune Epoch [119/5000], Train Loss: -1.2960, Val NLL: -1.4793, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4733 -> -1.4793)，保存模型...
+Fine-tune Epoch [120/5000], Train Loss: -1.2452, Val NLL: -1.4585, LR_head: 2.00e-03
+Fine-tune Epoch [121/5000], Train Loss: -1.2844, Val NLL: -1.4676, LR_head: 2.00e-03
+Fine-tune Epoch [122/5000], Train Loss: -1.3082, Val NLL: -1.4578, LR_head: 2.00e-03
+Fine-tune Epoch [123/5000], Train Loss: -1.2832, Val NLL: -1.4767, LR_head: 2.00e-03
+Fine-tune Epoch [124/5000], Train Loss: -1.2820, Val NLL: -1.4783, LR_head: 2.00e-03
+Fine-tune Epoch [125/5000], Train Loss: -1.3024, Val NLL: -1.4848, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4793 -> -1.4848)，保存模型...
+Fine-tune Epoch [126/5000], Train Loss: -1.2796, Val NLL: -1.4937, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4848 -> -1.4937)，保存模型...
+Fine-tune Epoch [127/5000], Train Loss: -1.2865, Val NLL: -1.4789, LR_head: 2.00e-03
+Fine-tune Epoch [128/5000], Train Loss: -1.3158, Val NLL: -1.4750, LR_head: 2.00e-03
+Fine-tune Epoch [129/5000], Train Loss: -1.2909, Val NLL: -1.4724, LR_head: 2.00e-03
+Fine-tune Epoch [130/5000], Train Loss: -1.3037, Val NLL: -1.4883, LR_head: 2.00e-03
+Fine-tune Epoch [131/5000], Train Loss: -1.2844, Val NLL: -1.4933, LR_head: 2.00e-03
+Fine-tune Epoch [132/5000], Train Loss: -1.3031, Val NLL: -1.4727, LR_head: 2.00e-03
+Fine-tune Epoch [133/5000], Train Loss: -1.3021, Val NLL: -1.4904, LR_head: 2.00e-03
+Fine-tune Epoch [134/5000], Train Loss: -1.3170, Val NLL: -1.4998, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4937 -> -1.4998)，保存模型...
+Fine-tune Epoch [135/5000], Train Loss: -1.3252, Val NLL: -1.5075, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.4998 -> -1.5075)，保存模型...
+Fine-tune Epoch [136/5000], Train Loss: -1.3052, Val NLL: -1.5183, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5075 -> -1.5183)，保存模型...
+Fine-tune Epoch [137/5000], Train Loss: -1.3209, Val NLL: -1.5080, LR_head: 2.00e-03
+Fine-tune Epoch [138/5000], Train Loss: -1.3079, Val NLL: -1.5144, LR_head: 2.00e-03
+Fine-tune Epoch [139/5000], Train Loss: -1.3259, Val NLL: -1.4890, LR_head: 2.00e-03
+Fine-tune Epoch [140/5000], Train Loss: -1.3547, Val NLL: -1.5217, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5183 -> -1.5217)，保存模型...
+Fine-tune Epoch [141/5000], Train Loss: -1.3591, Val NLL: -1.5541, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5217 -> -1.5541)，保存模型...
+Fine-tune Epoch [142/5000], Train Loss: -1.3207, Val NLL: -1.5061, LR_head: 2.00e-03
+Fine-tune Epoch [143/5000], Train Loss: -1.3301, Val NLL: -1.5150, LR_head: 2.00e-03
+Fine-tune Epoch [144/5000], Train Loss: -1.3405, Val NLL: -1.5217, LR_head: 2.00e-03
+Fine-tune Epoch [145/5000], Train Loss: -1.3209, Val NLL: -1.5177, LR_head: 2.00e-03
+Fine-tune Epoch [146/5000], Train Loss: -1.3354, Val NLL: -1.5175, LR_head: 2.00e-03
+Fine-tune Epoch [147/5000], Train Loss: -1.3417, Val NLL: -1.5424, LR_head: 2.00e-03
+Fine-tune Epoch [148/5000], Train Loss: -1.3320, Val NLL: -1.5260, LR_head: 2.00e-03
+Fine-tune Epoch [149/5000], Train Loss: -1.3328, Val NLL: -1.5316, LR_head: 2.00e-03
+Fine-tune Epoch [150/5000], Train Loss: -1.3401, Val NLL: -1.5183, LR_head: 2.00e-03
+Fine-tune Epoch [151/5000], Train Loss: -1.3325, Val NLL: -1.5234, LR_head: 2.00e-03
+Fine-tune Epoch [152/5000], Train Loss: -1.3363, Val NLL: -1.5267, LR_head: 2.00e-03
+Fine-tune Epoch [153/5000], Train Loss: -1.3312, Val NLL: -1.5242, LR_head: 2.00e-03
+Fine-tune Epoch [154/5000], Train Loss: -1.3578, Val NLL: -1.5361, LR_head: 2.00e-03
+Fine-tune Epoch [155/5000], Train Loss: -1.3708, Val NLL: -1.5326, LR_head: 2.00e-03
+Fine-tune Epoch [156/5000], Train Loss: -1.3748, Val NLL: -1.5449, LR_head: 2.00e-03
+Fine-tune Epoch [157/5000], Train Loss: -1.3463, Val NLL: -1.5170, LR_head: 2.00e-03
+Fine-tune Epoch [158/5000], Train Loss: -1.3498, Val NLL: -1.5544, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5541 -> -1.5544)，保存模型...
+Fine-tune Epoch [159/5000], Train Loss: -1.3597, Val NLL: -1.5418, LR_head: 2.00e-03
+Fine-tune Epoch [160/5000], Train Loss: -1.3436, Val NLL: -1.5396, LR_head: 2.00e-03
+Fine-tune Epoch [161/5000], Train Loss: -1.3715, Val NLL: -1.5524, LR_head: 2.00e-03
+Fine-tune Epoch [162/5000], Train Loss: -1.3894, Val NLL: -1.5601, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5544 -> -1.5601)，保存模型...
+Fine-tune Epoch [163/5000], Train Loss: -1.3676, Val NLL: -1.5505, LR_head: 2.00e-03
+Fine-tune Epoch [164/5000], Train Loss: -1.3695, Val NLL: -1.5493, LR_head: 2.00e-03
+Fine-tune Epoch [165/5000], Train Loss: -1.3619, Val NLL: -1.5438, LR_head: 2.00e-03
+Fine-tune Epoch [166/5000], Train Loss: -1.3434, Val NLL: -1.5272, LR_head: 2.00e-03
+Fine-tune Epoch [167/5000], Train Loss: -1.3551, Val NLL: -1.5363, LR_head: 2.00e-03
+Fine-tune Epoch [168/5000], Train Loss: -1.3813, Val NLL: -1.5209, LR_head: 2.00e-03
+Fine-tune Epoch [169/5000], Train Loss: -1.3566, Val NLL: -1.5282, LR_head: 2.00e-03
+Fine-tune Epoch [170/5000], Train Loss: -1.3634, Val NLL: -1.5641, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5601 -> -1.5641)，保存模型...
+Fine-tune Epoch [171/5000], Train Loss: -1.3781, Val NLL: -1.5625, LR_head: 2.00e-03
+Fine-tune Epoch [172/5000], Train Loss: -1.3969, Val NLL: -1.5446, LR_head: 2.00e-03
+Fine-tune Epoch [173/5000], Train Loss: -1.3577, Val NLL: -1.5511, LR_head: 2.00e-03
+Fine-tune Epoch [174/5000], Train Loss: -1.3766, Val NLL: -1.5473, LR_head: 2.00e-03
+Fine-tune Epoch [175/5000], Train Loss: -1.3716, Val NLL: -1.5501, LR_head: 2.00e-03
+Fine-tune Epoch [176/5000], Train Loss: -1.3549, Val NLL: -1.5568, LR_head: 2.00e-03
+Fine-tune Epoch [177/5000], Train Loss: -1.3867, Val NLL: -1.5533, LR_head: 2.00e-03
+Fine-tune Epoch [178/5000], Train Loss: -1.3776, Val NLL: -1.5496, LR_head: 2.00e-03
+Fine-tune Epoch [179/5000], Train Loss: -1.3672, Val NLL: -1.5568, LR_head: 2.00e-03
+Fine-tune Epoch [180/5000], Train Loss: -1.4013, Val NLL: -1.5505, LR_head: 2.00e-03
+Fine-tune Epoch [181/5000], Train Loss: -1.3816, Val NLL: -1.5772, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5641 -> -1.5772)，保存模型...
+Fine-tune Epoch [182/5000], Train Loss: -1.4179, Val NLL: -1.5548, LR_head: 2.00e-03
+Fine-tune Epoch [183/5000], Train Loss: -1.3979, Val NLL: -1.5659, LR_head: 2.00e-03
+Fine-tune Epoch [184/5000], Train Loss: -1.3965, Val NLL: -1.5702, LR_head: 2.00e-03
+Fine-tune Epoch [185/5000], Train Loss: -1.3886, Val NLL: -1.5531, LR_head: 2.00e-03
+Fine-tune Epoch [186/5000], Train Loss: -1.3975, Val NLL: -1.5694, LR_head: 2.00e-03
+Fine-tune Epoch [187/5000], Train Loss: -1.4187, Val NLL: -1.5834, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5772 -> -1.5834)，保存模型...
+Fine-tune Epoch [188/5000], Train Loss: -1.4032, Val NLL: -1.5723, LR_head: 2.00e-03
+Fine-tune Epoch [189/5000], Train Loss: -1.3957, Val NLL: -1.5705, LR_head: 2.00e-03
+Fine-tune Epoch [190/5000], Train Loss: -1.3890, Val NLL: -1.5872, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5834 -> -1.5872)，保存模型...
+Fine-tune Epoch [191/5000], Train Loss: -1.4059, Val NLL: -1.5841, LR_head: 2.00e-03
+Fine-tune Epoch [192/5000], Train Loss: -1.4040, Val NLL: -1.5548, LR_head: 2.00e-03
+Fine-tune Epoch [193/5000], Train Loss: -1.3978, Val NLL: -1.5852, LR_head: 2.00e-03
+Fine-tune Epoch [194/5000], Train Loss: -1.3944, Val NLL: -1.5823, LR_head: 2.00e-03
+Fine-tune Epoch [195/5000], Train Loss: -1.4261, Val NLL: -1.5904, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5872 -> -1.5904)，保存模型...
+Fine-tune Epoch [196/5000], Train Loss: -1.3985, Val NLL: -1.5885, LR_head: 2.00e-03
+Fine-tune Epoch [197/5000], Train Loss: -1.4287, Val NLL: -1.5941, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5904 -> -1.5941)，保存模型...
+Fine-tune Epoch [198/5000], Train Loss: -1.4089, Val NLL: -1.5818, LR_head: 2.00e-03
+Fine-tune Epoch [199/5000], Train Loss: -1.4206, Val NLL: -1.5884, LR_head: 2.00e-03
+Fine-tune Epoch [200/5000], Train Loss: -1.3987, Val NLL: -1.5603, LR_head: 2.00e-03
+Fine-tune Epoch [201/5000], Train Loss: -1.4277, Val NLL: -1.5967, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5941 -> -1.5967)，保存模型...
+Fine-tune Epoch [202/5000], Train Loss: -1.4166, Val NLL: -1.6062, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.5967 -> -1.6062)，保存模型...
+Fine-tune Epoch [203/5000], Train Loss: -1.4076, Val NLL: -1.6158, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6062 -> -1.6158)，保存模型...
+Fine-tune Epoch [204/5000], Train Loss: -1.4576, Val NLL: -1.6124, LR_head: 2.00e-03
+Fine-tune Epoch [205/5000], Train Loss: -1.4270, Val NLL: -1.5900, LR_head: 2.00e-03
+Fine-tune Epoch [206/5000], Train Loss: -1.3948, Val NLL: -1.6079, LR_head: 2.00e-03
+Fine-tune Epoch [207/5000], Train Loss: -1.4188, Val NLL: -1.6021, LR_head: 2.00e-03
+Fine-tune Epoch [208/5000], Train Loss: -1.4434, Val NLL: -1.6105, LR_head: 2.00e-03
+Fine-tune Epoch [209/5000], Train Loss: -1.4368, Val NLL: -1.5798, LR_head: 2.00e-03
+Fine-tune Epoch [210/5000], Train Loss: -1.4256, Val NLL: -1.6118, LR_head: 2.00e-03
+Fine-tune Epoch [211/5000], Train Loss: -1.4433, Val NLL: -1.6016, LR_head: 2.00e-03
+Fine-tune Epoch [212/5000], Train Loss: -1.4278, Val NLL: -1.6074, LR_head: 2.00e-03
+Fine-tune Epoch [213/5000], Train Loss: -1.4305, Val NLL: -1.5850, LR_head: 2.00e-03
+Fine-tune Epoch [214/5000], Train Loss: -1.4435, Val NLL: -1.5882, LR_head: 2.00e-03
+Fine-tune Epoch [215/5000], Train Loss: -1.4485, Val NLL: -1.6010, LR_head: 2.00e-03
+Fine-tune Epoch [216/5000], Train Loss: -1.4638, Val NLL: -1.5999, LR_head: 2.00e-03
+Fine-tune Epoch [217/5000], Train Loss: -1.4639, Val NLL: -1.5927, LR_head: 2.00e-03
+Fine-tune Epoch [218/5000], Train Loss: -1.4448, Val NLL: -1.5956, LR_head: 2.00e-03
+Fine-tune Epoch [219/5000], Train Loss: -1.4402, Val NLL: -1.6000, LR_head: 2.00e-03
+Fine-tune Epoch [220/5000], Train Loss: -1.4559, Val NLL: -1.5862, LR_head: 2.00e-03
+Fine-tune Epoch [221/5000], Train Loss: -1.4373, Val NLL: -1.6197, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6158 -> -1.6197)，保存模型...
+Fine-tune Epoch [222/5000], Train Loss: -1.4702, Val NLL: -1.5947, LR_head: 2.00e-03
+Fine-tune Epoch [223/5000], Train Loss: -1.4750, Val NLL: -1.5953, LR_head: 2.00e-03
+Fine-tune Epoch [224/5000], Train Loss: -1.4638, Val NLL: -1.6199, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6197 -> -1.6199)，保存模型...
+Fine-tune Epoch [225/5000], Train Loss: -1.4516, Val NLL: -1.6209, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6199 -> -1.6209)，保存模型...
+Fine-tune Epoch [226/5000], Train Loss: -1.4800, Val NLL: -1.5974, LR_head: 2.00e-03
+Fine-tune Epoch [227/5000], Train Loss: -1.4238, Val NLL: -1.6002, LR_head: 2.00e-03
+Fine-tune Epoch [228/5000], Train Loss: -1.4537, Val NLL: -1.6017, LR_head: 2.00e-03
+Fine-tune Epoch [229/5000], Train Loss: -1.4406, Val NLL: -1.6214, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6209 -> -1.6214)，保存模型...
+Fine-tune Epoch [230/5000], Train Loss: -1.4233, Val NLL: -1.6136, LR_head: 2.00e-03
+Fine-tune Epoch [231/5000], Train Loss: -1.4710, Val NLL: -1.5653, LR_head: 2.00e-03
+Fine-tune Epoch [232/5000], Train Loss: -1.4397, Val NLL: -1.6005, LR_head: 2.00e-03
+Fine-tune Epoch [233/5000], Train Loss: -1.4475, Val NLL: -1.6122, LR_head: 2.00e-03
+Fine-tune Epoch [234/5000], Train Loss: -1.4757, Val NLL: -1.6128, LR_head: 2.00e-03
+Fine-tune Epoch [235/5000], Train Loss: -1.4590, Val NLL: -1.6159, LR_head: 2.00e-03
+Fine-tune Epoch [236/5000], Train Loss: -1.4633, Val NLL: -1.6163, LR_head: 2.00e-03
+Fine-tune Epoch [237/5000], Train Loss: -1.4574, Val NLL: -1.5938, LR_head: 2.00e-03
+Fine-tune Epoch [238/5000], Train Loss: -1.4724, Val NLL: -1.6177, LR_head: 2.00e-03
+Fine-tune Epoch [239/5000], Train Loss: -1.4645, Val NLL: -1.5951, LR_head: 2.00e-03
+Fine-tune Epoch [240/5000], Train Loss: -1.4528, Val NLL: -1.6082, LR_head: 2.00e-03
+Fine-tune Epoch [241/5000], Train Loss: -1.4602, Val NLL: -1.6125, LR_head: 2.00e-03
+Fine-tune Epoch [242/5000], Train Loss: -1.4701, Val NLL: -1.5872, LR_head: 2.00e-03
+Fine-tune Epoch [243/5000], Train Loss: -1.4658, Val NLL: -1.6307, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6214 -> -1.6307)，保存模型...
+Fine-tune Epoch [244/5000], Train Loss: -1.4586, Val NLL: -1.6218, LR_head: 2.00e-03
+Fine-tune Epoch [245/5000], Train Loss: -1.4784, Val NLL: -1.5953, LR_head: 2.00e-03
+Fine-tune Epoch [246/5000], Train Loss: -1.4575, Val NLL: -1.6124, LR_head: 2.00e-03
+Fine-tune Epoch [247/5000], Train Loss: -1.4723, Val NLL: -1.6136, LR_head: 2.00e-03
+Fine-tune Epoch [248/5000], Train Loss: -1.4664, Val NLL: -1.6231, LR_head: 2.00e-03
+Fine-tune Epoch [249/5000], Train Loss: -1.4678, Val NLL: -1.6253, LR_head: 2.00e-03
+Fine-tune Epoch [250/5000], Train Loss: -1.4758, Val NLL: -1.6326, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6307 -> -1.6326)，保存模型...
+Fine-tune Epoch [251/5000], Train Loss: -1.4651, Val NLL: -1.6529, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6326 -> -1.6529)，保存模型...
+Fine-tune Epoch [252/5000], Train Loss: -1.4655, Val NLL: -1.6360, LR_head: 2.00e-03
+Fine-tune Epoch [253/5000], Train Loss: -1.4937, Val NLL: -1.6366, LR_head: 2.00e-03
+Fine-tune Epoch [254/5000], Train Loss: -1.4786, Val NLL: -1.6428, LR_head: 2.00e-03
+Fine-tune Epoch [255/5000], Train Loss: -1.4809, Val NLL: -1.6221, LR_head: 2.00e-03
+Fine-tune Epoch [256/5000], Train Loss: -1.4804, Val NLL: -1.6258, LR_head: 2.00e-03
+Fine-tune Epoch [257/5000], Train Loss: -1.4842, Val NLL: -1.6103, LR_head: 2.00e-03
+Fine-tune Epoch [258/5000], Train Loss: -1.5023, Val NLL: -1.6402, LR_head: 2.00e-03
+Fine-tune Epoch [259/5000], Train Loss: -1.4757, Val NLL: -1.6055, LR_head: 2.00e-03
+Fine-tune Epoch [260/5000], Train Loss: -1.4454, Val NLL: -1.5915, LR_head: 2.00e-03
+Fine-tune Epoch [261/5000], Train Loss: -1.4742, Val NLL: -1.6380, LR_head: 2.00e-03
+Fine-tune Epoch [262/5000], Train Loss: -1.4843, Val NLL: -1.6352, LR_head: 2.00e-03
+Fine-tune Epoch [263/5000], Train Loss: -1.4976, Val NLL: -1.6083, LR_head: 2.00e-03
+Fine-tune Epoch [264/5000], Train Loss: -1.4807, Val NLL: -1.6256, LR_head: 2.00e-03
+Fine-tune Epoch [265/5000], Train Loss: -1.4979, Val NLL: -1.6267, LR_head: 2.00e-03
+Fine-tune Epoch [266/5000], Train Loss: -1.4852, Val NLL: -1.6193, LR_head: 2.00e-03
+Fine-tune Epoch [267/5000], Train Loss: -1.4882, Val NLL: -1.6401, LR_head: 2.00e-03
+Fine-tune Epoch [268/5000], Train Loss: -1.5022, Val NLL: -1.6356, LR_head: 2.00e-03
+Fine-tune Epoch [269/5000], Train Loss: -1.4988, Val NLL: -1.6429, LR_head: 2.00e-03
+Fine-tune Epoch [270/5000], Train Loss: -1.4891, Val NLL: -1.6315, LR_head: 2.00e-03
+Fine-tune Epoch [271/5000], Train Loss: -1.5189, Val NLL: -1.6247, LR_head: 2.00e-03
+Fine-tune Epoch [272/5000], Train Loss: -1.4923, Val NLL: -1.6448, LR_head: 2.00e-03
+Fine-tune Epoch [273/5000], Train Loss: -1.4786, Val NLL: -1.6252, LR_head: 2.00e-03
+Fine-tune Epoch [274/5000], Train Loss: -1.5107, Val NLL: -1.6333, LR_head: 2.00e-03
+Fine-tune Epoch [275/5000], Train Loss: -1.5257, Val NLL: -1.6349, LR_head: 2.00e-03
+Fine-tune Epoch [276/5000], Train Loss: -1.4919, Val NLL: -1.6298, LR_head: 2.00e-03
+Fine-tune Epoch [277/5000], Train Loss: -1.4901, Val NLL: -1.6137, LR_head: 2.00e-03
+Fine-tune Epoch [278/5000], Train Loss: -1.4962, Val NLL: -1.6450, LR_head: 2.00e-03
+Fine-tune Epoch [279/5000], Train Loss: -1.5183, Val NLL: -1.6094, LR_head: 2.00e-03
+Fine-tune Epoch [280/5000], Train Loss: -1.4840, Val NLL: -1.6140, LR_head: 2.00e-03
+Fine-tune Epoch [281/5000], Train Loss: -1.4905, Val NLL: -1.6065, LR_head: 2.00e-03
+Fine-tune Epoch [282/5000], Train Loss: -1.4952, Val NLL: -1.6172, LR_head: 2.00e-03
+Fine-tune Epoch [283/5000], Train Loss: -1.4999, Val NLL: -1.6223, LR_head: 2.00e-03
+Fine-tune Epoch [284/5000], Train Loss: -1.4939, Val NLL: -1.6378, LR_head: 2.00e-03
+Fine-tune Epoch [285/5000], Train Loss: -1.4892, Val NLL: -1.6336, LR_head: 2.00e-03
+Fine-tune Epoch [286/5000], Train Loss: -1.5335, Val NLL: -1.6206, LR_head: 2.00e-03
+Fine-tune Epoch [287/5000], Train Loss: -1.4892, Val NLL: -1.6206, LR_head: 2.00e-03
+Fine-tune Epoch [288/5000], Train Loss: -1.5171, Val NLL: -1.6170, LR_head: 2.00e-03
+Fine-tune Epoch [289/5000], Train Loss: -1.5359, Val NLL: -1.6072, LR_head: 2.00e-03
+Fine-tune Epoch [290/5000], Train Loss: -1.5007, Val NLL: -1.6336, LR_head: 2.00e-03
+Fine-tune Epoch [291/5000], Train Loss: -1.4933, Val NLL: -1.6311, LR_head: 2.00e-03
+Fine-tune Epoch [292/5000], Train Loss: -1.4975, Val NLL: -1.6250, LR_head: 2.00e-03
+Fine-tune Epoch [293/5000], Train Loss: -1.4941, Val NLL: -1.6359, LR_head: 2.00e-03
+Fine-tune Epoch [294/5000], Train Loss: -1.5326, Val NLL: -1.6223, LR_head: 2.00e-03
+Fine-tune Epoch [295/5000], Train Loss: -1.5096, Val NLL: -1.6235, LR_head: 2.00e-03
+Fine-tune Epoch [296/5000], Train Loss: -1.5468, Val NLL: -1.6196, LR_head: 2.00e-03
+Fine-tune Epoch [297/5000], Train Loss: -1.5366, Val NLL: -1.5837, LR_head: 2.00e-03
+Fine-tune Epoch [298/5000], Train Loss: -1.5117, Val NLL: -1.6268, LR_head: 2.00e-03
+Fine-tune Epoch [299/5000], Train Loss: -1.5367, Val NLL: -1.6389, LR_head: 2.00e-03
+Fine-tune Epoch [300/5000], Train Loss: -1.5300, Val NLL: -1.6278, LR_head: 2.00e-03
+Fine-tune Epoch [301/5000], Train Loss: -1.5298, Val NLL: -1.6089, LR_head: 2.00e-03
+Fine-tune Epoch [302/5000], Train Loss: -1.5139, Val NLL: -1.6209, LR_head: 2.00e-03
+Fine-tune Epoch [303/5000], Train Loss: -1.5238, Val NLL: -1.6361, LR_head: 2.00e-03
+Fine-tune Epoch [304/5000], Train Loss: -1.5494, Val NLL: -1.6445, LR_head: 2.00e-03
+Fine-tune Epoch [305/5000], Train Loss: -1.5238, Val NLL: -1.6289, LR_head: 2.00e-03
+Fine-tune Epoch [306/5000], Train Loss: -1.5234, Val NLL: -1.6366, LR_head: 2.00e-03
+Fine-tune Epoch [307/5000], Train Loss: -1.5127, Val NLL: -1.6321, LR_head: 2.00e-03
+Fine-tune Epoch [308/5000], Train Loss: -1.5136, Val NLL: -1.6308, LR_head: 2.00e-03
+Fine-tune Epoch [309/5000], Train Loss: -1.5209, Val NLL: -1.6397, LR_head: 2.00e-03
+Fine-tune Epoch [310/5000], Train Loss: -1.5445, Val NLL: -1.6503, LR_head: 2.00e-03
+Fine-tune Epoch [311/5000], Train Loss: -1.5486, Val NLL: -1.6505, LR_head: 2.00e-03
+Fine-tune Epoch [312/5000], Train Loss: -1.5132, Val NLL: -1.6422, LR_head: 2.00e-03
+Fine-tune Epoch [313/5000], Train Loss: -1.5463, Val NLL: -1.6455, LR_head: 2.00e-03
+Fine-tune Epoch [314/5000], Train Loss: -1.5471, Val NLL: -1.6268, LR_head: 2.00e-03
+Fine-tune Epoch [315/5000], Train Loss: -1.4991, Val NLL: -1.6337, LR_head: 2.00e-03
+Fine-tune Epoch [316/5000], Train Loss: -1.5207, Val NLL: -1.6275, LR_head: 2.00e-03
+Fine-tune Epoch [317/5000], Train Loss: -1.5252, Val NLL: -1.6408, LR_head: 2.00e-03
+Fine-tune Epoch [318/5000], Train Loss: -1.5081, Val NLL: -1.5927, LR_head: 2.00e-03
+Fine-tune Epoch [319/5000], Train Loss: -1.5555, Val NLL: -1.6281, LR_head: 2.00e-03
+Fine-tune Epoch [320/5000], Train Loss: -1.5330, Val NLL: -1.6363, LR_head: 2.00e-03
+Fine-tune Epoch [321/5000], Train Loss: -1.5380, Val NLL: -1.6309, LR_head: 2.00e-03
+Fine-tune Epoch [322/5000], Train Loss: -1.5417, Val NLL: -1.6430, LR_head: 2.00e-03
+Fine-tune Epoch [323/5000], Train Loss: -1.5172, Val NLL: -1.6487, LR_head: 2.00e-03
+Fine-tune Epoch [324/5000], Train Loss: -1.5509, Val NLL: -1.6680, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6529 -> -1.6680)，保存模型...
+Fine-tune Epoch [325/5000], Train Loss: -1.5397, Val NLL: -1.6549, LR_head: 2.00e-03
+Fine-tune Epoch [326/5000], Train Loss: -1.5528, Val NLL: -1.6707, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6680 -> -1.6707)，保存模型...
+Fine-tune Epoch [327/5000], Train Loss: -1.5443, Val NLL: -1.6760, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6707 -> -1.6760)，保存模型...
+Fine-tune Epoch [328/5000], Train Loss: -1.5687, Val NLL: -1.6521, LR_head: 2.00e-03
+Fine-tune Epoch [329/5000], Train Loss: -1.5608, Val NLL: -1.6665, LR_head: 2.00e-03
+Fine-tune Epoch [330/5000], Train Loss: -1.5348, Val NLL: -1.6267, LR_head: 2.00e-03
+Fine-tune Epoch [331/5000], Train Loss: -1.5268, Val NLL: -1.6442, LR_head: 2.00e-03
+Fine-tune Epoch [332/5000], Train Loss: -1.5464, Val NLL: -1.6261, LR_head: 2.00e-03
+Fine-tune Epoch [333/5000], Train Loss: -1.5435, Val NLL: -1.6358, LR_head: 2.00e-03
+Fine-tune Epoch [334/5000], Train Loss: -1.5358, Val NLL: -1.6450, LR_head: 2.00e-03
+Fine-tune Epoch [335/5000], Train Loss: -1.5249, Val NLL: -1.6277, LR_head: 2.00e-03
+Fine-tune Epoch [336/5000], Train Loss: -1.5378, Val NLL: -1.6409, LR_head: 2.00e-03
+Fine-tune Epoch [337/5000], Train Loss: -1.5477, Val NLL: -1.6647, LR_head: 2.00e-03
+Fine-tune Epoch [338/5000], Train Loss: -1.5436, Val NLL: -1.6659, LR_head: 2.00e-03
+Fine-tune Epoch [339/5000], Train Loss: -1.5595, Val NLL: -1.6417, LR_head: 2.00e-03
+Fine-tune Epoch [340/5000], Train Loss: -1.5564, Val NLL: -1.6707, LR_head: 2.00e-03
+Fine-tune Epoch [341/5000], Train Loss: -1.5337, Val NLL: -1.6619, LR_head: 2.00e-03
+Fine-tune Epoch [342/5000], Train Loss: -1.5515, Val NLL: -1.6548, LR_head: 2.00e-03
+Fine-tune Epoch [343/5000], Train Loss: -1.5649, Val NLL: -1.6732, LR_head: 2.00e-03
+Fine-tune Epoch [344/5000], Train Loss: -1.5531, Val NLL: -1.6704, LR_head: 2.00e-03
+Fine-tune Epoch [345/5000], Train Loss: -1.5326, Val NLL: -1.6422, LR_head: 2.00e-03
+Fine-tune Epoch [346/5000], Train Loss: -1.5513, Val NLL: -1.6605, LR_head: 2.00e-03
+Fine-tune Epoch [347/5000], Train Loss: -1.5494, Val NLL: -1.6581, LR_head: 2.00e-03
+Fine-tune Epoch [348/5000], Train Loss: -1.5811, Val NLL: -1.6542, LR_head: 2.00e-03
+Fine-tune Epoch [349/5000], Train Loss: -1.5266, Val NLL: -1.6390, LR_head: 2.00e-03
+Fine-tune Epoch [350/5000], Train Loss: -1.5576, Val NLL: -1.6643, LR_head: 2.00e-03
+Fine-tune Epoch [351/5000], Train Loss: -1.5785, Val NLL: -1.6474, LR_head: 2.00e-03
+Fine-tune Epoch [352/5000], Train Loss: -1.5541, Val NLL: -1.6749, LR_head: 2.00e-03
+Fine-tune Epoch [353/5000], Train Loss: -1.5596, Val NLL: -1.6829, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6760 -> -1.6829)，保存模型...
+Fine-tune Epoch [354/5000], Train Loss: -1.5805, Val NLL: -1.6539, LR_head: 2.00e-03
+Fine-tune Epoch [355/5000], Train Loss: -1.5499, Val NLL: -1.6282, LR_head: 2.00e-03
+Fine-tune Epoch [356/5000], Train Loss: -1.5643, Val NLL: -1.6679, LR_head: 2.00e-03
+Fine-tune Epoch [357/5000], Train Loss: -1.5421, Val NLL: -1.6505, LR_head: 2.00e-03
+Fine-tune Epoch [358/5000], Train Loss: -1.5635, Val NLL: -1.6509, LR_head: 2.00e-03
+Fine-tune Epoch [359/5000], Train Loss: -1.5516, Val NLL: -1.6614, LR_head: 2.00e-03
+Fine-tune Epoch [360/5000], Train Loss: -1.5613, Val NLL: -1.6642, LR_head: 2.00e-03
+Fine-tune Epoch [361/5000], Train Loss: -1.5691, Val NLL: -1.6870, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6829 -> -1.6870)，保存模型...
+Fine-tune Epoch [362/5000], Train Loss: -1.5695, Val NLL: -1.6663, LR_head: 2.00e-03
+Fine-tune Epoch [363/5000], Train Loss: -1.5665, Val NLL: -1.6477, LR_head: 2.00e-03
+Fine-tune Epoch [364/5000], Train Loss: -1.5452, Val NLL: -1.6548, LR_head: 2.00e-03
+Fine-tune Epoch [365/5000], Train Loss: -1.5626, Val NLL: -1.6990, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6870 -> -1.6990)，保存模型...
+Fine-tune Epoch [366/5000], Train Loss: -1.5415, Val NLL: -1.6800, LR_head: 2.00e-03
+Fine-tune Epoch [367/5000], Train Loss: -1.5696, Val NLL: -1.6703, LR_head: 2.00e-03
+Fine-tune Epoch [368/5000], Train Loss: -1.5663, Val NLL: -1.6514, LR_head: 2.00e-03
+Fine-tune Epoch [369/5000], Train Loss: -1.5412, Val NLL: -1.6736, LR_head: 2.00e-03
+Fine-tune Epoch [370/5000], Train Loss: -1.5985, Val NLL: -1.6618, LR_head: 2.00e-03
+Fine-tune Epoch [371/5000], Train Loss: -1.5763, Val NLL: -1.6822, LR_head: 2.00e-03
+Fine-tune Epoch [372/5000], Train Loss: -1.5589, Val NLL: -1.6913, LR_head: 2.00e-03
+Fine-tune Epoch [373/5000], Train Loss: -1.5716, Val NLL: -1.6813, LR_head: 2.00e-03
+Fine-tune Epoch [374/5000], Train Loss: -1.5781, Val NLL: -1.6707, LR_head: 2.00e-03
+Fine-tune Epoch [375/5000], Train Loss: -1.5557, Val NLL: -1.6918, LR_head: 2.00e-03
+Fine-tune Epoch [376/5000], Train Loss: -1.5778, Val NLL: -1.6616, LR_head: 2.00e-03
+Fine-tune Epoch [377/5000], Train Loss: -1.5859, Val NLL: -1.6718, LR_head: 2.00e-03
+Fine-tune Epoch [378/5000], Train Loss: -1.6008, Val NLL: -1.6702, LR_head: 2.00e-03
+Fine-tune Epoch [379/5000], Train Loss: -1.6023, Val NLL: -1.6776, LR_head: 2.00e-03
+Fine-tune Epoch [380/5000], Train Loss: -1.5828, Val NLL: -1.6751, LR_head: 2.00e-03
+Fine-tune Epoch [381/5000], Train Loss: -1.5737, Val NLL: -1.6831, LR_head: 2.00e-03
+Fine-tune Epoch [382/5000], Train Loss: -1.5756, Val NLL: -1.6698, LR_head: 2.00e-03
+Fine-tune Epoch [383/5000], Train Loss: -1.5807, Val NLL: -1.6558, LR_head: 2.00e-03
+Fine-tune Epoch [384/5000], Train Loss: -1.6103, Val NLL: -1.6864, LR_head: 2.00e-03
+Fine-tune Epoch [385/5000], Train Loss: -1.5828, Val NLL: -1.6874, LR_head: 2.00e-03
+Fine-tune Epoch [386/5000], Train Loss: -1.5637, Val NLL: -1.6872, LR_head: 2.00e-03
+Fine-tune Epoch [387/5000], Train Loss: -1.5809, Val NLL: -1.6686, LR_head: 2.00e-03
+Fine-tune Epoch [388/5000], Train Loss: -1.5950, Val NLL: -1.6872, LR_head: 2.00e-03
+Fine-tune Epoch [389/5000], Train Loss: -1.5760, Val NLL: -1.6617, LR_head: 2.00e-03
+Fine-tune Epoch [390/5000], Train Loss: -1.5638, Val NLL: -1.6711, LR_head: 2.00e-03
+Fine-tune Epoch [391/5000], Train Loss: -1.5947, Val NLL: -1.6577, LR_head: 2.00e-03
+Fine-tune Epoch [392/5000], Train Loss: -1.5765, Val NLL: -1.6708, LR_head: 2.00e-03
+Fine-tune Epoch [393/5000], Train Loss: -1.5859, Val NLL: -1.6571, LR_head: 2.00e-03
+Fine-tune Epoch [394/5000], Train Loss: -1.5869, Val NLL: -1.6788, LR_head: 2.00e-03
+Fine-tune Epoch [395/5000], Train Loss: -1.5662, Val NLL: -1.6680, LR_head: 2.00e-03
+Fine-tune Epoch [396/5000], Train Loss: -1.5767, Val NLL: -1.6534, LR_head: 2.00e-03
+Fine-tune Epoch [397/5000], Train Loss: -1.5976, Val NLL: -1.6571, LR_head: 2.00e-03
+Fine-tune Epoch [398/5000], Train Loss: -1.5931, Val NLL: -1.7028, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.6990 -> -1.7028)，保存模型...
+Fine-tune Epoch [399/5000], Train Loss: -1.5822, Val NLL: -1.6526, LR_head: 2.00e-03
+Fine-tune Epoch [400/5000], Train Loss: -1.5707, Val NLL: -1.6590, LR_head: 2.00e-03
+Fine-tune Epoch [401/5000], Train Loss: -1.5642, Val NLL: -1.6675, LR_head: 2.00e-03
+Fine-tune Epoch [402/5000], Train Loss: -1.5914, Val NLL: -1.6531, LR_head: 2.00e-03
+Fine-tune Epoch [403/5000], Train Loss: -1.6075, Val NLL: -1.6254, LR_head: 2.00e-03
+Fine-tune Epoch [404/5000], Train Loss: -1.5716, Val NLL: -1.6513, LR_head: 2.00e-03
+Fine-tune Epoch [405/5000], Train Loss: -1.5974, Val NLL: -1.6694, LR_head: 2.00e-03
+Fine-tune Epoch [406/5000], Train Loss: -1.6005, Val NLL: -1.6837, LR_head: 2.00e-03
+Fine-tune Epoch [407/5000], Train Loss: -1.5978, Val NLL: -1.6947, LR_head: 2.00e-03
+Fine-tune Epoch [408/5000], Train Loss: -1.5857, Val NLL: -1.6901, LR_head: 2.00e-03
+Fine-tune Epoch [409/5000], Train Loss: -1.6181, Val NLL: -1.6516, LR_head: 2.00e-03
+Fine-tune Epoch [410/5000], Train Loss: -1.6096, Val NLL: -1.6787, LR_head: 2.00e-03
+Fine-tune Epoch [411/5000], Train Loss: -1.5932, Val NLL: -1.6580, LR_head: 2.00e-03
+Fine-tune Epoch [412/5000], Train Loss: -1.6255, Val NLL: -1.6886, LR_head: 2.00e-03
+Fine-tune Epoch [413/5000], Train Loss: -1.6130, Val NLL: -1.6711, LR_head: 2.00e-03
+Fine-tune Epoch [414/5000], Train Loss: -1.5824, Val NLL: -1.7192, LR_head: 2.00e-03
+- 微调验证损失改善 (-1.7028 -> -1.7192)，保存模型...
+Fine-tune Epoch [415/5000], Train Loss: -1.6133, Val NLL: -1.6993, LR_head: 2.00e-03
+Fine-tune Epoch [416/5000], Train Loss: -1.6003, Val NLL: -1.6724, LR_head: 2.00e-03
+Fine-tune Epoch [417/5000], Train Loss: -1.5938, Val NLL: -1.6986, LR_head: 2.00e-03
+Fine-tune Epoch [418/5000], Train Loss: -1.5951, Val NLL: -1.6623, LR_head: 2.00e-03
+Fine-tune Epoch [419/5000], Train Loss: -1.5961, Val NLL: -1.6894, LR_head: 2.00e-03
+Fine-tune Epoch [420/5000], Train Loss: -1.6180, Val NLL: -1.6755, LR_head: 2.00e-03
+Fine-tune Epoch [421/5000], Train Loss: -1.6218, Val NLL: -1.6671, LR_head: 2.00e-03
+Fine-tune Epoch [422/5000], Train Loss: -1.5878, Val NLL: -1.6838, LR_head: 2.00e-03
+Fine-tune Epoch [423/5000], Train Loss: -1.5685, Val NLL: -1.6710, LR_head: 2.00e-03
+Fine-tune Epoch [424/5000], Train Loss: -1.6165, Val NLL: -1.6817, LR_head: 2.00e-03
+Fine-tune Epoch [425/5000], Train Loss: -1.6250, Val NLL: -1.6653, LR_head: 2.00e-03
+Fine-tune Epoch [426/5000], Train Loss: -1.6124, Val NLL: -1.6576, LR_head: 2.00e-03
+Fine-tune Epoch [427/5000], Train Loss: -1.5925, Val NLL: -1.6746, LR_head: 2.00e-03
+Fine-tune Epoch [428/5000], Train Loss: -1.6020, Val NLL: -1.6767, LR_head: 2.00e-03
+Fine-tune Epoch [429/5000], Train Loss: -1.6228, Val NLL: -1.6830, LR_head: 2.00e-03
+Fine-tune Epoch [430/5000], Train Loss: -1.5875, Val NLL: -1.6507, LR_head: 2.00e-03
+Fine-tune Epoch [431/5000], Train Loss: -1.6401, Val NLL: -1.6797, LR_head: 2.00e-03
+Fine-tune Epoch [432/5000], Train Loss: -1.6096, Val NLL: -1.6492, LR_head: 2.00e-03
+Fine-tune Epoch [433/5000], Train Loss: -1.6164, Val NLL: -1.6533, LR_head: 2.00e-03
+Fine-tune Epoch [434/5000], Train Loss: -1.6026, Val NLL: -1.6637, LR_head: 2.00e-03
+Fine-tune Epoch [435/5000], Train Loss: -1.5898, Val NLL: -1.6990, LR_head: 2.00e-03
+Fine-tune Epoch [436/5000], Train Loss: -1.6421, Val NLL: -1.6535, LR_head: 2.00e-03
+Fine-tune Epoch [437/5000], Train Loss: -1.5720, Val NLL: -1.6588, LR_head: 2.00e-03
+Fine-tune Epoch [438/5000], Train Loss: -1.5991, Val NLL: -1.6560, LR_head: 2.00e-03
+Fine-tune Epoch [439/5000], Train Loss: -1.5916, Val NLL: -1.6609, LR_head: 2.00e-03
+Fine-tune Epoch [440/5000], Train Loss: -1.6081, Val NLL: -1.6905, LR_head: 2.00e-03
+Fine-tune Epoch [441/5000], Train Loss: -1.6250, Val NLL: -1.6696, LR_head: 2.00e-03
+Fine-tune Epoch [442/5000], Train Loss: -1.6076, Val NLL: -1.6788, LR_head: 2.00e-03
+Fine-tune Epoch [443/5000], Train Loss: -1.5927, Val NLL: -1.6596, LR_head: 2.00e-03
+Fine-tune Epoch [444/5000], Train Loss: -1.6263, Val NLL: -1.6902, LR_head: 2.00e-03
+Fine-tune Epoch [445/5000], Train Loss: -1.6346, Val NLL: -1.6766, LR_head: 2.00e-03
+Fine-tune Epoch [446/5000], Train Loss: -1.6184, Val NLL: -1.6617, LR_head: 2.00e-03
+Fine-tune Epoch [447/5000], Train Loss: -1.6170, Val NLL: -1.6667, LR_head: 2.00e-03
+Fine-tune Epoch [448/5000], Train Loss: -1.6467, Val NLL: -1.6755, LR_head: 2.00e-03
+Fine-tune Epoch [449/5000], Train Loss: -1.6200, Val NLL: -1.6768, LR_head: 2.00e-03
+Fine-tune Epoch [450/5000], Train Loss: -1.6388, Val NLL: -1.6880, LR_head: 2.00e-03
+Fine-tune Epoch [451/5000], Train Loss: -1.6170, Val NLL: -1.6897, LR_head: 2.00e-03
+Fine-tune Epoch [452/5000], Train Loss: -1.6234, Val NLL: -1.7080, LR_head: 2.00e-03
+Fine-tune Epoch [453/5000], Train Loss: -1.6017, Val NLL: -1.6944, LR_head: 2.00e-03
+Fine-tune Epoch [454/5000], Train Loss: -1.6098, Val NLL: -1.6797, LR_head: 2.00e-03
+Fine-tune Epoch [455/5000], Train Loss: -1.6420, Val NLL: -1.6786, LR_head: 2.00e-03
+Fine-tune Epoch [456/5000], Train Loss: -1.6425, Val NLL: -1.6873, LR_head: 2.00e-03
+Fine-tune Epoch [457/5000], Train Loss: -1.6418, Val NLL: -1.6738, LR_head: 2.00e-03
+Fine-tune Epoch [458/5000], Train Loss: -1.6283, Val NLL: -1.6711, LR_head: 2.00e-03
+Fine-tune Epoch [459/5000], Train Loss: -1.6399, Val NLL: -1.6761, LR_head: 2.00e-03
+Fine-tune Epoch [460/5000], Train Loss: -1.6142, Val NLL: -1.6759, LR_head: 2.00e-03
+Fine-tune Epoch [461/5000], Train Loss: -1.6273, Val NLL: -1.6736, LR_head: 2.00e-03
+Fine-tune Epoch [462/5000], Train Loss: -1.6180, Val NLL: -1.6680, LR_head: 2.00e-03
+Fine-tune Epoch [463/5000], Train Loss: -1.6237, Val NLL: -1.6533, LR_head: 2.00e-03
+Fine-tune Epoch [464/5000], Train Loss: -1.6418, Val NLL: -1.6551, LR_head: 2.00e-03
+Fine-tune Epoch [465/5000], Train Loss: -1.6223, Val NLL: -1.6556, LR_head: 2.00e-03
+Fine-tune Epoch [466/5000], Train Loss: -1.6208, Val NLL: -1.6732, LR_head: 2.00e-03
+Fine-tune Epoch [467/5000], Train Loss: -1.6435, Val NLL: -1.6833, LR_head: 2.00e-03
+Fine-tune Epoch [468/5000], Train Loss: -1.6547, Val NLL: -1.6938, LR_head: 2.00e-03
+Fine-tune Epoch [469/5000], Train Loss: -1.6347, Val NLL: -1.6950, LR_head: 2.00e-03
+Fine-tune Epoch [470/5000], Train Loss: -1.6223, Val NLL: -1.6427, LR_head: 2.00e-03
+Fine-tune Epoch [471/5000], Train Loss: -1.6262, Val NLL: -1.6808, LR_head: 2.00e-03
+Fine-tune Epoch [472/5000], Train Loss: -1.6465, Val NLL: -1.6864, LR_head: 2.00e-03
+Fine-tune Epoch [473/5000], Train Loss: -1.6153, Val NLL: -1.6640, LR_head: 2.00e-03
+Fine-tune Epoch [474/5000], Train Loss: -1.6374, Val NLL: -1.6744, LR_head: 2.00e-03
+Fine-tune Epoch [475/5000], Train Loss: -1.6580, Val NLL: -1.6630, LR_head: 2.00e-03
+Fine-tune Epoch [476/5000], Train Loss: -1.6447, Val NLL: -1.6879, LR_head: 2.00e-03
+Fine-tune Epoch [477/5000], Train Loss: -1.6446, Val NLL: -1.6870, LR_head: 2.00e-03
+Fine-tune Epoch [478/5000], Train Loss: -1.6203, Val NLL: -1.6873, LR_head: 2.00e-03
+Fine-tune Epoch [479/5000], Train Loss: -1.6321, Val NLL: -1.6839, LR_head: 2.00e-03
+Fine-tune Epoch [480/5000], Train Loss: -1.6425, Val NLL: -1.6466, LR_head: 2.00e-03
+Fine-tune Epoch [481/5000], Train Loss: -1.6305, Val NLL: -1.6816, LR_head: 2.00e-03
+Fine-tune Epoch [482/5000], Train Loss: -1.6383, Val NLL: -1.6364, LR_head: 2.00e-03
+Fine-tune Epoch [483/5000], Train Loss: -1.6572, Val NLL: -1.6653, LR_head: 2.00e-03
+Fine-tune Epoch [484/5000], Train Loss: -1.6425, Val NLL: -1.6695, LR_head: 2.00e-03
+Fine-tune Epoch [485/5000], Train Loss: -1.6457, Val NLL: -1.6806, LR_head: 2.00e-03
+Fine-tune Epoch [486/5000], Train Loss: -1.6433, Val NLL: -1.6900, LR_head: 2.00e-03
+Fine-tune Epoch [487/5000], Train Loss: -1.6618, Val NLL: -1.6772, LR_head: 2.00e-03
+Fine-tune Epoch [488/5000], Train Loss: -1.6494, Val NLL: -1.6688, LR_head: 2.00e-03
+Fine-tune Epoch [489/5000], Train Loss: -1.6417, Val NLL: -1.6863, LR_head: 2.00e-03
+Fine-tune Epoch [490/5000], Train Loss: -1.6497, Val NLL: -1.6980, LR_head: 2.00e-03
+Fine-tune Epoch [491/5000], Train Loss: -1.6180, Val NLL: -1.6968, LR_head: 2.00e-03
+Fine-tune Epoch [492/5000], Train Loss: -1.6127, Val NLL: -1.6668, LR_head: 2.00e-03
+Fine-tune Epoch [493/5000], Train Loss: -1.6796, Val NLL: -1.6858, LR_head: 2.00e-03
+Fine-tune Epoch [494/5000], Train Loss: -1.6239, Val NLL: -1.6727, LR_head: 2.00e-03
+Fine-tune Epoch [495/5000], Train Loss: -1.6361, Val NLL: -1.6824, LR_head: 2.00e-03
+Fine-tune Epoch [496/5000], Train Loss: -1.6548, Val NLL: -1.6678, LR_head: 2.00e-03
+Fine-tune Epoch [497/5000], Train Loss: -1.6211, Val NLL: -1.6834, LR_head: 2.00e-03
+Fine-tune Epoch [498/5000], Train Loss: -1.6308, Val NLL: -1.6733, LR_head: 2.00e-03
+Fine-tune Epoch [499/5000], Train Loss: -1.6463, Val NLL: -1.6881, LR_head: 2.00e-03
+Fine-tune Epoch [500/5000], Train Loss: -1.6413, Val NLL: -1.6718, LR_head: 2.00e-03
+Fine-tune Epoch [501/5000], Train Loss: -1.6447, Val NLL: -1.6733, LR_head: 2.00e-03
+Fine-tune Epoch [502/5000], Train Loss: -1.6462, Val NLL: -1.6857, LR_head: 2.00e-03
+Fine-tune Epoch [503/5000], Train Loss: -1.6267, Val NLL: -1.6554, LR_head: 2.00e-03
+Fine-tune Epoch [504/5000], Train Loss: -1.6686, Val NLL: -1.6549, LR_head: 2.00e-03
+Fine-tune Epoch [505/5000], Train Loss: -1.6612, Val NLL: -1.6795, LR_head: 2.00e-03
+Fine-tune Epoch [506/5000], Train Loss: -1.6502, Val NLL: -1.6870, LR_head: 2.00e-03
+Fine-tune Epoch [507/5000], Train Loss: -1.6648, Val NLL: -1.6934, LR_head: 2.00e-03
+Fine-tune Epoch [508/5000], Train Loss: -1.6727, Val NLL: -1.7091, LR_head: 2.00e-03
+Fine-tune Epoch [509/5000], Train Loss: -1.6612, Val NLL: -1.6846, LR_head: 2.00e-03
+Fine-tune Epoch [510/5000], Train Loss: -1.6853, Val NLL: -1.7109, LR_head: 2.00e-03
+Fine-tune Epoch [511/5000], Train Loss: -1.6562, Val NLL: -1.7111, LR_head: 2.00e-03
+Fine-tune Epoch [512/5000], Train Loss: -1.6605, Val NLL: -1.7010, LR_head: 2.00e-03
+Fine-tune Epoch [513/5000], Train Loss: -1.6654, Val NLL: -1.6844, LR_head: 2.00e-03
+Fine-tune Epoch [514/5000], Train Loss: -1.6605, Val NLL: -1.7105, LR_head: 2.00e-03
+Fine-tune Epoch [515/5000], Train Loss: -1.6606, Val NLL: -1.7024, LR_head: 2.00e-03
+Fine-tune Epoch [516/5000], Train Loss: -1.6501, Val NLL: -1.6764, LR_head: 2.00e-03
+Fine-tune Epoch [517/5000], Train Loss: -1.6733, Val NLL: -1.6947, LR_head: 2.00e-03
+Fine-tune Epoch [518/5000], Train Loss: -1.6491, Val NLL: -1.6967, LR_head: 2.00e-03
+Fine-tune Epoch [519/5000], Train Loss: -1.6529, Val NLL: -1.7184, LR_head: 2.00e-03
+Fine-tune Epoch [520/5000], Train Loss: -1.6526, Val NLL: -1.6859, LR_head: 2.00e-03
+Fine-tune Epoch [521/5000], Train Loss: -1.6687, Val NLL: -1.7028, LR_head: 2.00e-03
+Fine-tune Epoch [522/5000], Train Loss: -1.6466, Val NLL: -1.6981, LR_head: 2.00e-03
+Fine-tune Epoch [523/5000], Train Loss: -1.6421, Val NLL: -1.6714, LR_head: 2.00e-03
+Fine-tune Epoch [524/5000], Train Loss: -1.6386, Val NLL: -1.6825, LR_head: 2.00e-03
+Fine-tune Epoch [525/5000], Train Loss: -1.6866, Val NLL: -1.6796, LR_head: 2.00e-03
+Fine-tune Epoch [526/5000], Train Loss: -1.6545, Val NLL: -1.6840, LR_head: 2.00e-03
+Fine-tune Epoch [527/5000], Train Loss: -1.6711, Val NLL: -1.6871, LR_head: 2.00e-03
+Fine-tune Epoch [528/5000], Train Loss: -1.6351, Val NLL: -1.6758, LR_head: 2.00e-03
+Fine-tune Epoch [529/5000], Train Loss: -1.6529, Val NLL: -1.6902, LR_head: 2.00e-03
+Fine-tune Epoch [530/5000], Train Loss: -1.6643, Val NLL: -1.7011, LR_head: 2.00e-03
+Fine-tune Epoch [531/5000], Train Loss: -1.6731, Val NLL: -1.6938, LR_head: 2.00e-03
+Fine-tune Epoch [532/5000], Train Loss: -1.6650, Val NLL: -1.6829, LR_head: 2.00e-03
+Fine-tune Epoch [533/5000], Train Loss: -1.6682, Val NLL: -1.6690, LR_head: 2.00e-03
+Fine-tune Epoch [534/5000], Train Loss: -1.6581, Val NLL: -1.6475, LR_head: 2.00e-03
+Fine-tune Epoch [535/5000], Train Loss: -1.6535, Val NLL: -1.6627, LR_head: 2.00e-03
+Fine-tune Epoch [536/5000], Train Loss: -1.6592, Val NLL: -1.6651, LR_head: 2.00e-03
+Fine-tune Epoch [537/5000], Train Loss: -1.6623, Val NLL: -1.6682, LR_head: 2.00e-03
+Fine-tune Epoch [538/5000], Train Loss: -1.6685, Val NLL: -1.6673, LR_head: 2.00e-03
+Fine-tune Epoch [539/5000], Train Loss: -1.6739, Val NLL: -1.6789, LR_head: 2.00e-03
+Fine-tune Epoch [540/5000], Train Loss: -1.6734, Val NLL: -1.6920, LR_head: 2.00e-03
+Fine-tune Epoch [541/5000], Train Loss: -1.6812, Val NLL: -1.6891, LR_head: 2.00e-03
+Fine-tune Epoch [542/5000], Train Loss: -1.6719, Val NLL: -1.6832, LR_head: 2.00e-03
+Fine-tune Epoch [543/5000], Train Loss: -1.6507, Val NLL: -1.6892, LR_head: 2.00e-03
+Fine-tune Epoch [544/5000], Train Loss: -1.6844, Val NLL: -1.6968, LR_head: 2.00e-03
+Fine-tune Epoch [545/5000], Train Loss: -1.6783, Val NLL: -1.6756, LR_head: 2.00e-03
+Fine-tune Epoch [546/5000], Train Loss: -1.6630, Val NLL: -1.6927, LR_head: 2.00e-03
+Fine-tune Epoch [547/5000], Train Loss: -1.6906, Val NLL: -1.6905, LR_head: 2.00e-03
+Fine-tune Epoch [548/5000], Train Loss: -1.6488, Val NLL: -1.6707, LR_head: 2.00e-03
+Fine-tune Epoch [549/5000], Train Loss: -1.6485, Val NLL: -1.6568, LR_head: 2.00e-03
+Fine-tune Epoch [550/5000], Train Loss: -1.6556, Val NLL: -1.6461, LR_head: 2.00e-03
+Fine-tune Epoch [551/5000], Train Loss: -1.6632, Val NLL: -1.6811, LR_head: 2.00e-03
+Fine-tune Epoch [552/5000], Train Loss: -1.6809, Val NLL: -1.6665, LR_head: 2.00e-03
+Fine-tune Epoch [553/5000], Train Loss: -1.6452, Val NLL: -1.6730, LR_head: 2.00e-03
+Fine-tune Epoch [554/5000], Train Loss: -1.6610, Val NLL: -1.6751, LR_head: 2.00e-03
+Fine-tune Epoch [555/5000], Train Loss: -1.6819, Val NLL: -1.7059, LR_head: 2.00e-03
+Fine-tune Epoch [556/5000], Train Loss: -1.6724, Val NLL: -1.6984, LR_head: 2.00e-03
+Fine-tune Epoch [557/5000], Train Loss: -1.6467, Val NLL: -1.6810, LR_head: 2.00e-03
+Fine-tune Epoch [558/5000], Train Loss: -1.6862, Val NLL: -1.6578, LR_head: 2.00e-03
+Fine-tune Epoch [559/5000], Train Loss: -1.6832, Val NLL: -1.6764, LR_head: 2.00e-03
+Fine-tune Epoch [560/5000], Train Loss: -1.6705, Val NLL: -1.6782, LR_head: 2.00e-03
+Fine-tune Epoch [561/5000], Train Loss: -1.6652, Val NLL: -1.6760, LR_head: 2.00e-03
+Fine-tune Epoch [562/5000], Train Loss: -1.6775, Val NLL: -1.6650, LR_head: 2.00e-03
+Fine-tune Epoch [563/5000], Train Loss: -1.6583, Val NLL: -1.6645, LR_head: 2.00e-03
+Fine-tune Epoch [564/5000], Train Loss: -1.6786, Val NLL: -1.6651, LR_head: 2.00e-03
+Fine-tune Epoch [565/5000], Train Loss: -1.6645, Val NLL: -1.6752, LR_head: 2.00e-03
+Fine-tune Epoch [566/5000], Train Loss: -1.6783, Val NLL: -1.6739, LR_head: 2.00e-03
+Fine-tune Epoch [567/5000], Train Loss: -1.7015, Val NLL: -1.6780, LR_head: 2.00e-03
+Fine-tune Epoch [568/5000], Train Loss: -1.6698, Val NLL: -1.6697, LR_head: 2.00e-03
+Fine-tune Epoch [569/5000], Train Loss: -1.6972, Val NLL: -1.6272, LR_head: 2.00e-03
+Fine-tune Epoch [570/5000], Train Loss: -1.6691, Val NLL: -1.6557, LR_head: 2.00e-03
+Fine-tune Epoch [571/5000], Train Loss: -1.6873, Val NLL: -1.6509, LR_head: 2.00e-03
+Fine-tune Epoch [572/5000], Train Loss: -1.6722, Val NLL: -1.6666, LR_head: 2.00e-03
+Fine-tune Epoch [573/5000], Train Loss: -1.6823, Val NLL: -1.6560, LR_head: 2.00e-03
+Fine-tune Epoch [574/5000], Train Loss: -1.6652, Val NLL: -1.6459, LR_head: 2.00e-03
+Fine-tune Epoch [575/5000], Train Loss: -1.6849, Val NLL: -1.6814, LR_head: 2.00e-03
+Fine-tune Epoch [576/5000], Train Loss: -1.6843, Val NLL: -1.6750, LR_head: 2.00e-03
+Fine-tune Epoch [577/5000], Train Loss: -1.6904, Val NLL: -1.6738, LR_head: 2.00e-03
+Fine-tune Epoch [578/5000], Train Loss: -1.7016, Val NLL: -1.6504, LR_head: 2.00e-03
+Fine-tune Epoch [579/5000], Train Loss: -1.6953, Val NLL: -1.6372, LR_head: 2.00e-03
+Fine-tune Epoch [580/5000], Train Loss: -1.6834, Val NLL: -1.6643, LR_head: 2.00e-03
+Fine-tune Epoch [581/5000], Train Loss: -1.6698, Val NLL: -1.6938, LR_head: 2.00e-03
+Fine-tune Epoch [582/5000], Train Loss: -1.6671, Val NLL: -1.6729, LR_head: 2.00e-03
+Fine-tune Epoch [583/5000], Train Loss: -1.6960, Val NLL: -1.6868, LR_head: 2.00e-03
+Fine-tune Epoch [584/5000], Train Loss: -1.6972, Val NLL: -1.6646, LR_head: 2.00e-03
+Fine-tune Epoch [585/5000], Train Loss: -1.6938, Val NLL: -1.6606, LR_head: 2.00e-03
+Fine-tune Epoch [586/5000], Train Loss: -1.7059, Val NLL: -1.6491, LR_head: 2.00e-03
+Fine-tune Epoch [587/5000], Train Loss: -1.6626, Val NLL: -1.6593, LR_head: 2.00e-03
+Fine-tune Epoch [588/5000], Train Loss: -1.6913, Val NLL: -1.6763, LR_head: 2.00e-03
+Fine-tune Epoch [589/5000], Train Loss: -1.6613, Val NLL: -1.6523, LR_head: 2.00e-03
+Fine-tune Epoch [590/5000], Train Loss: -1.6613, Val NLL: -1.6822, LR_head: 2.00e-03
+Fine-tune Epoch [591/5000], Train Loss: -1.6822, Val NLL: -1.6510, LR_head: 2.00e-03
+Fine-tune Epoch [592/5000], Train Loss: -1.6901, Val NLL: -1.6814, LR_head: 2.00e-03
+Fine-tune Epoch [593/5000], Train Loss: -1.7124, Val NLL: -1.6417, LR_head: 2.00e-03
+Fine-tune Epoch [594/5000], Train Loss: -1.6882, Val NLL: -1.6564, LR_head: 2.00e-03
+Fine-tune Epoch [595/5000], Train Loss: -1.6803, Val NLL: -1.6610, LR_head: 2.00e-03
+Fine-tune Epoch [596/5000], Train Loss: -1.6867, Val NLL: -1.6476, LR_head: 2.00e-03
+Fine-tune Epoch [597/5000], Train Loss: -1.6819, Val NLL: -1.6740, LR_head: 2.00e-03
+Fine-tune Epoch [598/5000], Train Loss: -1.6873, Val NLL: -1.6389, LR_head: 2.00e-03
+Fine-tune Epoch [599/5000], Train Loss: -1.6714, Val NLL: -1.6593, LR_head: 2.00e-03
+Fine-tune Epoch [600/5000], Train Loss: -1.6967, Val NLL: -1.6829, LR_head: 2.00e-03
+Fine-tune Epoch [601/5000], Train Loss: -1.6904, Val NLL: -1.6960, LR_head: 2.00e-03
+Fine-tune Epoch [602/5000], Train Loss: -1.6970, Val NLL: -1.6636, LR_head: 2.00e-03
+Fine-tune Epoch [603/5000], Train Loss: -1.6637, Val NLL: -1.6735, LR_head: 2.00e-03
+Fine-tune Epoch [604/5000], Train Loss: -1.7046, Val NLL: -1.6829, LR_head: 2.00e-03
+Fine-tune Epoch [605/5000], Train Loss: -1.6874, Val NLL: -1.6878, LR_head: 2.00e-03
+Fine-tune Epoch [606/5000], Train Loss: -1.6711, Val NLL: -1.6702, LR_head: 2.00e-03
+Fine-tune Epoch [607/5000], Train Loss: -1.6657, Val NLL: -1.6322, LR_head: 2.00e-03
+Fine-tune Epoch [608/5000], Train Loss: -1.7001, Val NLL: -1.6620, LR_head: 2.00e-03
+Fine-tune Epoch [609/5000], Train Loss: -1.6976, Val NLL: -1.6689, LR_head: 2.00e-03
+Fine-tune Epoch [610/5000], Train Loss: -1.7077, Val NLL: -1.6979, LR_head: 2.00e-03
+Fine-tune Epoch [611/5000], Train Loss: -1.6887, Val NLL: -1.6830, LR_head: 2.00e-03
+Fine-tune Epoch [612/5000], Train Loss: -1.7058, Val NLL: -1.7079, LR_head: 2.00e-03
+Fine-tune Epoch [613/5000], Train Loss: -1.6909, Val NLL: -1.7117, LR_head: 2.00e-03
+Fine-tune Epoch [614/5000], Train Loss: -1.6846, Val NLL: -1.6967, LR_head: 2.00e-03
+Fine-tune Epoch [615/5000], Train Loss: -1.7109, Val NLL: -1.7028, LR_head: 2.00e-03
+Fine-tune Epoch [616/5000], Train Loss: -1.7171, Val NLL: -1.6880, LR_head: 2.00e-03
+Fine-tune Epoch [617/5000], Train Loss: -1.6980, Val NLL: -1.6772, LR_head: 2.00e-03
+Fine-tune Epoch [618/5000], Train Loss: -1.6921, Val NLL: -1.6886, LR_head: 2.00e-03
+Fine-tune Epoch [619/5000], Train Loss: -1.7027, Val NLL: -1.7060, LR_head: 2.00e-03
+Fine-tune Epoch [620/5000], Train Loss: -1.6893, Val NLL: -1.6949, LR_head: 2.00e-03
+Fine-tune Epoch [621/5000], Train Loss: -1.6672, Val NLL: -1.6837, LR_head: 2.00e-03
+Fine-tune Epoch [622/5000], Train Loss: -1.7047, Val NLL: -1.6803, LR_head: 2.00e-03
+Fine-tune Epoch [623/5000], Train Loss: -1.7122, Val NLL: -1.6791, LR_head: 2.00e-03
+Fine-tune Epoch [624/5000], Train Loss: -1.7269, Val NLL: -1.6891, LR_head: 2.00e-03
+Fine-tune Epoch [625/5000], Train Loss: -1.7153, Val NLL: -1.6886, LR_head: 2.00e-03
+Fine-tune Epoch [626/5000], Train Loss: -1.6846, Val NLL: -1.6874, LR_head: 2.00e-03
+Fine-tune Epoch [627/5000], Train Loss: -1.7277, Val NLL: -1.7025, LR_head: 2.00e-03
+Fine-tune Epoch [628/5000], Train Loss: -1.7074, Val NLL: -1.6767, LR_head: 2.00e-03
+Fine-tune Epoch [629/5000], Train Loss: -1.6826, Val NLL: -1.6825, LR_head: 2.00e-03
+Fine-tune Epoch [630/5000], Train Loss: -1.7095, Val NLL: -1.6373, LR_head: 2.00e-03
+Fine-tune Epoch [631/5000], Train Loss: -1.6950, Val NLL: -1.6965, LR_head: 2.00e-03
+Fine-tune Epoch [632/5000], Train Loss: -1.6753, Val NLL: -1.6839, LR_head: 2.00e-03
+Fine-tune Epoch [633/5000], Train Loss: -1.7097, Val NLL: -1.6737, LR_head: 2.00e-03
+Fine-tune Epoch [634/5000], Train Loss: -1.6916, Val NLL: -1.6682, LR_head: 2.00e-03
+Fine-tune Epoch [635/5000], Train Loss: -1.6780, Val NLL: -1.6719, LR_head: 2.00e-03
+Fine-tune Epoch [636/5000], Train Loss: -1.6994, Val NLL: -1.6616, LR_head: 2.00e-03
+Fine-tune Epoch [637/5000], Train Loss: -1.7109, Val NLL: -1.6601, LR_head: 2.00e-03
+Fine-tune Epoch [638/5000], Train Loss: -1.6948, Val NLL: -1.6860, LR_head: 2.00e-03
+Fine-tune Epoch [639/5000], Train Loss: -1.7111, Val NLL: -1.6947, LR_head: 2.00e-03
+Fine-tune Epoch [640/5000], Train Loss: -1.7119, Val NLL: -1.7024, LR_head: 2.00e-03
+Fine-tune Epoch [641/5000], Train Loss: -1.6986, Val NLL: -1.6778, LR_head: 2.00e-03
+Fine-tune Epoch [642/5000], Train Loss: -1.7080, Val NLL: -1.6664, LR_head: 2.00e-03
+Fine-tune Epoch [643/5000], Train Loss: -1.7327, Val NLL: -1.6528, LR_head: 2.00e-03
+Fine-tune Epoch [644/5000], Train Loss: -1.6816, Val NLL: -1.6328, LR_head: 2.00e-03
+Fine-tune Epoch [645/5000], Train Loss: -1.6913, Val NLL: -1.6723, LR_head: 2.00e-03
+Fine-tune Epoch [646/5000], Train Loss: -1.7230, Val NLL: -1.7100, LR_head: 2.00e-03
+Fine-tune Epoch [647/5000], Train Loss: -1.7136, Val NLL: -1.6809, LR_head: 2.00e-03
+Fine-tune Epoch [648/5000], Train Loss: -1.7255, Val NLL: -1.6535, LR_head: 2.00e-03
+Fine-tune Epoch [649/5000], Train Loss: -1.7223, Val NLL: -1.6716, LR_head: 2.00e-03
+Fine-tune Epoch [650/5000], Train Loss: -1.7029, Val NLL: -1.6747, LR_head: 2.00e-03
+Fine-tune Epoch [651/5000], Train Loss: -1.7185, Val NLL: -1.6285, LR_head: 2.00e-03
+Fine-tune Epoch [652/5000], Train Loss: -1.6847, Val NLL: -1.6659, LR_head: 2.00e-03
+Fine-tune Epoch [653/5000], Train Loss: -1.7269, Val NLL: -1.6332, LR_head: 2.00e-03
+Fine-tune Epoch [654/5000], Train Loss: -1.7269, Val NLL: -1.6596, LR_head: 2.00e-03
+Fine-tune Epoch [655/5000], Train Loss: -1.7027, Val NLL: -1.6491, LR_head: 2.00e-03
+Fine-tune Epoch [656/5000], Train Loss: -1.7181, Val NLL: -1.6364, LR_head: 2.00e-03
+Fine-tune Epoch [657/5000], Train Loss: -1.6889, Val NLL: -1.6579, LR_head: 2.00e-03
+Fine-tune Epoch [658/5000], Train Loss: -1.7136, Val NLL: -1.6795, LR_head: 2.00e-03
+Fine-tune Epoch [659/5000], Train Loss: -1.7178, Val NLL: -1.6647, LR_head: 2.00e-03
+Fine-tune Epoch [660/5000], Train Loss: -1.7234, Val NLL: -1.6639, LR_head: 2.00e-03
+Fine-tune Epoch [661/5000], Train Loss: -1.7053, Val NLL: -1.6824, LR_head: 2.00e-03
+Fine-tune Epoch [662/5000], Train Loss: -1.7277, Val NLL: -1.6873, LR_head: 2.00e-03
+Fine-tune Epoch [663/5000], Train Loss: -1.7000, Val NLL: -1.6648, LR_head: 2.00e-03
+Fine-tune Epoch [664/5000], Train Loss: -1.7076, Val NLL: -1.6764, LR_head: 2.00e-03
+Fine-tune Epoch [665/5000], Train Loss: -1.7167, Val NLL: -1.6836, LR_head: 2.00e-03
+Fine-tune Epoch [666/5000], Train Loss: -1.7259, Val NLL: -1.7010, LR_head: 2.00e-03
+Fine-tune Epoch [667/5000], Train Loss: -1.6960, Val NLL: -1.6574, LR_head: 2.00e-03
+Fine-tune Epoch [668/5000], Train Loss: -1.7146, Val NLL: -1.6921, LR_head: 2.00e-03
+Fine-tune Epoch [669/5000], Train Loss: -1.7302, Val NLL: -1.6831, LR_head: 2.00e-03
+Fine-tune Epoch [670/5000], Train Loss: -1.7312, Val NLL: -1.6769, LR_head: 2.00e-03
+Fine-tune Epoch [671/5000], Train Loss: -1.7347, Val NLL: -1.6340, LR_head: 2.00e-03
+Fine-tune Epoch [672/5000], Train Loss: -1.7419, Val NLL: -1.6671, LR_head: 2.00e-03
+Fine-tune Epoch [673/5000], Train Loss: -1.6959, Val NLL: -1.6834, LR_head: 2.00e-03
+Fine-tune Epoch [674/5000], Train Loss: -1.7439, Val NLL: -1.6866, LR_head: 2.00e-03
+Fine-tune Epoch [675/5000], Train Loss: -1.7175, Val NLL: -1.6691, LR_head: 2.00e-03
+Fine-tune Epoch [676/5000], Train Loss: -1.7355, Val NLL: -1.6691, LR_head: 2.00e-03
+Fine-tune Epoch [677/5000], Train Loss: -1.7361, Val NLL: -1.6760, LR_head: 2.00e-03
+Fine-tune Epoch [678/5000], Train Loss: -1.6933, Val NLL: -1.6534, LR_head: 2.00e-03
+Fine-tune Epoch [679/5000], Train Loss: -1.7089, Val NLL: -1.6422, LR_head: 2.00e-03
+Fine-tune Epoch [680/5000], Train Loss: -1.7094, Val NLL: -1.6494, LR_head: 2.00e-03
+Fine-tune Epoch [681/5000], Train Loss: -1.7461, Val NLL: -1.6476, LR_head: 2.00e-03
+Fine-tune Epoch [682/5000], Train Loss: -1.6978, Val NLL: -1.6480, LR_head: 2.00e-03
+Fine-tune Epoch [683/5000], Train Loss: -1.7476, Val NLL: -1.6333, LR_head: 2.00e-03
+Fine-tune Epoch [684/5000], Train Loss: -1.7171, Val NLL: -1.6627, LR_head: 2.00e-03
+Fine-tune Epoch [685/5000], Train Loss: -1.7047, Val NLL: -1.6671, LR_head: 2.00e-03
+Fine-tune Epoch [686/5000], Train Loss: -1.7043, Val NLL: -1.6481, LR_head: 2.00e-03
+Fine-tune Epoch [687/5000], Train Loss: -1.7407, Val NLL: -1.6317, LR_head: 2.00e-03
+Fine-tune Epoch [688/5000], Train Loss: -1.7285, Val NLL: -1.6655, LR_head: 2.00e-03
+Fine-tune Epoch [689/5000], Train Loss: -1.7149, Val NLL: -1.6716, LR_head: 2.00e-03
+Fine-tune Epoch [690/5000], Train Loss: -1.7099, Val NLL: -1.6757, LR_head: 2.00e-03
+Fine-tune Epoch [691/5000], Train Loss: -1.7075, Val NLL: -1.6771, LR_head: 2.00e-03
+Fine-tune Epoch [692/5000], Train Loss: -1.7200, Val NLL: -1.6715, LR_head: 2.00e-03
+Fine-tune Epoch [693/5000], Train Loss: -1.7248, Val NLL: -1.6919, LR_head: 2.00e-03
+Fine-tune Epoch [694/5000], Train Loss: -1.7384, Val NLL: -1.6605, LR_head: 2.00e-03
+Fine-tune Epoch [695/5000], Train Loss: -1.7078, Val NLL: -1.6667, LR_head: 2.00e-03
+Fine-tune Epoch [696/5000], Train Loss: -1.7308, Val NLL: -1.6697, LR_head: 2.00e-03
+Fine-tune Epoch [697/5000], Train Loss: -1.7079, Val NLL: -1.6702, LR_head: 2.00e-03
+Fine-tune Epoch [698/5000], Train Loss: -1.7156, Val NLL: -1.6422, LR_head: 2.00e-03
+Fine-tune Epoch [699/5000], Train Loss: -1.7291, Val NLL: -1.6635, LR_head: 2.00e-03
+Fine-tune Epoch [700/5000], Train Loss: -1.7092, Val NLL: -1.6704, LR_head: 2.00e-03
+Fine-tune Epoch [701/5000], Train Loss: -1.6991, Val NLL: -1.6503, LR_head: 2.00e-03
+Fine-tune Epoch [702/5000], Train Loss: -1.7335, Val NLL: -1.6508, LR_head: 2.00e-03
+Fine-tune Epoch [703/5000], Train Loss: -1.7430, Val NLL: -1.6271, LR_head: 2.00e-03
+Fine-tune Epoch [704/5000], Train Loss: -1.7322, Val NLL: -1.6581, LR_head: 2.00e-03
+Fine-tune Epoch [705/5000], Train Loss: -1.7001, Val NLL: -1.6554, LR_head: 2.00e-03
+Fine-tune Epoch [706/5000], Train Loss: -1.7467, Val NLL: -1.6382, LR_head: 2.00e-03
+Fine-tune Epoch [707/5000], Train Loss: -1.7384, Val NLL: -1.6492, LR_head: 2.00e-03
+Fine-tune Epoch [708/5000], Train Loss: -1.7143, Val NLL: -1.7018, LR_head: 2.00e-03
+Fine-tune Epoch [709/5000], Train Loss: -1.7099, Val NLL: -1.6629, LR_head: 2.00e-03
+Fine-tune Epoch [710/5000], Train Loss: -1.7458, Val NLL: -1.6599, LR_head: 2.00e-03
+Fine-tune Epoch [711/5000], Train Loss: -1.7230, Val NLL: -1.6909, LR_head: 2.00e-03
+Fine-tune Epoch [712/5000], Train Loss: -1.7564, Val NLL: -1.6702, LR_head: 2.00e-03
+Fine-tune Epoch [713/5000], Train Loss: -1.7180, Val NLL: -1.6890, LR_head: 2.00e-03
+Fine-tune Epoch [714/5000], Train Loss: -1.7213, Val NLL: -1.7038, LR_head: 2.00e-03
+Fine-tune Epoch [715/5000], Train Loss: -1.7066, Val NLL: -1.6885, LR_head: 2.00e-03
+Fine-tune Epoch [716/5000], Train Loss: -1.7546, Val NLL: -1.6597, LR_head: 2.00e-03
+Fine-tune Epoch [717/5000], Train Loss: -1.7198, Val NLL: -1.6368, LR_head: 2.00e-03
+Fine-tune Epoch [718/5000], Train Loss: -1.7335, Val NLL: -1.6875, LR_head: 2.00e-03
+Fine-tune Epoch [719/5000], Train Loss: -1.7405, Val NLL: -1.6618, LR_head: 2.00e-03
+Fine-tune Epoch [720/5000], Train Loss: -1.7312, Val NLL: -1.6783, LR_head: 2.00e-03
+Fine-tune Epoch [721/5000], Train Loss: -1.7348, Val NLL: -1.6691, LR_head: 2.00e-03
+Fine-tune Epoch [722/5000], Train Loss: -1.7448, Val NLL: -1.6572, LR_head: 2.00e-03
+Fine-tune Epoch [723/5000], Train Loss: -1.7535, Val NLL: -1.6634, LR_head: 2.00e-03
+Fine-tune Epoch [724/5000], Train Loss: -1.7376, Val NLL: -1.6814, LR_head: 2.00e-03
+Fine-tune Epoch [725/5000], Train Loss: -1.7558, Val NLL: -1.6559, LR_head: 2.00e-03
+Fine-tune Epoch [726/5000], Train Loss: -1.6948, Val NLL: -1.6392, LR_head: 2.00e-03
+Fine-tune Epoch [727/5000], Train Loss: -1.7217, Val NLL: -1.6503, LR_head: 2.00e-03
+Fine-tune Epoch [728/5000], Train Loss: -1.7214, Val NLL: -1.6204, LR_head: 2.00e-03
+Fine-tune Epoch [729/5000], Train Loss: -1.7431, Val NLL: -1.6380, LR_head: 2.00e-03
+Fine-tune Epoch [730/5000], Train Loss: -1.7707, Val NLL: -1.6612, LR_head: 2.00e-03
+Fine-tune Epoch [731/5000], Train Loss: -1.7307, Val NLL: -1.6737, LR_head: 2.00e-03
+Fine-tune Epoch [732/5000], Train Loss: -1.7307, Val NLL: -1.6830, LR_head: 2.00e-03
+Fine-tune Epoch [733/5000], Train Loss: -1.7358, Val NLL: -1.6617, LR_head: 2.00e-03
+Fine-tune Epoch [734/5000], Train Loss: -1.7440, Val NLL: -1.6714, LR_head: 2.00e-03
+Fine-tune Epoch [735/5000], Train Loss: -1.7386, Val NLL: -1.6625, LR_head: 2.00e-03
+Fine-tune Epoch [736/5000], Train Loss: -1.7390, Val NLL: -1.6391, LR_head: 2.00e-03
+Fine-tune Epoch [737/5000], Train Loss: -1.7376, Val NLL: -1.6245, LR_head: 2.00e-03
+Fine-tune Epoch [738/5000], Train Loss: -1.7459, Val NLL: -1.6427, LR_head: 2.00e-03
+Fine-tune Epoch [739/5000], Train Loss: -1.7329, Val NLL: -1.6600, LR_head: 2.00e-03
+Fine-tune Epoch [740/5000], Train Loss: -1.7336, Val NLL: -1.6431, LR_head: 2.00e-03
+Fine-tune Epoch [741/5000], Train Loss: -1.7599, Val NLL: -1.6415, LR_head: 2.00e-03
+Fine-tune Epoch [742/5000], Train Loss: -1.7359, Val NLL: -1.6535, LR_head: 2.00e-03
+Fine-tune Epoch [743/5000], Train Loss: -1.7495, Val NLL: -1.6008, LR_head: 2.00e-03
+Fine-tune Epoch [744/5000], Train Loss: -1.7012, Val NLL: -1.6228, LR_head: 2.00e-03
+Fine-tune Epoch [745/5000], Train Loss: -1.7626, Val NLL: -1.6524, LR_head: 2.00e-03
+Fine-tune Epoch [746/5000], Train Loss: -1.7716, Val NLL: -1.6256, LR_head: 2.00e-03
+Fine-tune Epoch [747/5000], Train Loss: -1.7812, Val NLL: -1.6309, LR_head: 2.00e-03
+Fine-tune Epoch [748/5000], Train Loss: -1.7401, Val NLL: -1.6241, LR_head: 2.00e-03
+Fine-tune Epoch [749/5000], Train Loss: -1.7501, Val NLL: -1.6231, LR_head: 2.00e-03
+Fine-tune Epoch [750/5000], Train Loss: -1.7501, Val NLL: -1.6348, LR_head: 2.00e-03
+Fine-tune Epoch [751/5000], Train Loss: -1.7786, Val NLL: -1.6398, LR_head: 2.00e-03
+Fine-tune Epoch [752/5000], Train Loss: -1.7591, Val NLL: -1.6240, LR_head: 2.00e-03
+Fine-tune Epoch [753/5000], Train Loss: -1.7272, Val NLL: -1.6396, LR_head: 2.00e-03
+Fine-tune Epoch [754/5000], Train Loss: -1.7148, Val NLL: -1.6430, LR_head: 2.00e-03
+Fine-tune Epoch [755/5000], Train Loss: -1.7481, Val NLL: -1.6397, LR_head: 2.00e-03
+Fine-tune Epoch [756/5000], Train Loss: -1.7554, Val NLL: -1.6500, LR_head: 2.00e-03
+Fine-tune Epoch [757/5000], Train Loss: -1.7133, Val NLL: -1.6157, LR_head: 2.00e-03
+Fine-tune Epoch [758/5000], Train Loss: -1.7521, Val NLL: -1.6344, LR_head: 2.00e-03
+Fine-tune Epoch [759/5000], Train Loss: -1.7308, Val NLL: -1.6443, LR_head: 2.00e-03
+Fine-tune Epoch [760/5000], Train Loss: -1.7319, Val NLL: -1.6031, LR_head: 2.00e-03
+Fine-tune Epoch [761/5000], Train Loss: -1.7651, Val NLL: -1.6288, LR_head: 2.00e-03
+Fine-tune Epoch [762/5000], Train Loss: -1.7256, Val NLL: -1.6108, LR_head: 2.00e-03
+Fine-tune Epoch [763/5000], Train Loss: -1.7267, Val NLL: -1.6473, LR_head: 2.00e-03
+Fine-tune Epoch [764/5000], Train Loss: -1.7460, Val NLL: -1.6241, LR_head: 2.00e-03
+Fine-tune Epoch [765/5000], Train Loss: -1.7378, Val NLL: -1.5992, LR_head: 2.00e-03
+Fine-tune Epoch [766/5000], Train Loss: -1.7165, Val NLL: -1.6285, LR_head: 2.00e-03
+Fine-tune Epoch [767/5000], Train Loss: -1.7810, Val NLL: -1.6196, LR_head: 2.00e-03
+Fine-tune Epoch [768/5000], Train Loss: -1.7407, Val NLL: -1.6311, LR_head: 2.00e-03
+Fine-tune Epoch [769/5000], Train Loss: -1.7527, Val NLL: -1.6095, LR_head: 2.00e-03
+Fine-tune Epoch [770/5000], Train Loss: -1.7328, Val NLL: -1.6417, LR_head: 2.00e-03
+Fine-tune Epoch [771/5000], Train Loss: -1.7860, Val NLL: -1.6391, LR_head: 2.00e-03
+Fine-tune Epoch [772/5000], Train Loss: -1.7403, Val NLL: -1.6327, LR_head: 2.00e-03
+Fine-tune Epoch [773/5000], Train Loss: -1.7409, Val NLL: -1.6180, LR_head: 2.00e-03
+Fine-tune Epoch [774/5000], Train Loss: -1.7435, Val NLL: -1.6484, LR_head: 2.00e-03
+Fine-tune Epoch [775/5000], Train Loss: -1.7440, Val NLL: -1.6426, LR_head: 2.00e-03
+Fine-tune Epoch [776/5000], Train Loss: -1.7889, Val NLL: -1.6750, LR_head: 2.00e-03
+Fine-tune Epoch [777/5000], Train Loss: -1.7741, Val NLL: -1.6569, LR_head: 2.00e-03
+Fine-tune Epoch [778/5000], Train Loss: -1.7617, Val NLL: -1.6599, LR_head: 2.00e-03
+Fine-tune Epoch [779/5000], Train Loss: -1.7683, Val NLL: -1.6460, LR_head: 2.00e-03
+Fine-tune Epoch [780/5000], Train Loss: -1.7645, Val NLL: -1.6631, LR_head: 2.00e-03
+Fine-tune Epoch [781/5000], Train Loss: -1.7670, Val NLL: -1.6324, LR_head: 2.00e-03
+Fine-tune Epoch [782/5000], Train Loss: -1.7703, Val NLL: -1.6424, LR_head: 2.00e-03
+Fine-tune Epoch [783/5000], Train Loss: -1.7574, Val NLL: -1.6404, LR_head: 2.00e-03
+Fine-tune Epoch [784/5000], Train Loss: -1.7566, Val NLL: -1.6517, LR_head: 2.00e-03
+Fine-tune Epoch [785/5000], Train Loss: -1.7693, Val NLL: -1.6800, LR_head: 2.00e-03
+Fine-tune Epoch [786/5000], Train Loss: -1.7560, Val NLL: -1.6541, LR_head: 2.00e-03
+Fine-tune Epoch [787/5000], Train Loss: -1.7783, Val NLL: -1.6770, LR_head: 2.00e-03
+Fine-tune Epoch [788/5000], Train Loss: -1.7661, Val NLL: -1.6725, LR_head: 2.00e-03
+Fine-tune Epoch [789/5000], Train Loss: -1.7746, Val NLL: -1.6591, LR_head: 2.00e-03
+Fine-tune Epoch [790/5000], Train Loss: -1.7767, Val NLL: -1.6487, LR_head: 2.00e-03
+Fine-tune Epoch [791/5000], Train Loss: -1.7510, Val NLL: -1.6764, LR_head: 2.00e-03
+Fine-tune Epoch [792/5000], Train Loss: -1.7643, Val NLL: -1.6695, LR_head: 2.00e-03
+Fine-tune Epoch [793/5000], Train Loss: -1.7582, Val NLL: -1.6471, LR_head: 2.00e-03
+Fine-tune Epoch [794/5000], Train Loss: -1.7707, Val NLL: -1.6510, LR_head: 2.00e-03
+Fine-tune Epoch [795/5000], Train Loss: -1.7330, Val NLL: -1.6497, LR_head: 2.00e-03
+Fine-tune Epoch [796/5000], Train Loss: -1.7631, Val NLL: -1.6661, LR_head: 2.00e-03
+Fine-tune Epoch [797/5000], Train Loss: -1.7279, Val NLL: -1.6209, LR_head: 2.00e-03
+Fine-tune Epoch [798/5000], Train Loss: -1.7731, Val NLL: -1.6493, LR_head: 2.00e-03
+Fine-tune Epoch [799/5000], Train Loss: -1.7194, Val NLL: -1.6411, LR_head: 2.00e-03
+Fine-tune Epoch [800/5000], Train Loss: -1.7479, Val NLL: -1.6310, LR_head: 2.00e-03
+Fine-tune Epoch [801/5000], Train Loss: -1.7655, Val NLL: -1.6271, LR_head: 2.00e-03
+Fine-tune Epoch [802/5000], Train Loss: -1.7502, Val NLL: -1.6254, LR_head: 2.00e-03
+Fine-tune Epoch [803/5000], Train Loss: -1.7931, Val NLL: -1.5925, LR_head: 2.00e-03
+Fine-tune Epoch [804/5000], Train Loss: -1.7425, Val NLL: -1.6403, LR_head: 2.00e-03
+Fine-tune Epoch [805/5000], Train Loss: -1.7622, Val NLL: -1.6316, LR_head: 2.00e-03
+Fine-tune Epoch [806/5000], Train Loss: -1.7665, Val NLL: -1.6501, LR_head: 2.00e-03
+Fine-tune Epoch [807/5000], Train Loss: -1.7862, Val NLL: -1.6277, LR_head: 2.00e-03
+Fine-tune Epoch [808/5000], Train Loss: -1.7705, Val NLL: -1.6282, LR_head: 2.00e-03
+Fine-tune Epoch [809/5000], Train Loss: -1.7654, Val NLL: -1.6542, LR_head: 2.00e-03
+Fine-tune Epoch [810/5000], Train Loss: -1.7408, Val NLL: -1.6507, LR_head: 2.00e-03
+Fine-tune Epoch [811/5000], Train Loss: -1.7746, Val NLL: -1.6370, LR_head: 2.00e-03
+Fine-tune Epoch [812/5000], Train Loss: -1.7492, Val NLL: -1.6422, LR_head: 2.00e-03
+Fine-tune Epoch [813/5000], Train Loss: -1.7637, Val NLL: -1.6085, LR_head: 2.00e-03
+Fine-tune Epoch [814/5000], Train Loss: -1.7929, Val NLL: -1.6410, LR_head: 2.00e-03
+Fine-tune Epoch [815/5000], Train Loss: -1.7749, Val NLL: -1.6555, LR_head: 2.00e-03
+Fine-tune Epoch [816/5000], Train Loss: -1.7709, Val NLL: -1.6503, LR_head: 2.00e-03
+Fine-tune Epoch [817/5000], Train Loss: -1.7422, Val NLL: -1.6563, LR_head: 2.00e-03
+Fine-tune Epoch [818/5000], Train Loss: -1.7620, Val NLL: -1.6392, LR_head: 2.00e-03
+Fine-tune Epoch [819/5000], Train Loss: -1.7541, Val NLL: -1.6596, LR_head: 2.00e-03
+Fine-tune Epoch [820/5000], Train Loss: -1.7652, Val NLL: -1.6670, LR_head: 2.00e-03
+Fine-tune Epoch [821/5000], Train Loss: -1.7716, Val NLL: -1.6518, LR_head: 2.00e-03
+Fine-tune Epoch [822/5000], Train Loss: -1.7672, Val NLL: -1.6449, LR_head: 2.00e-03
+Fine-tune Epoch [823/5000], Train Loss: -1.7549, Val NLL: -1.6354, LR_head: 2.00e-03
+Fine-tune Epoch [824/5000], Train Loss: -1.7746, Val NLL: -1.6509, LR_head: 2.00e-03
+Fine-tune Epoch [825/5000], Train Loss: -1.7675, Val NLL: -1.6559, LR_head: 2.00e-03
+Fine-tune Epoch [826/5000], Train Loss: -1.7558, Val NLL: -1.6284, LR_head: 2.00e-03
+Fine-tune Epoch [827/5000], Train Loss: -1.7570, Val NLL: -1.6247, LR_head: 2.00e-03
+Fine-tune Epoch [828/5000], Train Loss: -1.7588, Val NLL: -1.6483, LR_head: 2.00e-03
+Fine-tune Epoch [829/5000], Train Loss: -1.7450, Val NLL: -1.6298, LR_head: 2.00e-03
+Fine-tune Epoch [830/5000], Train Loss: -1.7613, Val NLL: -1.6349, LR_head: 2.00e-03
+Fine-tune Epoch [831/5000], Train Loss: -1.7330, Val NLL: -1.6420, LR_head: 2.00e-03
+Fine-tune Epoch [832/5000], Train Loss: -1.7608, Val NLL: -1.6161, LR_head: 2.00e-03
+Fine-tune Epoch [833/5000], Train Loss: -1.7670, Val NLL: -1.6036, LR_head: 2.00e-03
+Fine-tune Epoch [834/5000], Train Loss: -1.7567, Val NLL: -1.5933, LR_head: 2.00e-03
+Fine-tune Epoch [835/5000], Train Loss: -1.7912, Val NLL: -1.6251, LR_head: 2.00e-03
+Fine-tune Epoch [836/5000], Train Loss: -1.7569, Val NLL: -1.6199, LR_head: 2.00e-03
+Fine-tune Epoch [837/5000], Train Loss: -1.7895, Val NLL: -1.5975, LR_head: 2.00e-03
+Fine-tune Epoch [838/5000], Train Loss: -1.7571, Val NLL: -1.6372, LR_head: 2.00e-03
+Fine-tune Epoch [839/5000], Train Loss: -1.7551, Val NLL: -1.6311, LR_head: 2.00e-03
+Fine-tune Epoch [840/5000], Train Loss: -1.7600, Val NLL: -1.6315, LR_head: 2.00e-03
+Fine-tune Epoch [841/5000], Train Loss: -1.7674, Val NLL: -1.6297, LR_head: 2.00e-03
+Fine-tune Epoch [842/5000], Train Loss: -1.7518, Val NLL: -1.6214, LR_head: 2.00e-03
+Fine-tune Epoch [843/5000], Train Loss: -1.7586, Val NLL: -1.6208, LR_head: 2.00e-03
+Fine-tune Epoch [844/5000], Train Loss: -1.7576, Val NLL: -1.6256, LR_head: 2.00e-03
+Fine-tune Epoch [845/5000], Train Loss: -1.7628, Val NLL: -1.6136, LR_head: 2.00e-03
+Fine-tune Epoch [846/5000], Train Loss: -1.7743, Val NLL: -1.6286, LR_head: 2.00e-03
+Fine-tune Epoch [847/5000], Train Loss: -1.7647, Val NLL: -1.6198, LR_head: 2.00e-03
+Fine-tune Epoch [848/5000], Train Loss: -1.7754, Val NLL: -1.6338, LR_head: 2.00e-03
+Fine-tune Epoch [849/5000], Train Loss: -1.7684, Val NLL: -1.6190, LR_head: 2.00e-03
+Fine-tune Epoch [850/5000], Train Loss: -1.7747, Val NLL: -1.6406, LR_head: 2.00e-03
+Fine-tune Epoch [851/5000], Train Loss: -1.7599, Val NLL: -1.6354, LR_head: 2.00e-03
+Fine-tune Epoch [852/5000], Train Loss: -1.7602, Val NLL: -1.6462, LR_head: 2.00e-03
+Fine-tune Epoch [853/5000], Train Loss: -1.7758, Val NLL: -1.6446, LR_head: 2.00e-03
+Fine-tune Epoch [854/5000], Train Loss: -1.7752, Val NLL: -1.6246, LR_head: 2.00e-03
+Fine-tune Epoch [855/5000], Train Loss: -1.7870, Val NLL: -1.6133, LR_head: 2.00e-03
+Fine-tune Epoch [856/5000], Train Loss: -1.7514, Val NLL: -1.6302, LR_head: 2.00e-03
+Fine-tune Epoch [857/5000], Train Loss: -1.7869, Val NLL: -1.6548, LR_head: 2.00e-03
+Fine-tune Epoch [858/5000], Train Loss: -1.7532, Val NLL: -1.6081, LR_head: 2.00e-03
+Fine-tune Epoch [859/5000], Train Loss: -1.7640, Val NLL: -1.5915, LR_head: 2.00e-03
+Fine-tune Epoch [860/5000], Train Loss: -1.7754, Val NLL: -1.6236, LR_head: 2.00e-03
+Fine-tune Epoch [861/5000], Train Loss: -1.7688, Val NLL: -1.6062, LR_head: 2.00e-03
+Fine-tune Epoch [862/5000], Train Loss: -1.7681, Val NLL: -1.6160, LR_head: 2.00e-03
+Fine-tune Epoch [863/5000], Train Loss: -1.7709, Val NLL: -1.6496, LR_head: 2.00e-03
+Fine-tune Epoch [864/5000], Train Loss: -1.7828, Val NLL: -1.6329, LR_head: 2.00e-03
+Fine-tune Epoch [865/5000], Train Loss: -1.7703, Val NLL: -1.6286, LR_head: 2.00e-03
+Fine-tune Epoch [866/5000], Train Loss: -1.8064, Val NLL: -1.6158, LR_head: 2.00e-03
+Fine-tune Epoch [867/5000], Train Loss: -1.7927, Val NLL: -1.6178, LR_head: 2.00e-03
+Fine-tune Epoch [868/5000], Train Loss: -1.8189, Val NLL: -1.6436, LR_head: 2.00e-03
+Fine-tune Epoch [869/5000], Train Loss: -1.7870, Val NLL: -1.6212, LR_head: 2.00e-03
+Fine-tune Epoch [870/5000], Train Loss: -1.7620, Val NLL: -1.6008, LR_head: 2.00e-03
+Fine-tune Epoch [871/5000], Train Loss: -1.7864, Val NLL: -1.5689, LR_head: 2.00e-03
+Fine-tune Epoch [872/5000], Train Loss: -1.7649, Val NLL: -1.5920, LR_head: 2.00e-03
+Fine-tune Epoch [873/5000], Train Loss: -1.7778, Val NLL: -1.5867, LR_head: 2.00e-03
+Fine-tune Epoch [874/5000], Train Loss: -1.7919, Val NLL: -1.5866, LR_head: 2.00e-03
+Fine-tune Epoch [875/5000], Train Loss: -1.8098, Val NLL: -1.5627, LR_head: 2.00e-03
+Fine-tune Epoch [876/5000], Train Loss: -1.7486, Val NLL: -1.5396, LR_head: 2.00e-03
+Fine-tune Epoch [877/5000], Train Loss: -1.7489, Val NLL: -1.5683, LR_head: 2.00e-03
+Fine-tune Epoch [878/5000], Train Loss: -1.7840, Val NLL: -1.5647, LR_head: 2.00e-03
+Fine-tune Epoch [879/5000], Train Loss: -1.7809, Val NLL: -1.5857, LR_head: 2.00e-03
+Fine-tune Epoch [880/5000], Train Loss: -1.7684, Val NLL: -1.5729, LR_head: 2.00e-03
+Fine-tune Epoch [881/5000], Train Loss: -1.7913, Val NLL: -1.6141, LR_head: 2.00e-03
+Fine-tune Epoch [882/5000], Train Loss: -1.7992, Val NLL: -1.6268, LR_head: 2.00e-03
+Fine-tune Epoch [883/5000], Train Loss: -1.7813, Val NLL: -1.6007, LR_head: 2.00e-03
+Fine-tune Epoch [884/5000], Train Loss: -1.7843, Val NLL: -1.6165, LR_head: 2.00e-03
+Fine-tune Epoch [885/5000], Train Loss: -1.7848, Val NLL: -1.5974, LR_head: 2.00e-03
+Fine-tune Epoch [886/5000], Train Loss: -1.7687, Val NLL: -1.6110, LR_head: 2.00e-03
+Fine-tune Epoch [887/5000], Train Loss: -1.7721, Val NLL: -1.6102, LR_head: 2.00e-03
+Fine-tune Epoch [888/5000], Train Loss: -1.7495, Val NLL: -1.6139, LR_head: 2.00e-03
+Fine-tune Epoch [889/5000], Train Loss: -1.8053, Val NLL: -1.6079, LR_head: 2.00e-03
+Fine-tune Epoch [890/5000], Train Loss: -1.7773, Val NLL: -1.6208, LR_head: 2.00e-03
+Fine-tune Epoch [891/5000], Train Loss: -1.7843, Val NLL: -1.6308, LR_head: 2.00e-03
+Fine-tune Epoch [892/5000], Train Loss: -1.8071, Val NLL: -1.6194, LR_head: 2.00e-03
+Fine-tune Epoch [893/5000], Train Loss: -1.8061, Val NLL: -1.6121, LR_head: 2.00e-03
+Fine-tune Epoch [894/5000], Train Loss: -1.7767, Val NLL: -1.6006, LR_head: 2.00e-03
+Fine-tune Epoch [895/5000], Train Loss: -1.7888, Val NLL: -1.5906, LR_head: 2.00e-03
+Fine-tune Epoch [896/5000], Train Loss: -1.7922, Val NLL: -1.6131, LR_head: 2.00e-03
+Fine-tune Epoch [897/5000], Train Loss: -1.7944, Val NLL: -1.5823, LR_head: 2.00e-03
+Fine-tune Epoch [898/5000], Train Loss: -1.7824, Val NLL: -1.6012, LR_head: 2.00e-03
+Fine-tune Epoch [899/5000], Train Loss: -1.7919, Val NLL: -1.6018, LR_head: 2.00e-03
+Fine-tune Epoch [900/5000], Train Loss: -1.7726, Val NLL: -1.5999, LR_head: 2.00e-03
+Fine-tune Epoch [901/5000], Train Loss: -1.7783, Val NLL: -1.6009, LR_head: 2.00e-03
+Fine-tune Epoch [902/5000], Train Loss: -1.8009, Val NLL: -1.5938, LR_head: 2.00e-03
+Fine-tune Epoch [903/5000], Train Loss: -1.7749, Val NLL: -1.5512, LR_head: 2.00e-03
+Fine-tune Epoch [904/5000], Train Loss: -1.7845, Val NLL: -1.5891, LR_head: 2.00e-03
+Fine-tune Epoch [905/5000], Train Loss: -1.7625, Val NLL: -1.5939, LR_head: 2.00e-03
+Fine-tune Epoch [906/5000], Train Loss: -1.7979, Val NLL: -1.5754, LR_head: 2.00e-03
+Fine-tune Epoch [907/5000], Train Loss: -1.7961, Val NLL: -1.6096, LR_head: 2.00e-03
+Fine-tune Epoch [908/5000], Train Loss: -1.7792, Val NLL: -1.6033, LR_head: 2.00e-03
+Fine-tune Epoch [909/5000], Train Loss: -1.7661, Val NLL: -1.5974, LR_head: 2.00e-03
+Fine-tune Epoch [910/5000], Train Loss: -1.7688, Val NLL: -1.6180, LR_head: 2.00e-03
+Fine-tune Epoch [911/5000], Train Loss: -1.7733, Val NLL: -1.6003, LR_head: 2.00e-03
+Fine-tune Epoch [912/5000], Train Loss: -1.8008, Val NLL: -1.5996, LR_head: 2.00e-03
+Fine-tune Epoch [913/5000], Train Loss: -1.7746, Val NLL: -1.6115, LR_head: 2.00e-03
+Fine-tune Epoch [914/5000], Train Loss: -1.7918, Val NLL: -1.5854, LR_head: 2.00e-03
+验证损失连续 500 轮未改善，触发早停。
+--- [阶段二] 微调完成，最佳模型已保存至 results/two_stage_opamp_finetuned.pth ---
+
+--- [评估流程启动] ---
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.988e+13  MAE=3.015e+06  R2=0.9303
+dc_gain         MSE=1.886e+07  MAE=1207  R2=0.5159
+ugf             MSE=9.803e+12  MAE=1.897e+06  R2=0.9778
+phase_margin    MSE=67.41  MAE=5.151  R2=0.9413
+cmrr            MSE=8.329e+11  MAE=8.301e+04  R2=0.0383
+
+Avg  (all dims)   MSE=8.103e+12  MAE=9.991e+05  R2=0.6807
+
+--- Running: train_target_only for two_stage_opamp ---
+
+[CMD] In directory '/home/mario1578347613/eda-for-transfer-learning-1/src', running: python -m train_target_only --opamp two_stage_opamp --restart
+--- 开始为 two_stage_opamp 加载数据 ---
+已对列 ['ugf', 'cmrr', 'dc_gain', 'slewrate_pos'] 进行 log1p 变换。
+StandardScaler 已在工艺 A(Source) 上完成 fit。
+A/B 全部数据已完成标准化（基于 A 域的 scaler）。
+工艺 A 数据已划分为 80% 训练集 / 20% 验证集。
+工艺 B 数据已划分为 80% 训练集 / 20% 验证集。
+[Target-Only] 使用 hidden_dims = [256, 256, 256, 256]
+[Target-Only] opamp: two_stage_opamp, device: cpu, ckpt: two_stage_opamp_target_only.pth
+[Target-Only] `--restart` 指定：已删除旧 checkpoint，将从头训练。
+[Target-Only][001/5000] Train NLL=0.5022 | Val NLL=0.3038
+-> New best model saved.
+[Target-Only][002/5000] Train NLL=0.3549 | Val NLL=0.2658
+-> New best model saved.
+[Target-Only][003/5000] Train NLL=0.2618 | Val NLL=0.1700
+-> New best model saved.
+[Target-Only][004/5000] Train NLL=0.1726 | Val NLL=0.0788
+-> New best model saved.
+[Target-Only][005/5000] Train NLL=0.0995 | Val NLL=0.0173
+-> New best model saved.
+[Target-Only][006/5000] Train NLL=0.0350 | Val NLL=-0.0543
+-> New best model saved.
+[Target-Only][007/5000] Train NLL=-0.0240 | Val NLL=-0.1020
+-> New best model saved.
+[Target-Only][008/5000] Train NLL=-0.0758 | Val NLL=-0.1576
+-> New best model saved.
+[Target-Only][009/5000] Train NLL=-0.1399 | Val NLL=-0.1896
+-> New best model saved.
+[Target-Only][010/5000] Train NLL=-0.2117 | Val NLL=-0.2436
+-> New best model saved.
+[Target-Only][011/5000] Train NLL=-0.2286 | Val NLL=-0.2745
+-> New best model saved.
+[Target-Only][012/5000] Train NLL=-0.2858 | Val NLL=-0.3470
+-> New best model saved.
+[Target-Only][013/5000] Train NLL=-0.3447 | Val NLL=-0.3971
+-> New best model saved.
+[Target-Only][014/5000] Train NLL=-0.3789 | Val NLL=-0.4398
+-> New best model saved.
+[Target-Only][015/5000] Train NLL=-0.4072 | Val NLL=-0.4465
+-> New best model saved.
+[Target-Only][016/5000] Train NLL=-0.4040 | Val NLL=-0.4913
+-> New best model saved.
+[Target-Only][017/5000] Train NLL=-0.4951 | Val NLL=-0.5558
+-> New best model saved.
+[Target-Only][018/5000] Train NLL=-0.5163 | Val NLL=-0.5804
+-> New best model saved.
+[Target-Only][019/5000] Train NLL=-0.5661 | Val NLL=-0.6077
+-> New best model saved.
+[Target-Only][020/5000] Train NLL=-0.5933 | Val NLL=-0.5896
+[Target-Only][021/5000] Train NLL=-0.6098 | Val NLL=-0.6300
+-> New best model saved.
+[Target-Only][022/5000] Train NLL=-0.6487 | Val NLL=-0.6773
+-> New best model saved.
+[Target-Only][023/5000] Train NLL=-0.6625 | Val NLL=-0.7115
+-> New best model saved.
+[Target-Only][024/5000] Train NLL=-0.6811 | Val NLL=-0.6937
+[Target-Only][025/5000] Train NLL=-0.7198 | Val NLL=-0.7763
+-> New best model saved.
+[Target-Only][026/5000] Train NLL=-0.7493 | Val NLL=-0.7228
+[Target-Only][027/5000] Train NLL=-0.7380 | Val NLL=-0.7662
+[Target-Only][028/5000] Train NLL=-0.7819 | Val NLL=-0.8310
+-> New best model saved.
+[Target-Only][029/5000] Train NLL=-0.7785 | Val NLL=-0.8279
+[Target-Only][030/5000] Train NLL=-0.8048 | Val NLL=-0.8468
+-> New best model saved.
+[Target-Only][031/5000] Train NLL=-0.8359 | Val NLL=-0.8408
+[Target-Only][032/5000] Train NLL=-0.8267 | Val NLL=-0.8880
+-> New best model saved.
+[Target-Only][033/5000] Train NLL=-0.8654 | Val NLL=-0.9094
+-> New best model saved.
+[Target-Only][034/5000] Train NLL=-0.8806 | Val NLL=-0.9328
+-> New best model saved.
+[Target-Only][035/5000] Train NLL=-0.9166 | Val NLL=-0.8983
+[Target-Only][036/5000] Train NLL=-0.9101 | Val NLL=-0.9567
+-> New best model saved.
+[Target-Only][037/5000] Train NLL=-0.9144 | Val NLL=-0.9605
+-> New best model saved.
+[Target-Only][038/5000] Train NLL=-0.8885 | Val NLL=-0.9871
+-> New best model saved.
+[Target-Only][039/5000] Train NLL=-0.9142 | Val NLL=-0.9361
+[Target-Only][040/5000] Train NLL=-0.9116 | Val NLL=-0.8822
+[Target-Only][041/5000] Train NLL=-0.8899 | Val NLL=-0.9497
+[Target-Only][042/5000] Train NLL=-0.9379 | Val NLL=-0.9665
+[Target-Only][043/5000] Train NLL=-0.9370 | Val NLL=-1.0401
+-> New best model saved.
+[Target-Only][044/5000] Train NLL=-0.9530 | Val NLL=-1.0107
+[Target-Only][045/5000] Train NLL=-0.9438 | Val NLL=-1.0582
+-> New best model saved.
+[Target-Only][046/5000] Train NLL=-0.9148 | Val NLL=-1.0220
+[Target-Only][047/5000] Train NLL=-0.9657 | Val NLL=-1.0116
+[Target-Only][048/5000] Train NLL=-0.9451 | Val NLL=-0.9966
+[Target-Only][049/5000] Train NLL=-0.9967 | Val NLL=-1.0133
+[Target-Only][050/5000] Train NLL=-1.0075 | Val NLL=-1.0249
+[Target-Only][051/5000] Train NLL=-0.9664 | Val NLL=-0.9956
+[Target-Only][052/5000] Train NLL=-0.9540 | Val NLL=-1.0282
+[Target-Only][053/5000] Train NLL=-0.9622 | Val NLL=-0.9545
+[Target-Only][054/5000] Train NLL=-1.0133 | Val NLL=-1.0057
+[Target-Only][055/5000] Train NLL=-1.0588 | Val NLL=-1.0729
+-> New best model saved.
+[Target-Only][056/5000] Train NLL=-0.9927 | Val NLL=-1.1197
+-> New best model saved.
+[Target-Only][057/5000] Train NLL=-1.0419 | Val NLL=-1.0871
+[Target-Only][058/5000] Train NLL=-1.0321 | Val NLL=-1.1089
+[Target-Only][059/5000] Train NLL=-0.9813 | Val NLL=-0.9984
+[Target-Only][060/5000] Train NLL=-0.9720 | Val NLL=-1.0954
+[Target-Only][061/5000] Train NLL=-1.0356 | Val NLL=-1.1077
+[Target-Only][062/5000] Train NLL=-1.0823 | Val NLL=-1.0952
+[Target-Only][063/5000] Train NLL=-1.0543 | Val NLL=-1.0746
+[Target-Only][064/5000] Train NLL=-1.0419 | Val NLL=-1.0825
+[Target-Only][065/5000] Train NLL=-1.0108 | Val NLL=-1.0383
+[Target-Only][066/5000] Train NLL=-1.0181 | Val NLL=-1.0486
+[Target-Only][067/5000] Train NLL=-1.0856 | Val NLL=-1.1285
+-> New best model saved.
+[Target-Only][068/5000] Train NLL=-1.0917 | Val NLL=-1.1488
+-> New best model saved.
+[Target-Only][069/5000] Train NLL=-1.0973 | Val NLL=-1.1462
+[Target-Only][070/5000] Train NLL=-1.0990 | Val NLL=-1.0634
+[Target-Only][071/5000] Train NLL=-1.1046 | Val NLL=-1.1367
+[Target-Only][072/5000] Train NLL=-1.1122 | Val NLL=-1.1019
+[Target-Only][073/5000] Train NLL=-1.0944 | Val NLL=-1.1526
+-> New best model saved.
+[Target-Only][074/5000] Train NLL=-1.1299 | Val NLL=-1.1244
+[Target-Only][075/5000] Train NLL=-1.1388 | Val NLL=-1.1406
+[Target-Only][076/5000] Train NLL=-1.1200 | Val NLL=-1.1316
+[Target-Only][077/5000] Train NLL=-1.1032 | Val NLL=-1.1050
+[Target-Only][078/5000] Train NLL=-1.1159 | Val NLL=-1.1581
+-> New best model saved.
+[Target-Only][079/5000] Train NLL=-1.1282 | Val NLL=-1.1446
+[Target-Only][080/5000] Train NLL=-1.1038 | Val NLL=-1.0348
+[Target-Only][081/5000] Train NLL=-1.0871 | Val NLL=-1.1418
+[Target-Only][082/5000] Train NLL=-1.1124 | Val NLL=-1.1552
+[Target-Only][083/5000] Train NLL=-1.1188 | Val NLL=-1.1637
+-> New best model saved.
+[Target-Only][084/5000] Train NLL=-1.0918 | Val NLL=-1.1618
+[Target-Only][085/5000] Train NLL=-1.1469 | Val NLL=-1.1957
+-> New best model saved.
+[Target-Only][086/5000] Train NLL=-1.1581 | Val NLL=-1.2300
+-> New best model saved.
+[Target-Only][087/5000] Train NLL=-1.1437 | Val NLL=-1.1523
+[Target-Only][088/5000] Train NLL=-1.1768 | Val NLL=-1.1939
+[Target-Only][089/5000] Train NLL=-1.1865 | Val NLL=-1.1860
+[Target-Only][090/5000] Train NLL=-1.1803 | Val NLL=-1.1782
+[Target-Only][091/5000] Train NLL=-1.2200 | Val NLL=-1.1499
+[Target-Only][092/5000] Train NLL=-1.1652 | Val NLL=-1.1738
+[Target-Only][093/5000] Train NLL=-1.2001 | Val NLL=-1.2523
+-> New best model saved.
+[Target-Only][094/5000] Train NLL=-1.1363 | Val NLL=-1.1251
+[Target-Only][095/5000] Train NLL=-1.1489 | Val NLL=-1.0850
+[Target-Only][096/5000] Train NLL=-1.1788 | Val NLL=-1.1620
+[Target-Only][097/5000] Train NLL=-1.1995 | Val NLL=-1.2246
+[Target-Only][098/5000] Train NLL=-1.1708 | Val NLL=-1.2194
+[Target-Only][099/5000] Train NLL=-1.1671 | Val NLL=-1.1342
+[Target-Only][100/5000] Train NLL=-1.1750 | Val NLL=-1.1451
+[Target-Only][101/5000] Train NLL=-1.1650 | Val NLL=-1.1921
+[Target-Only][102/5000] Train NLL=-1.1074 | Val NLL=-1.1239
+[Target-Only][103/5000] Train NLL=-1.1455 | Val NLL=-1.2032
+[Target-Only][104/5000] Train NLL=-1.1467 | Val NLL=-1.1538
+[Target-Only][105/5000] Train NLL=-1.0910 | Val NLL=-1.2369
+[Target-Only][106/5000] Train NLL=-1.1817 | Val NLL=-1.1701
+[Target-Only][107/5000] Train NLL=-1.2137 | Val NLL=-1.2083
+[Target-Only][108/5000] Train NLL=-1.1696 | Val NLL=-1.2246
+[Target-Only][109/5000] Train NLL=-1.1836 | Val NLL=-1.1273
+[Target-Only][110/5000] Train NLL=-1.1653 | Val NLL=-1.1600
+[Target-Only][111/5000] Train NLL=-1.2006 | Val NLL=-1.1483
+[Target-Only][112/5000] Train NLL=-1.1941 | Val NLL=-1.1831
+[Target-Only][113/5000] Train NLL=-1.1969 | Val NLL=-1.2750
+-> New best model saved.
+[Target-Only][114/5000] Train NLL=-1.1989 | Val NLL=-1.2248
+[Target-Only][115/5000] Train NLL=-1.1821 | Val NLL=-1.2088
+[Target-Only][116/5000] Train NLL=-1.2032 | Val NLL=-1.2092
+[Target-Only][117/5000] Train NLL=-1.1903 | Val NLL=-1.1954
+[Target-Only][118/5000] Train NLL=-1.2393 | Val NLL=-1.2263
+[Target-Only][119/5000] Train NLL=-1.2610 | Val NLL=-1.2737
+[Target-Only][120/5000] Train NLL=-1.2529 | Val NLL=-1.2361
+[Target-Only][121/5000] Train NLL=-1.2650 | Val NLL=-1.2331
+[Target-Only][122/5000] Train NLL=-1.2614 | Val NLL=-1.3439
+-> New best model saved.
+[Target-Only][123/5000] Train NLL=-1.2809 | Val NLL=-1.2852
+[Target-Only][124/5000] Train NLL=-1.2121 | Val NLL=-1.1817
+[Target-Only][125/5000] Train NLL=-1.1795 | Val NLL=-1.2224
+[Target-Only][126/5000] Train NLL=-1.2305 | Val NLL=-1.2090
+[Target-Only][127/5000] Train NLL=-1.2537 | Val NLL=-1.2724
+[Target-Only][128/5000] Train NLL=-1.2328 | Val NLL=-1.2733
+[Target-Only][129/5000] Train NLL=-1.2441 | Val NLL=-1.1663
+[Target-Only][130/5000] Train NLL=-1.2623 | Val NLL=-1.2385
+[Target-Only][131/5000] Train NLL=-1.2645 | Val NLL=-1.1760
+[Target-Only][132/5000] Train NLL=-1.2526 | Val NLL=-1.2092
+[Target-Only][133/5000] Train NLL=-1.2733 | Val NLL=-1.2665
+[Target-Only][134/5000] Train NLL=-1.2884 | Val NLL=-1.2588
+[Target-Only][135/5000] Train NLL=-1.2709 | Val NLL=-1.3013
+[Target-Only][136/5000] Train NLL=-1.2722 | Val NLL=-1.2357
+[Target-Only][137/5000] Train NLL=-1.2987 | Val NLL=-1.3023
+[Target-Only][138/5000] Train NLL=-1.3025 | Val NLL=-1.2531
+[Target-Only][139/5000] Train NLL=-1.3145 | Val NLL=-1.2752
+[Target-Only][140/5000] Train NLL=-1.2824 | Val NLL=-1.2570
+[Target-Only][141/5000] Train NLL=-1.2685 | Val NLL=-1.2112
+[Target-Only][142/5000] Train NLL=-1.2679 | Val NLL=-1.1374
+[Target-Only][143/5000] Train NLL=-1.2913 | Val NLL=-1.2240
+[Target-Only][144/5000] Train NLL=-1.2976 | Val NLL=-1.2742
+[Target-Only][145/5000] Train NLL=-1.2809 | Val NLL=-1.2727
+[Target-Only][146/5000] Train NLL=-1.2705 | Val NLL=-1.2216
+[Target-Only][147/5000] Train NLL=-1.2833 | Val NLL=-1.2482
+[Target-Only][148/5000] Train NLL=-1.2773 | Val NLL=-1.2218
+[Target-Only][149/5000] Train NLL=-1.2858 | Val NLL=-1.2576
+[Target-Only][150/5000] Train NLL=-1.3204 | Val NLL=-1.2410
+[Target-Only][151/5000] Train NLL=-1.3048 | Val NLL=-1.3219
+[Target-Only][152/5000] Train NLL=-1.2596 | Val NLL=-1.2674
+[Target-Only][153/5000] Train NLL=-1.2720 | Val NLL=-1.2697
+[Target-Only][154/5000] Train NLL=-1.2789 | Val NLL=-1.3071
+[Target-Only][155/5000] Train NLL=-1.2927 | Val NLL=-1.2900
+[Target-Only][156/5000] Train NLL=-1.2973 | Val NLL=-1.2744
+[Target-Only][157/5000] Train NLL=-1.2972 | Val NLL=-1.2611
+[Target-Only][158/5000] Train NLL=-1.3033 | Val NLL=-1.2899
+[Target-Only][159/5000] Train NLL=-1.2997 | Val NLL=-1.2622
+[Target-Only][160/5000] Train NLL=-1.2491 | Val NLL=-1.2331
+[Target-Only][161/5000] Train NLL=-1.2716 | Val NLL=-1.2070
+[Target-Only][162/5000] Train NLL=-1.2789 | Val NLL=-1.2641
+[Target-Only][163/5000] Train NLL=-1.3100 | Val NLL=-1.1756
+[Target-Only][164/5000] Train NLL=-1.2775 | Val NLL=-1.2122
+[Target-Only][165/5000] Train NLL=-1.3121 | Val NLL=-1.2586
+[Target-Only][166/5000] Train NLL=-1.3041 | Val NLL=-1.2776
+[Target-Only][167/5000] Train NLL=-1.3330 | Val NLL=-1.3007
+[Target-Only][168/5000] Train NLL=-1.2854 | Val NLL=-1.3045
+[Target-Only][169/5000] Train NLL=-1.3322 | Val NLL=-1.2819
+[Target-Only][170/5000] Train NLL=-1.3445 | Val NLL=-1.2414
+[Target-Only][171/5000] Train NLL=-1.3105 | Val NLL=-1.2863
+[Target-Only][172/5000] Train NLL=-1.2838 | Val NLL=-1.2400
+[Target-Only][173/5000] Train NLL=-1.2874 | Val NLL=-1.2199
+[Target-Only][174/5000] Train NLL=-1.3070 | Val NLL=-1.2756
+[Target-Only][175/5000] Train NLL=-1.3261 | Val NLL=-1.2836
+[Target-Only][176/5000] Train NLL=-1.3359 | Val NLL=-1.2759
+[Target-Only][177/5000] Train NLL=-1.3514 | Val NLL=-1.3207
+[Target-Only][178/5000] Train NLL=-1.3210 | Val NLL=-1.1935
+[Target-Only][179/5000] Train NLL=-1.3045 | Val NLL=-1.2509
+[Target-Only][180/5000] Train NLL=-1.3333 | Val NLL=-1.2649
+[Target-Only][181/5000] Train NLL=-1.3293 | Val NLL=-1.2617
+[Target-Only][182/5000] Train NLL=-1.3385 | Val NLL=-1.3042
+[Target-Only][183/5000] Train NLL=-1.3517 | Val NLL=-1.3026
+[Target-Only][184/5000] Train NLL=-1.3625 | Val NLL=-1.3200
+[Target-Only][185/5000] Train NLL=-1.3463 | Val NLL=-1.3469
+-> New best model saved.
+[Target-Only][186/5000] Train NLL=-1.3355 | Val NLL=-1.2836
+[Target-Only][187/5000] Train NLL=-1.3478 | Val NLL=-1.3411
+[Target-Only][188/5000] Train NLL=-1.3482 | Val NLL=-1.2832
+[Target-Only][189/5000] Train NLL=-1.3485 | Val NLL=-1.2873
+[Target-Only][190/5000] Train NLL=-1.2889 | Val NLL=-1.1874
+[Target-Only][191/5000] Train NLL=-1.3235 | Val NLL=-1.2709
+[Target-Only][192/5000] Train NLL=-1.3032 | Val NLL=-1.2538
+[Target-Only][193/5000] Train NLL=-1.3238 | Val NLL=-1.2679
+[Target-Only][194/5000] Train NLL=-1.3203 | Val NLL=-1.2797
+[Target-Only][195/5000] Train NLL=-1.3033 | Val NLL=-1.2329
+[Target-Only][196/5000] Train NLL=-1.3035 | Val NLL=-1.2316
+[Target-Only][197/5000] Train NLL=-1.3288 | Val NLL=-1.2749
+[Target-Only][198/5000] Train NLL=-1.3353 | Val NLL=-1.2897
+[Target-Only][199/5000] Train NLL=-1.3412 | Val NLL=-1.3277
+[Target-Only][200/5000] Train NLL=-1.3375 | Val NLL=-1.3180
+[Target-Only][201/5000] Train NLL=-1.3848 | Val NLL=-1.2910
+[Target-Only][202/5000] Train NLL=-1.3666 | Val NLL=-1.3371
+[Target-Only][203/5000] Train NLL=-1.3747 | Val NLL=-1.3425
+[Target-Only][204/5000] Train NLL=-1.3751 | Val NLL=-1.3453
+[Target-Only][205/5000] Train NLL=-1.3615 | Val NLL=-1.2966
+[Target-Only][206/5000] Train NLL=-1.3669 | Val NLL=-1.3506
+-> New best model saved.
+[Target-Only][207/5000] Train NLL=-1.3802 | Val NLL=-1.2457
+[Target-Only][208/5000] Train NLL=-1.3275 | Val NLL=-1.1651
+[Target-Only][209/5000] Train NLL=-1.3242 | Val NLL=-1.2611
+[Target-Only][210/5000] Train NLL=-1.2306 | Val NLL=-1.2469
+[Target-Only][211/5000] Train NLL=-1.3145 | Val NLL=-1.2654
+[Target-Only][212/5000] Train NLL=-1.3264 | Val NLL=-1.2815
+[Target-Only][213/5000] Train NLL=-1.3679 | Val NLL=-1.2818
+[Target-Only][214/5000] Train NLL=-1.3651 | Val NLL=-1.2650
+[Target-Only][215/5000] Train NLL=-1.3261 | Val NLL=-1.2125
+[Target-Only][216/5000] Train NLL=-1.3244 | Val NLL=-1.2770
+[Target-Only][217/5000] Train NLL=-1.3033 | Val NLL=-1.1783
+[Target-Only][218/5000] Train NLL=-1.3473 | Val NLL=-1.2507
+[Target-Only][219/5000] Train NLL=-1.3748 | Val NLL=-1.2932
+[Target-Only][220/5000] Train NLL=-1.3428 | Val NLL=-1.2729
+[Target-Only][221/5000] Train NLL=-1.3483 | Val NLL=-1.2661
+[Target-Only][222/5000] Train NLL=-1.4037 | Val NLL=-1.3554
+-> New best model saved.
+[Target-Only][223/5000] Train NLL=-1.4072 | Val NLL=-1.3063
+[Target-Only][224/5000] Train NLL=-1.3142 | Val NLL=-1.2127
+[Target-Only][225/5000] Train NLL=-1.3479 | Val NLL=-1.2819
+[Target-Only][226/5000] Train NLL=-1.3713 | Val NLL=-1.3101
+[Target-Only][227/5000] Train NLL=-1.3879 | Val NLL=-1.2862
+[Target-Only][228/5000] Train NLL=-1.3568 | Val NLL=-1.2643
+[Target-Only][229/5000] Train NLL=-1.3812 | Val NLL=-1.2384
+[Target-Only][230/5000] Train NLL=-1.3740 | Val NLL=-1.2994
+[Target-Only][231/5000] Train NLL=-1.3725 | Val NLL=-1.2297
+[Target-Only][232/5000] Train NLL=-1.3710 | Val NLL=-1.2551
+[Target-Only][233/5000] Train NLL=-1.3770 | Val NLL=-1.2777
+[Target-Only][234/5000] Train NLL=-1.3802 | Val NLL=-1.2758
+[Target-Only][235/5000] Train NLL=-1.4089 | Val NLL=-1.2409
+[Target-Only][236/5000] Train NLL=-1.3705 | Val NLL=-1.2196
+[Target-Only][237/5000] Train NLL=-1.3456 | Val NLL=-1.1700
+[Target-Only][238/5000] Train NLL=-1.3518 | Val NLL=-1.2596
+[Target-Only][239/5000] Train NLL=-1.3488 | Val NLL=-1.2480
+[Target-Only][240/5000] Train NLL=-1.3571 | Val NLL=-1.2168
+[Target-Only][241/5000] Train NLL=-1.3526 | Val NLL=-1.1887
+[Target-Only][242/5000] Train NLL=-1.3666 | Val NLL=-1.2502
+[Target-Only][243/5000] Train NLL=-1.3547 | Val NLL=-1.2505
+[Target-Only][244/5000] Train NLL=-1.3781 | Val NLL=-1.2269
+[Target-Only][245/5000] Train NLL=-1.3806 | Val NLL=-1.2829
+[Target-Only][246/5000] Train NLL=-1.3971 | Val NLL=-1.2825
+[Target-Only][247/5000] Train NLL=-1.4103 | Val NLL=-1.2780
+[Target-Only][248/5000] Train NLL=-1.4370 | Val NLL=-1.2093
+[Target-Only][249/5000] Train NLL=-1.3487 | Val NLL=-1.1648
+[Target-Only][250/5000] Train NLL=-1.3178 | Val NLL=-1.2309
+[Target-Only][251/5000] Train NLL=-1.3626 | Val NLL=-1.2868
+[Target-Only][252/5000] Train NLL=-1.4039 | Val NLL=-1.2415
+[Target-Only][253/5000] Train NLL=-1.3992 | Val NLL=-1.2533
+[Target-Only][254/5000] Train NLL=-1.3483 | Val NLL=-1.2485
+[Target-Only][255/5000] Train NLL=-1.4108 | Val NLL=-1.2732
+[Target-Only][256/5000] Train NLL=-1.3880 | Val NLL=-1.2024
+[Target-Only][257/5000] Train NLL=-1.3899 | Val NLL=-1.1751
+[Target-Only][258/5000] Train NLL=-1.4199 | Val NLL=-1.2569
+[Target-Only][259/5000] Train NLL=-1.4160 | Val NLL=-1.2439
+[Target-Only][260/5000] Train NLL=-1.3393 | Val NLL=-1.1505
+[Target-Only][261/5000] Train NLL=-1.3822 | Val NLL=-1.2471
+[Target-Only][262/5000] Train NLL=-1.3839 | Val NLL=-1.2287
+[Target-Only][263/5000] Train NLL=-1.3927 | Val NLL=-1.1991
+[Target-Only][264/5000] Train NLL=-1.3987 | Val NLL=-1.1440
+[Target-Only][265/5000] Train NLL=-1.4308 | Val NLL=-1.2134
+[Target-Only][266/5000] Train NLL=-1.4094 | Val NLL=-1.1608
+[Target-Only][267/5000] Train NLL=-1.4033 | Val NLL=-1.3135
+[Target-Only][268/5000] Train NLL=-1.4227 | Val NLL=-1.3343
+[Target-Only][269/5000] Train NLL=-1.4213 | Val NLL=-1.2554
+[Target-Only][270/5000] Train NLL=-1.3958 | Val NLL=-1.2193
+[Target-Only][271/5000] Train NLL=-1.4439 | Val NLL=-1.2519
+[Target-Only][272/5000] Train NLL=-1.4515 | Val NLL=-1.2431
+[Target-Only][273/5000] Train NLL=-1.4289 | Val NLL=-1.2769
+[Target-Only][274/5000] Train NLL=-1.4063 | Val NLL=-1.2738
+[Target-Only][275/5000] Train NLL=-1.3759 | Val NLL=-1.1619
+[Target-Only][276/5000] Train NLL=-1.3391 | Val NLL=-1.3157
+[Target-Only][277/5000] Train NLL=-1.4152 | Val NLL=-1.2934
+[Target-Only][278/5000] Train NLL=-1.4105 | Val NLL=-1.1371
+[Target-Only][279/5000] Train NLL=-1.4086 | Val NLL=-1.2213
+[Target-Only][280/5000] Train NLL=-1.4374 | Val NLL=-1.2656
+[Target-Only][281/5000] Train NLL=-1.4317 | Val NLL=-1.3210
+[Target-Only][282/5000] Train NLL=-1.4254 | Val NLL=-1.2516
+[Target-Only][283/5000] Train NLL=-1.4075 | Val NLL=-1.2795
+[Target-Only][284/5000] Train NLL=-1.4242 | Val NLL=-1.3312
+[Target-Only][285/5000] Train NLL=-1.3840 | Val NLL=-1.3078
+[Target-Only][286/5000] Train NLL=-1.3671 | Val NLL=-1.1722
+[Target-Only][287/5000] Train NLL=-1.3919 | Val NLL=-1.2935
+[Target-Only][288/5000] Train NLL=-1.4024 | Val NLL=-1.2140
+[Target-Only][289/5000] Train NLL=-1.3844 | Val NLL=-1.2139
+[Target-Only][290/5000] Train NLL=-1.4190 | Val NLL=-1.3200
+[Target-Only][291/5000] Train NLL=-1.4366 | Val NLL=-1.2277
+[Target-Only][292/5000] Train NLL=-1.4254 | Val NLL=-1.2678
+[Target-Only][293/5000] Train NLL=-1.4438 | Val NLL=-1.2429
+[Target-Only][294/5000] Train NLL=-1.4140 | Val NLL=-1.1848
+[Target-Only][295/5000] Train NLL=-1.4459 | Val NLL=-1.2609
+[Target-Only][296/5000] Train NLL=-1.4314 | Val NLL=-1.2578
+[Target-Only][297/5000] Train NLL=-1.4010 | Val NLL=-1.2058
+[Target-Only][298/5000] Train NLL=-1.4205 | Val NLL=-1.2466
+[Target-Only][299/5000] Train NLL=-1.3982 | Val NLL=-1.1957
+[Target-Only][300/5000] Train NLL=-1.4351 | Val NLL=-1.3035
+[Target-Only][301/5000] Train NLL=-1.3955 | Val NLL=-1.3045
+[Target-Only][302/5000] Train NLL=-1.3956 | Val NLL=-1.2572
+[Target-Only][303/5000] Train NLL=-1.4407 | Val NLL=-1.2980
+[Target-Only][304/5000] Train NLL=-1.3887 | Val NLL=-1.2565
+[Target-Only][305/5000] Train NLL=-1.3928 | Val NLL=-1.2160
+[Target-Only][306/5000] Train NLL=-1.3627 | Val NLL=-1.2215
+[Target-Only][307/5000] Train NLL=-1.3969 | Val NLL=-1.2371
+[Target-Only][308/5000] Train NLL=-1.4417 | Val NLL=-1.2815
+[Target-Only][309/5000] Train NLL=-1.4412 | Val NLL=-1.2749
+[Target-Only][310/5000] Train NLL=-1.4287 | Val NLL=-1.2946
+[Target-Only][311/5000] Train NLL=-1.4285 | Val NLL=-1.2703
+[Target-Only][312/5000] Train NLL=-1.4321 | Val NLL=-1.2214
+[Target-Only][313/5000] Train NLL=-1.4409 | Val NLL=-1.2509
+[Target-Only][314/5000] Train NLL=-1.4332 | Val NLL=-1.2661
+[Target-Only][315/5000] Train NLL=-1.4272 | Val NLL=-1.0989
+[Target-Only][316/5000] Train NLL=-1.3874 | Val NLL=-1.1489
+[Target-Only][317/5000] Train NLL=-1.4202 | Val NLL=-1.2089
+[Target-Only][318/5000] Train NLL=-1.4183 | Val NLL=-1.2159
+[Target-Only][319/5000] Train NLL=-1.4528 | Val NLL=-1.2027
+[Target-Only][320/5000] Train NLL=-1.4519 | Val NLL=-1.2516
+[Target-Only][321/5000] Train NLL=-1.4507 | Val NLL=-1.2398
+[Target-Only][322/5000] Train NLL=-1.4543 | Val NLL=-1.2084
+[Target-Only][323/5000] Train NLL=-1.4579 | Val NLL=-1.3465
+[Target-Only][324/5000] Train NLL=-1.4071 | Val NLL=-1.2619
+[Target-Only][325/5000] Train NLL=-1.4134 | Val NLL=-1.2387
+[Target-Only][326/5000] Train NLL=-1.4203 | Val NLL=-1.2355
+[Target-Only][327/5000] Train NLL=-1.4393 | Val NLL=-1.1928
+[Target-Only][328/5000] Train NLL=-1.4458 | Val NLL=-1.2529
+[Target-Only][329/5000] Train NLL=-1.4563 | Val NLL=-1.2746
+[Target-Only][330/5000] Train NLL=-1.4424 | Val NLL=-1.2428
+[Target-Only][331/5000] Train NLL=-1.4498 | Val NLL=-1.2792
+[Target-Only][332/5000] Train NLL=-1.4767 | Val NLL=-1.3423
+[Target-Only][333/5000] Train NLL=-1.4912 | Val NLL=-1.2903
+[Target-Only][334/5000] Train NLL=-1.4387 | Val NLL=-1.3411
+[Target-Only][335/5000] Train NLL=-1.4694 | Val NLL=-1.3968
+-> New best model saved.
+[Target-Only][336/5000] Train NLL=-1.4879 | Val NLL=-1.2922
+[Target-Only][337/5000] Train NLL=-1.4611 | Val NLL=-1.2393
+[Target-Only][338/5000] Train NLL=-1.4854 | Val NLL=-1.2928
+[Target-Only][339/5000] Train NLL=-1.3796 | Val NLL=-1.2285
+[Target-Only][340/5000] Train NLL=-1.4063 | Val NLL=-1.2821
+[Target-Only][341/5000] Train NLL=-1.3824 | Val NLL=-1.2786
+[Target-Only][342/5000] Train NLL=-1.4005 | Val NLL=-1.1884
+[Target-Only][343/5000] Train NLL=-1.4339 | Val NLL=-1.2784
+[Target-Only][344/5000] Train NLL=-1.4207 | Val NLL=-1.2754
+[Target-Only][345/5000] Train NLL=-1.4583 | Val NLL=-1.2528
+[Target-Only][346/5000] Train NLL=-1.4390 | Val NLL=-1.1587
+[Target-Only][347/5000] Train NLL=-1.4660 | Val NLL=-1.2632
+[Target-Only][348/5000] Train NLL=-1.4799 | Val NLL=-1.2983
+[Target-Only][349/5000] Train NLL=-1.4725 | Val NLL=-1.2893
+[Target-Only][350/5000] Train NLL=-1.4938 | Val NLL=-1.3008
+[Target-Only][351/5000] Train NLL=-1.4715 | Val NLL=-1.2761
+[Target-Only][352/5000] Train NLL=-1.4590 | Val NLL=-1.2649
+[Target-Only][353/5000] Train NLL=-1.4815 | Val NLL=-1.2548
+[Target-Only][354/5000] Train NLL=-1.4605 | Val NLL=-1.2009
+[Target-Only][355/5000] Train NLL=-1.4539 | Val NLL=-1.2042
+[Target-Only][356/5000] Train NLL=-1.4464 | Val NLL=-1.1847
+[Target-Only][357/5000] Train NLL=-1.4733 | Val NLL=-1.2576
+[Target-Only][358/5000] Train NLL=-1.4451 | Val NLL=-1.2564
+[Target-Only][359/5000] Train NLL=-1.4439 | Val NLL=-1.2466
+[Target-Only][360/5000] Train NLL=-1.4925 | Val NLL=-1.2569
+[Target-Only][361/5000] Train NLL=-1.4727 | Val NLL=-1.2585
+[Target-Only][362/5000] Train NLL=-1.4772 | Val NLL=-1.2444
+[Target-Only][363/5000] Train NLL=-1.4871 | Val NLL=-1.2755
+[Target-Only][364/5000] Train NLL=-1.4797 | Val NLL=-1.2832
+[Target-Only][365/5000] Train NLL=-1.4807 | Val NLL=-1.2368
+[Target-Only][366/5000] Train NLL=-1.4188 | Val NLL=-1.2332
+[Target-Only][367/5000] Train NLL=-1.4806 | Val NLL=-1.2111
+[Target-Only][368/5000] Train NLL=-1.4771 | Val NLL=-1.1496
+[Target-Only][369/5000] Train NLL=-1.4478 | Val NLL=-1.2606
+[Target-Only][370/5000] Train NLL=-1.4744 | Val NLL=-1.3422
+[Target-Only][371/5000] Train NLL=-1.4437 | Val NLL=-1.2144
+[Target-Only][372/5000] Train NLL=-1.4629 | Val NLL=-1.1933
+[Target-Only][373/5000] Train NLL=-1.4739 | Val NLL=-1.2835
+[Target-Only][374/5000] Train NLL=-1.4801 | Val NLL=-1.2658
+[Target-Only][375/5000] Train NLL=-1.4951 | Val NLL=-1.2775
+[Target-Only][376/5000] Train NLL=-1.4687 | Val NLL=-1.2415
+[Target-Only][377/5000] Train NLL=-1.5086 | Val NLL=-1.1618
+[Target-Only][378/5000] Train NLL=-1.5017 | Val NLL=-1.1865
+[Target-Only][379/5000] Train NLL=-1.4897 | Val NLL=-1.2545
+[Target-Only][380/5000] Train NLL=-1.4853 | Val NLL=-1.2777
+[Target-Only][381/5000] Train NLL=-1.4315 | Val NLL=-1.1139
+[Target-Only][382/5000] Train NLL=-1.4883 | Val NLL=-1.2140
+[Target-Only][383/5000] Train NLL=-1.4684 | Val NLL=-1.2089
+[Target-Only][384/5000] Train NLL=-1.4806 | Val NLL=-1.1552
+[Target-Only][385/5000] Train NLL=-1.4239 | Val NLL=-1.1682
+[Target-Only][386/5000] Train NLL=-1.4233 | Val NLL=-1.2339
+[Target-Only][387/5000] Train NLL=-1.4077 | Val NLL=-1.1850
+[Target-Only][388/5000] Train NLL=-1.4269 | Val NLL=-1.1532
+[Target-Only][389/5000] Train NLL=-1.4608 | Val NLL=-1.2284
+[Target-Only][390/5000] Train NLL=-1.4507 | Val NLL=-1.1717
+[Target-Only][391/5000] Train NLL=-1.4974 | Val NLL=-1.2330
+[Target-Only][392/5000] Train NLL=-1.4996 | Val NLL=-1.2276
+[Target-Only][393/5000] Train NLL=-1.4858 | Val NLL=-1.1590
+[Target-Only][394/5000] Train NLL=-1.4367 | Val NLL=-1.2347
+[Target-Only][395/5000] Train NLL=-1.4917 | Val NLL=-1.1698
+[Target-Only][396/5000] Train NLL=-1.4808 | Val NLL=-1.2559
+[Target-Only][397/5000] Train NLL=-1.4751 | Val NLL=-1.1967
+[Target-Only][398/5000] Train NLL=-1.4821 | Val NLL=-1.2262
+[Target-Only][399/5000] Train NLL=-1.4837 | Val NLL=-1.0378
+[Target-Only][400/5000] Train NLL=-1.4821 | Val NLL=-1.2690
+[Target-Only][401/5000] Train NLL=-1.4789 | Val NLL=-1.2574
+[Target-Only][402/5000] Train NLL=-1.5069 | Val NLL=-1.1906
+[Target-Only][403/5000] Train NLL=-1.4919 | Val NLL=-1.1815
+[Target-Only][404/5000] Train NLL=-1.5197 | Val NLL=-1.1895
+[Target-Only][405/5000] Train NLL=-1.4825 | Val NLL=-1.1927
+[Target-Only][406/5000] Train NLL=-1.4826 | Val NLL=-1.0231
+[Target-Only][407/5000] Train NLL=-1.4271 | Val NLL=-1.1467
+[Target-Only][408/5000] Train NLL=-1.4245 | Val NLL=-1.1275
+[Target-Only][409/5000] Train NLL=-1.4081 | Val NLL=-1.1603
+[Target-Only][410/5000] Train NLL=-1.3912 | Val NLL=-1.1957
+[Target-Only][411/5000] Train NLL=-1.4573 | Val NLL=-1.2605
+[Target-Only][412/5000] Train NLL=-1.4795 | Val NLL=-1.2107
+[Target-Only][413/5000] Train NLL=-1.4603 | Val NLL=-1.2109
+[Target-Only][414/5000] Train NLL=-1.4638 | Val NLL=-1.2064
+[Target-Only][415/5000] Train NLL=-1.4950 | Val NLL=-1.1645
+[Target-Only][416/5000] Train NLL=-1.5108 | Val NLL=-1.2311
+[Target-Only][417/5000] Train NLL=-1.5067 | Val NLL=-1.1706
+[Target-Only][418/5000] Train NLL=-1.4859 | Val NLL=-1.1391
+[Target-Only][419/5000] Train NLL=-1.5006 | Val NLL=-1.0775
+[Target-Only][420/5000] Train NLL=-1.4748 | Val NLL=-1.1058
+[Target-Only][421/5000] Train NLL=-1.4846 | Val NLL=-1.1756
+[Target-Only][422/5000] Train NLL=-1.4698 | Val NLL=-1.2138
+[Target-Only][423/5000] Train NLL=-1.5121 | Val NLL=-1.1932
+[Target-Only][424/5000] Train NLL=-1.4803 | Val NLL=-1.2062
+[Target-Only][425/5000] Train NLL=-1.4907 | Val NLL=-1.1582
+[Target-Only][426/5000] Train NLL=-1.5086 | Val NLL=-1.1736
+[Target-Only][427/5000] Train NLL=-1.5123 | Val NLL=-1.2535
+[Target-Only][428/5000] Train NLL=-1.5095 | Val NLL=-1.1745
+[Target-Only][429/5000] Train NLL=-1.5099 | Val NLL=-1.2366
+[Target-Only][430/5000] Train NLL=-1.5322 | Val NLL=-1.2599
+[Target-Only][431/5000] Train NLL=-1.5320 | Val NLL=-1.2397
+[Target-Only][432/5000] Train NLL=-1.5144 | Val NLL=-1.2032
+[Target-Only][433/5000] Train NLL=-1.4603 | Val NLL=-1.1523
+[Target-Only][434/5000] Train NLL=-1.4767 | Val NLL=-1.1266
+[Target-Only][435/5000] Train NLL=-1.4428 | Val NLL=-1.1928
+[Target-Only][436/5000] Train NLL=-1.4247 | Val NLL=-0.9436
+[Target-Only][437/5000] Train NLL=-1.4052 | Val NLL=-1.0498
+[Target-Only][438/5000] Train NLL=-1.4362 | Val NLL=-1.2381
+[Target-Only][439/5000] Train NLL=-1.4308 | Val NLL=-1.2043
+[Target-Only][440/5000] Train NLL=-1.4627 | Val NLL=-1.1941
+[Target-Only][441/5000] Train NLL=-1.4781 | Val NLL=-1.2102
+[Target-Only][442/5000] Train NLL=-1.4367 | Val NLL=-1.2640
+[Target-Only][443/5000] Train NLL=-1.4660 | Val NLL=-1.2240
+[Target-Only][444/5000] Train NLL=-1.4769 | Val NLL=-1.2159
+[Target-Only][445/5000] Train NLL=-1.4550 | Val NLL=-1.1217
+[Target-Only][446/5000] Train NLL=-1.4726 | Val NLL=-1.1838
+[Target-Only][447/5000] Train NLL=-1.5130 | Val NLL=-1.2196
+[Target-Only][448/5000] Train NLL=-1.5124 | Val NLL=-1.2189
+[Target-Only][449/5000] Train NLL=-1.5095 | Val NLL=-1.1652
+[Target-Only][450/5000] Train NLL=-1.5027 | Val NLL=-1.1569
+[Target-Only][451/5000] Train NLL=-1.4598 | Val NLL=-1.2001
+[Target-Only][452/5000] Train NLL=-1.4769 | Val NLL=-1.1993
+[Target-Only][453/5000] Train NLL=-1.4608 | Val NLL=-1.2349
+[Target-Only][454/5000] Train NLL=-1.4954 | Val NLL=-1.2564
+[Target-Only][455/5000] Train NLL=-1.5251 | Val NLL=-1.2081
+[Target-Only][456/5000] Train NLL=-1.4869 | Val NLL=-1.1453
+[Target-Only][457/5000] Train NLL=-1.4939 | Val NLL=-1.1861
+[Target-Only][458/5000] Train NLL=-1.4919 | Val NLL=-1.2037
+[Target-Only][459/5000] Train NLL=-1.4708 | Val NLL=-1.1514
+[Target-Only][460/5000] Train NLL=-1.4968 | Val NLL=-1.2192
+[Target-Only][461/5000] Train NLL=-1.4996 | Val NLL=-1.1386
+[Target-Only][462/5000] Train NLL=-1.5246 | Val NLL=-1.2454
+[Target-Only][463/5000] Train NLL=-1.5353 | Val NLL=-1.3047
+[Target-Only][464/5000] Train NLL=-1.4908 | Val NLL=-1.2147
+[Target-Only][465/5000] Train NLL=-1.5022 | Val NLL=-1.1631
+[Target-Only][466/5000] Train NLL=-1.5379 | Val NLL=-1.1846
+[Target-Only][467/5000] Train NLL=-1.5469 | Val NLL=-1.1160
+[Target-Only][468/5000] Train NLL=-1.4865 | Val NLL=-1.1961
+[Target-Only][469/5000] Train NLL=-1.4953 | Val NLL=-1.2345
+[Target-Only][470/5000] Train NLL=-1.5180 | Val NLL=-1.2093
+[Target-Only][471/5000] Train NLL=-1.5308 | Val NLL=-1.2613
+[Target-Only][472/5000] Train NLL=-1.5148 | Val NLL=-1.2465
+[Target-Only][473/5000] Train NLL=-1.5316 | Val NLL=-1.2213
+[Target-Only][474/5000] Train NLL=-1.5269 | Val NLL=-1.1929
+[Target-Only][475/5000] Train NLL=-1.5150 | Val NLL=-1.2493
+[Target-Only][476/5000] Train NLL=-1.5084 | Val NLL=-1.1813
+[Target-Only][477/5000] Train NLL=-1.5551 | Val NLL=-1.2370
+[Target-Only][478/5000] Train NLL=-1.5130 | Val NLL=-1.1931
+[Target-Only][479/5000] Train NLL=-1.5236 | Val NLL=-1.2176
+[Target-Only][480/5000] Train NLL=-1.5346 | Val NLL=-1.1380
+[Target-Only][481/5000] Train NLL=-1.5176 | Val NLL=-1.1544
+[Target-Only][482/5000] Train NLL=-1.5266 | Val NLL=-1.2111
+[Target-Only][483/5000] Train NLL=-1.4735 | Val NLL=-1.2952
+[Target-Only][484/5000] Train NLL=-1.4741 | Val NLL=-1.2421
+[Target-Only][485/5000] Train NLL=-1.5167 | Val NLL=-1.1726
+[Target-Only][486/5000] Train NLL=-1.5091 | Val NLL=-1.2082
+[Target-Only][487/5000] Train NLL=-1.4975 | Val NLL=-1.2067
+[Target-Only][488/5000] Train NLL=-1.4887 | Val NLL=-1.1356
+[Target-Only][489/5000] Train NLL=-1.4887 | Val NLL=-1.1945
+[Target-Only][490/5000] Train NLL=-1.5002 | Val NLL=-1.1292
+[Target-Only][491/5000] Train NLL=-1.5198 | Val NLL=-1.1083
+[Target-Only][492/5000] Train NLL=-1.5415 | Val NLL=-1.2107
+[Target-Only][493/5000] Train NLL=-1.5163 | Val NLL=-1.1716
+[Target-Only][494/5000] Train NLL=-1.5179 | Val NLL=-1.1868
+[Target-Only][495/5000] Train NLL=-1.5245 | Val NLL=-1.1809
+[Target-Only][496/5000] Train NLL=-1.5368 | Val NLL=-1.0717
+[Target-Only][497/5000] Train NLL=-1.4919 | Val NLL=-1.1851
+[Target-Only][498/5000] Train NLL=-1.4886 | Val NLL=-1.0722
+[Target-Only][499/5000] Train NLL=-1.5044 | Val NLL=-1.1276
+[Target-Only][500/5000] Train NLL=-1.4968 | Val NLL=-1.1726
+[Target-Only][501/5000] Train NLL=-1.4413 | Val NLL=-1.1558
+[Target-Only][502/5000] Train NLL=-1.5162 | Val NLL=-1.1678
+[Target-Only][503/5000] Train NLL=-1.5333 | Val NLL=-1.1519
+[Target-Only][504/5000] Train NLL=-1.5267 | Val NLL=-1.1287
+[Target-Only][505/5000] Train NLL=-1.5108 | Val NLL=-1.1708
+[Target-Only][506/5000] Train NLL=-1.4946 | Val NLL=-1.1422
+[Target-Only][507/5000] Train NLL=-1.5040 | Val NLL=-1.1336
+[Target-Only][508/5000] Train NLL=-1.5430 | Val NLL=-1.2022
+[Target-Only][509/5000] Train NLL=-1.5364 | Val NLL=-1.1298
+[Target-Only][510/5000] Train NLL=-1.4512 | Val NLL=-1.0237
+[Target-Only][511/5000] Train NLL=-1.4546 | Val NLL=-1.1319
+[Target-Only][512/5000] Train NLL=-1.4744 | Val NLL=-1.2093
+[Target-Only][513/5000] Train NLL=-1.5128 | Val NLL=-1.1597
+[Target-Only][514/5000] Train NLL=-1.5166 | Val NLL=-1.0725
+[Target-Only][515/5000] Train NLL=-1.4957 | Val NLL=-1.0784
+[Target-Only][516/5000] Train NLL=-1.5106 | Val NLL=-1.1126
+[Target-Only][517/5000] Train NLL=-1.4964 | Val NLL=-1.1093
+[Target-Only][518/5000] Train NLL=-1.5139 | Val NLL=-1.1887
+[Target-Only][519/5000] Train NLL=-1.5079 | Val NLL=-1.1668
+[Target-Only][520/5000] Train NLL=-1.5084 | Val NLL=-1.2239
+[Target-Only][521/5000] Train NLL=-1.5540 | Val NLL=-1.1166
+[Target-Only][522/5000] Train NLL=-1.5159 | Val NLL=-1.1996
+[Target-Only][523/5000] Train NLL=-1.5199 | Val NLL=-1.1209
+[Target-Only][524/5000] Train NLL=-1.5075 | Val NLL=-1.1052
+[Target-Only][525/5000] Train NLL=-1.5233 | Val NLL=-1.1013
+[Target-Only][526/5000] Train NLL=-1.5009 | Val NLL=-1.1012
+[Target-Only][527/5000] Train NLL=-1.5132 | Val NLL=-1.0547
+[Target-Only][528/5000] Train NLL=-1.4792 | Val NLL=-1.0981
+[Target-Only][529/5000] Train NLL=-1.5156 | Val NLL=-1.1694
+[Target-Only][530/5000] Train NLL=-1.5031 | Val NLL=-1.0458
+[Target-Only][531/5000] Train NLL=-1.4950 | Val NLL=-1.0364
+[Target-Only][532/5000] Train NLL=-1.4313 | Val NLL=-1.2546
+[Target-Only][533/5000] Train NLL=-1.4732 | Val NLL=-1.2272
+[Target-Only][534/5000] Train NLL=-1.4588 | Val NLL=-1.1699
+[Target-Only][535/5000] Train NLL=-1.4954 | Val NLL=-1.2153
+[Target-Only][536/5000] Train NLL=-1.5005 | Val NLL=-1.1773
+[Target-Only][537/5000] Train NLL=-1.4844 | Val NLL=-1.1767
+[Target-Only][538/5000] Train NLL=-1.5461 | Val NLL=-1.1642
+[Target-Only][539/5000] Train NLL=-1.5033 | Val NLL=-1.1362
+[Target-Only][540/5000] Train NLL=-1.5467 | Val NLL=-1.1199
+[Target-Only][541/5000] Train NLL=-1.5624 | Val NLL=-1.1944
+[Target-Only][542/5000] Train NLL=-1.5390 | Val NLL=-1.1649
+[Target-Only][543/5000] Train NLL=-1.5399 | Val NLL=-1.0568
+[Target-Only][544/5000] Train NLL=-1.4962 | Val NLL=-1.2035
+[Target-Only][545/5000] Train NLL=-1.5499 | Val NLL=-1.2435
+[Target-Only][546/5000] Train NLL=-1.5310 | Val NLL=-1.1901
+[Target-Only][547/5000] Train NLL=-1.4990 | Val NLL=-1.1646
+[Target-Only][548/5000] Train NLL=-1.5386 | Val NLL=-1.2161
+[Target-Only][549/5000] Train NLL=-1.5610 | Val NLL=-1.1732
+[Target-Only][550/5000] Train NLL=-1.5537 | Val NLL=-1.1651
+[Target-Only][551/5000] Train NLL=-1.5290 | Val NLL=-1.1080
+[Target-Only][552/5000] Train NLL=-1.5157 | Val NLL=-1.0897
+[Target-Only][553/5000] Train NLL=-1.5391 | Val NLL=-1.0910
+[Target-Only][554/5000] Train NLL=-1.5057 | Val NLL=-1.1241
+[Target-Only][555/5000] Train NLL=-1.4714 | Val NLL=-1.1708
+[Target-Only][556/5000] Train NLL=-1.4897 | Val NLL=-1.2380
+[Target-Only][557/5000] Train NLL=-1.5461 | Val NLL=-1.2882
+[Target-Only][558/5000] Train NLL=-1.5482 | Val NLL=-1.1777
+[Target-Only][559/5000] Train NLL=-1.5772 | Val NLL=-1.1731
+[Target-Only][560/5000] Train NLL=-1.5589 | Val NLL=-1.1330
+[Target-Only][561/5000] Train NLL=-1.5394 | Val NLL=-1.1724
+[Target-Only][562/5000] Train NLL=-1.5335 | Val NLL=-1.2329
+[Target-Only][563/5000] Train NLL=-1.5495 | Val NLL=-1.2187
+[Target-Only][564/5000] Train NLL=-1.5493 | Val NLL=-1.2035
+[Target-Only][565/5000] Train NLL=-1.5385 | Val NLL=-1.2170
+[Target-Only][566/5000] Train NLL=-1.5135 | Val NLL=-1.2441
+[Target-Only][567/5000] Train NLL=-1.5516 | Val NLL=-1.2066
+[Target-Only][568/5000] Train NLL=-1.5355 | Val NLL=-1.1554
+[Target-Only][569/5000] Train NLL=-1.5625 | Val NLL=-1.0925
+[Target-Only][570/5000] Train NLL=-1.5308 | Val NLL=-1.1840
+[Target-Only][571/5000] Train NLL=-1.5526 | Val NLL=-1.0994
+[Target-Only][572/5000] Train NLL=-1.5528 | Val NLL=-1.0542
+[Target-Only][573/5000] Train NLL=-1.5223 | Val NLL=-1.0600
+[Target-Only][574/5000] Train NLL=-1.5057 | Val NLL=-1.1097
+[Target-Only][575/5000] Train NLL=-1.5840 | Val NLL=-1.0507
+[Target-Only][576/5000] Train NLL=-1.5220 | Val NLL=-1.0295
+[Target-Only][577/5000] Train NLL=-1.5505 | Val NLL=-1.1604
+[Target-Only][578/5000] Train NLL=-1.5411 | Val NLL=-1.1853
+[Target-Only][579/5000] Train NLL=-1.4916 | Val NLL=-1.0925
+[Target-Only][580/5000] Train NLL=-1.5156 | Val NLL=-1.1661
+[Target-Only][581/5000] Train NLL=-1.5249 | Val NLL=-1.2887
+[Target-Only][582/5000] Train NLL=-1.5754 | Val NLL=-1.1676
+[Target-Only][583/5000] Train NLL=-1.5495 | Val NLL=-1.2403
+[Target-Only][584/5000] Train NLL=-1.4932 | Val NLL=-1.2134
+[Target-Only][585/5000] Train NLL=-1.5399 | Val NLL=-1.2474
+[Target-Only][586/5000] Train NLL=-1.5224 | Val NLL=-1.2512
+[Target-Only][587/5000] Train NLL=-1.5083 | Val NLL=-1.1621
+[Target-Only][588/5000] Train NLL=-1.5067 | Val NLL=-1.1100
+[Target-Only][589/5000] Train NLL=-1.5090 | Val NLL=-1.1589
+[Target-Only][590/5000] Train NLL=-1.5244 | Val NLL=-1.2348
+[Target-Only][591/5000] Train NLL=-1.5565 | Val NLL=-1.2093
+[Target-Only][592/5000] Train NLL=-1.5443 | Val NLL=-1.1902
+[Target-Only][593/5000] Train NLL=-1.5366 | Val NLL=-1.0034
+[Target-Only][594/5000] Train NLL=-1.4976 | Val NLL=-1.1450
+[Target-Only][595/5000] Train NLL=-1.4779 | Val NLL=-1.1242
+[Target-Only][596/5000] Train NLL=-1.5225 | Val NLL=-1.1284
+[Target-Only][597/5000] Train NLL=-1.5044 | Val NLL=-1.2498
+[Target-Only][598/5000] Train NLL=-1.5447 | Val NLL=-1.2702
+[Target-Only][599/5000] Train NLL=-1.5326 | Val NLL=-1.2223
+[Target-Only][600/5000] Train NLL=-1.5035 | Val NLL=-1.1864
+[Target-Only][601/5000] Train NLL=-1.5400 | Val NLL=-1.2088
+[Target-Only][602/5000] Train NLL=-1.5648 | Val NLL=-1.2356
+[Target-Only][603/5000] Train NLL=-1.5381 | Val NLL=-1.2634
+[Target-Only][604/5000] Train NLL=-1.5476 | Val NLL=-1.2500
+[Target-Only][605/5000] Train NLL=-1.5746 | Val NLL=-1.2496
+[Target-Only][606/5000] Train NLL=-1.5499 | Val NLL=-1.1998
+[Target-Only][607/5000] Train NLL=-1.5683 | Val NLL=-1.1546
+[Target-Only][608/5000] Train NLL=-1.5822 | Val NLL=-1.2056
+[Target-Only][609/5000] Train NLL=-1.5509 | Val NLL=-1.1729
+[Target-Only][610/5000] Train NLL=-1.5697 | Val NLL=-1.1403
+[Target-Only][611/5000] Train NLL=-1.5824 | Val NLL=-1.0748
+[Target-Only][612/5000] Train NLL=-1.5549 | Val NLL=-1.1065
+[Target-Only][613/5000] Train NLL=-1.5605 | Val NLL=-1.1848
+[Target-Only][614/5000] Train NLL=-1.5681 | Val NLL=-1.2494
+[Target-Only][615/5000] Train NLL=-1.5578 | Val NLL=-1.2149
+[Target-Only][616/5000] Train NLL=-1.5585 | Val NLL=-1.2596
+[Target-Only][617/5000] Train NLL=-1.5589 | Val NLL=-1.2584
+[Target-Only][618/5000] Train NLL=-1.5623 | Val NLL=-1.2333
+[Target-Only][619/5000] Train NLL=-1.5500 | Val NLL=-1.1611
+[Target-Only][620/5000] Train NLL=-1.5091 | Val NLL=-1.1804
+[Target-Only][621/5000] Train NLL=-1.5438 | Val NLL=-1.1241
+[Target-Only][622/5000] Train NLL=-1.4987 | Val NLL=-1.2359
+[Target-Only][623/5000] Train NLL=-1.5502 | Val NLL=-1.1899
+[Target-Only][624/5000] Train NLL=-1.5054 | Val NLL=-1.2046
+[Target-Only][625/5000] Train NLL=-1.5379 | Val NLL=-1.1420
+[Target-Only][626/5000] Train NLL=-1.4975 | Val NLL=-1.1790
+[Target-Only][627/5000] Train NLL=-1.5654 | Val NLL=-1.1967
+[Target-Only][628/5000] Train NLL=-1.5659 | Val NLL=-1.2046
+[Target-Only][629/5000] Train NLL=-1.5256 | Val NLL=-1.1502
+[Target-Only][630/5000] Train NLL=-1.5529 | Val NLL=-1.2282
+[Target-Only][631/5000] Train NLL=-1.5597 | Val NLL=-1.1618
+[Target-Only][632/5000] Train NLL=-1.5685 | Val NLL=-1.2140
+[Target-Only][633/5000] Train NLL=-1.5340 | Val NLL=-1.0388
+[Target-Only][634/5000] Train NLL=-1.4706 | Val NLL=-1.1781
+[Target-Only][635/5000] Train NLL=-1.5124 | Val NLL=-1.1447
+[Target-Only][636/5000] Train NLL=-1.5087 | Val NLL=-1.1199
+[Target-Only][637/5000] Train NLL=-1.5208 | Val NLL=-1.1952
+[Target-Only][638/5000] Train NLL=-1.5469 | Val NLL=-1.1459
+[Target-Only][639/5000] Train NLL=-1.5501 | Val NLL=-1.1647
+[Target-Only][640/5000] Train NLL=-1.5095 | Val NLL=-1.1664
+[Target-Only][641/5000] Train NLL=-1.5744 | Val NLL=-1.1752
+[Target-Only][642/5000] Train NLL=-1.5458 | Val NLL=-1.1376
+[Target-Only][643/5000] Train NLL=-1.5752 | Val NLL=-1.0325
+[Target-Only][644/5000] Train NLL=-1.5260 | Val NLL=-1.1170
+[Target-Only][645/5000] Train NLL=-1.4606 | Val NLL=-1.1795
+[Target-Only][646/5000] Train NLL=-1.5173 | Val NLL=-1.0817
+[Target-Only][647/5000] Train NLL=-1.4851 | Val NLL=-1.0976
+[Target-Only][648/5000] Train NLL=-1.5170 | Val NLL=-1.0626
+[Target-Only][649/5000] Train NLL=-1.4956 | Val NLL=-1.0943
+[Target-Only][650/5000] Train NLL=-1.5294 | Val NLL=-1.0603
+[Target-Only][651/5000] Train NLL=-1.5423 | Val NLL=-1.0533
+[Target-Only][652/5000] Train NLL=-1.5775 | Val NLL=-1.1173
+[Target-Only][653/5000] Train NLL=-1.5463 | Val NLL=-1.0965
+[Target-Only][654/5000] Train NLL=-1.5314 | Val NLL=-1.1921
+[Target-Only][655/5000] Train NLL=-1.5824 | Val NLL=-1.1457
+[Target-Only][656/5000] Train NLL=-1.5860 | Val NLL=-1.1029
+[Target-Only][657/5000] Train NLL=-1.5576 | Val NLL=-1.1405
+[Target-Only][658/5000] Train NLL=-1.5177 | Val NLL=-1.0807
+[Target-Only][659/5000] Train NLL=-1.5530 | Val NLL=-1.1085
+[Target-Only][660/5000] Train NLL=-1.5811 | Val NLL=-1.1486
+[Target-Only][661/5000] Train NLL=-1.5712 | Val NLL=-1.1596
+[Target-Only][662/5000] Train NLL=-1.5799 | Val NLL=-1.1581
+[Target-Only][663/5000] Train NLL=-1.5460 | Val NLL=-1.1427
+[Target-Only][664/5000] Train NLL=-1.5350 | Val NLL=-1.2070
+[Target-Only][665/5000] Train NLL=-1.5469 | Val NLL=-1.1933
+[Target-Only][666/5000] Train NLL=-1.5609 | Val NLL=-1.2064
+[Target-Only][667/5000] Train NLL=-1.5654 | Val NLL=-1.2033
+[Target-Only][668/5000] Train NLL=-1.5537 | Val NLL=-1.1848
+[Target-Only][669/5000] Train NLL=-1.5541 | Val NLL=-1.0589
+[Target-Only][670/5000] Train NLL=-1.5237 | Val NLL=-1.1570
+[Target-Only][671/5000] Train NLL=-1.5273 | Val NLL=-1.1008
+[Target-Only][672/5000] Train NLL=-1.5156 | Val NLL=-1.1540
+[Target-Only][673/5000] Train NLL=-1.5127 | Val NLL=-1.1452
+[Target-Only][674/5000] Train NLL=-1.5433 | Val NLL=-1.0715
+[Target-Only][675/5000] Train NLL=-1.5652 | Val NLL=-1.1329
+[Target-Only][676/5000] Train NLL=-1.5499 | Val NLL=-1.0718
+[Target-Only][677/5000] Train NLL=-1.5476 | Val NLL=-1.0927
+[Target-Only][678/5000] Train NLL=-1.5831 | Val NLL=-1.0967
+[Target-Only][679/5000] Train NLL=-1.5414 | Val NLL=-1.1107
+[Target-Only][680/5000] Train NLL=-1.5227 | Val NLL=-1.1576
+[Target-Only][681/5000] Train NLL=-1.5062 | Val NLL=-1.1180
+[Target-Only][682/5000] Train NLL=-1.5375 | Val NLL=-1.1327
+[Target-Only][683/5000] Train NLL=-1.5994 | Val NLL=-1.2028
+[Target-Only][684/5000] Train NLL=-1.5789 | Val NLL=-1.1279
+[Target-Only][685/5000] Train NLL=-1.5487 | Val NLL=-1.0796
+[Target-Only][686/5000] Train NLL=-1.5934 | Val NLL=-1.1090
+[Target-Only][687/5000] Train NLL=-1.5360 | Val NLL=-1.1489
+[Target-Only][688/5000] Train NLL=-1.6001 | Val NLL=-1.0550
+[Target-Only][689/5000] Train NLL=-1.5346 | Val NLL=-1.1593
+[Target-Only][690/5000] Train NLL=-1.5265 | Val NLL=-1.2015
+[Target-Only][691/5000] Train NLL=-1.5750 | Val NLL=-1.1259
+[Target-Only][692/5000] Train NLL=-1.5852 | Val NLL=-1.1612
+[Target-Only][693/5000] Train NLL=-1.6112 | Val NLL=-1.1905
+[Target-Only][694/5000] Train NLL=-1.5600 | Val NLL=-1.0762
+[Target-Only][695/5000] Train NLL=-1.5774 | Val NLL=-1.0421
+[Target-Only][696/5000] Train NLL=-1.5630 | Val NLL=-1.1014
+[Target-Only][697/5000] Train NLL=-1.5722 | Val NLL=-1.1767
+[Target-Only][698/5000] Train NLL=-1.5635 | Val NLL=-1.1546
+[Target-Only][699/5000] Train NLL=-1.5654 | Val NLL=-1.1827
+[Target-Only][700/5000] Train NLL=-1.5529 | Val NLL=-1.1802
+[Target-Only][701/5000] Train NLL=-1.5500 | Val NLL=-1.1816
+[Target-Only][702/5000] Train NLL=-1.5932 | Val NLL=-1.1843
+[Target-Only][703/5000] Train NLL=-1.6041 | Val NLL=-1.2016
+[Target-Only][704/5000] Train NLL=-1.5416 | Val NLL=-1.0724
+[Target-Only][705/5000] Train NLL=-1.5218 | Val NLL=-1.1234
+[Target-Only][706/5000] Train NLL=-1.5479 | Val NLL=-1.0877
+[Target-Only][707/5000] Train NLL=-1.5465 | Val NLL=-1.0802
+[Target-Only][708/5000] Train NLL=-1.5974 | Val NLL=-1.1059
+[Target-Only][709/5000] Train NLL=-1.5578 | Val NLL=-1.1930
+[Target-Only][710/5000] Train NLL=-1.5566 | Val NLL=-1.0890
+[Target-Only][711/5000] Train NLL=-1.5408 | Val NLL=-1.0417
+[Target-Only][712/5000] Train NLL=-1.5827 | Val NLL=-1.0951
+[Target-Only][713/5000] Train NLL=-1.5800 | Val NLL=-1.1766
+[Target-Only][714/5000] Train NLL=-1.5305 | Val NLL=-1.2226
+[Target-Only][715/5000] Train NLL=-1.5889 | Val NLL=-1.2032
+[Target-Only][716/5000] Train NLL=-1.5558 | Val NLL=-1.1876
+[Target-Only][717/5000] Train NLL=-1.5872 | Val NLL=-1.1864
+[Target-Only][718/5000] Train NLL=-1.5459 | Val NLL=-1.2356
+[Target-Only][719/5000] Train NLL=-1.5802 | Val NLL=-1.1436
+[Target-Only][720/5000] Train NLL=-1.5851 | Val NLL=-1.1954
+[Target-Only][721/5000] Train NLL=-1.5736 | Val NLL=-1.2685
+[Target-Only][722/5000] Train NLL=-1.5954 | Val NLL=-1.1159
+[Target-Only][723/5000] Train NLL=-1.5958 | Val NLL=-1.1399
+[Target-Only][724/5000] Train NLL=-1.6167 | Val NLL=-1.1430
+[Target-Only][725/5000] Train NLL=-1.5978 | Val NLL=-1.1800
+[Target-Only][726/5000] Train NLL=-1.6067 | Val NLL=-1.1818
+[Target-Only][727/5000] Train NLL=-1.6177 | Val NLL=-1.1315
+[Target-Only][728/5000] Train NLL=-1.6147 | Val NLL=-1.1552
+[Target-Only][729/5000] Train NLL=-1.6106 | Val NLL=-1.1394
+[Target-Only][730/5000] Train NLL=-1.5785 | Val NLL=-1.0362
+[Target-Only][731/5000] Train NLL=-1.5595 | Val NLL=-0.9209
+[Target-Only][732/5000] Train NLL=-1.5091 | Val NLL=-1.1400
+[Target-Only][733/5000] Train NLL=-1.5415 | Val NLL=-1.1665
+[Target-Only][734/5000] Train NLL=-1.5488 | Val NLL=-1.1669
+[Target-Only][735/5000] Train NLL=-1.5800 | Val NLL=-1.1332
+[Target-Only][736/5000] Train NLL=-1.5891 | Val NLL=-1.0628
+[Target-Only][737/5000] Train NLL=-1.5690 | Val NLL=-1.0830
+[Target-Only][738/5000] Train NLL=-1.5829 | Val NLL=-1.1273
+[Target-Only][739/5000] Train NLL=-1.5782 | Val NLL=-1.1463
+[Target-Only][740/5000] Train NLL=-1.5814 | Val NLL=-1.1304
+[Target-Only][741/5000] Train NLL=-1.5912 | Val NLL=-0.9938
+[Target-Only][742/5000] Train NLL=-1.5727 | Val NLL=-1.0334
+[Target-Only][743/5000] Train NLL=-1.5730 | Val NLL=-1.1072
+[Target-Only][744/5000] Train NLL=-1.5879 | Val NLL=-1.0846
+[Target-Only][745/5000] Train NLL=-1.5955 | Val NLL=-1.1192
+[Target-Only][746/5000] Train NLL=-1.5353 | Val NLL=-0.9630
+[Target-Only][747/5000] Train NLL=-1.5657 | Val NLL=-1.0184
+[Target-Only][748/5000] Train NLL=-1.5625 | Val NLL=-0.9806
+[Target-Only][749/5000] Train NLL=-1.5074 | Val NLL=-1.0703
+[Target-Only][750/5000] Train NLL=-1.5147 | Val NLL=-1.0531
+[Target-Only][751/5000] Train NLL=-1.5234 | Val NLL=-0.9037
+[Target-Only][752/5000] Train NLL=-1.5597 | Val NLL=-1.0715
+[Target-Only][753/5000] Train NLL=-1.5922 | Val NLL=-1.0637
+[Target-Only][754/5000] Train NLL=-1.5558 | Val NLL=-1.1143
+[Target-Only][755/5000] Train NLL=-1.5601 | Val NLL=-1.0901
+[Target-Only][756/5000] Train NLL=-1.5416 | Val NLL=-1.1052
+[Target-Only][757/5000] Train NLL=-1.5797 | Val NLL=-1.0866
+[Target-Only][758/5000] Train NLL=-1.5530 | Val NLL=-0.9456
+[Target-Only][759/5000] Train NLL=-1.5429 | Val NLL=-1.0639
+[Target-Only][760/5000] Train NLL=-1.5631 | Val NLL=-1.0939
+[Target-Only][761/5000] Train NLL=-1.5721 | Val NLL=-1.1372
+[Target-Only][762/5000] Train NLL=-1.5592 | Val NLL=-1.1059
+[Target-Only][763/5000] Train NLL=-1.5602 | Val NLL=-1.0633
+[Target-Only][764/5000] Train NLL=-1.5442 | Val NLL=-1.1175
+[Target-Only][765/5000] Train NLL=-1.5669 | Val NLL=-1.1038
+[Target-Only][766/5000] Train NLL=-1.5901 | Val NLL=-1.1123
+[Target-Only][767/5000] Train NLL=-1.5843 | Val NLL=-1.1066
+[Target-Only][768/5000] Train NLL=-1.5473 | Val NLL=-1.0288
+[Target-Only][769/5000] Train NLL=-1.5581 | Val NLL=-1.1515
+[Target-Only][770/5000] Train NLL=-1.5512 | Val NLL=-1.0993
+[Target-Only][771/5000] Train NLL=-1.5503 | Val NLL=-1.1193
+[Target-Only][772/5000] Train NLL=-1.5841 | Val NLL=-1.1293
+[Target-Only][773/5000] Train NLL=-1.5991 | Val NLL=-1.1276
+[Target-Only][774/5000] Train NLL=-1.5641 | Val NLL=-1.0683
+[Target-Only][775/5000] Train NLL=-1.5564 | Val NLL=-1.1319
+[Target-Only][776/5000] Train NLL=-1.5709 | Val NLL=-1.1679
+[Target-Only][777/5000] Train NLL=-1.6090 | Val NLL=-1.1473
+[Target-Only][778/5000] Train NLL=-1.6029 | Val NLL=-1.1590
+[Target-Only][779/5000] Train NLL=-1.6158 | Val NLL=-1.0969
+[Target-Only][780/5000] Train NLL=-1.5996 | Val NLL=-1.1520
+[Target-Only][781/5000] Train NLL=-1.5613 | Val NLL=-1.1524
+[Target-Only][782/5000] Train NLL=-1.5411 | Val NLL=-1.1915
+[Target-Only][783/5000] Train NLL=-1.5709 | Val NLL=-1.0955
+[Target-Only][784/5000] Train NLL=-1.4743 | Val NLL=-1.0860
+[Target-Only][785/5000] Train NLL=-1.4943 | Val NLL=-1.1028
+[Target-Only][786/5000] Train NLL=-1.5554 | Val NLL=-1.1185
+[Target-Only][787/5000] Train NLL=-1.5308 | Val NLL=-1.1170
+[Target-Only][788/5000] Train NLL=-1.5582 | Val NLL=-1.0842
+[Target-Only][789/5000] Train NLL=-1.6046 | Val NLL=-1.0771
+[Target-Only][790/5000] Train NLL=-1.5883 | Val NLL=-1.0493
+[Target-Only][791/5000] Train NLL=-1.5561 | Val NLL=-1.1183
+[Target-Only][792/5000] Train NLL=-1.5202 | Val NLL=-1.0749
+[Target-Only][793/5000] Train NLL=-1.5383 | Val NLL=-1.0725
+[Target-Only][794/5000] Train NLL=-1.5713 | Val NLL=-1.1123
+[Target-Only][795/5000] Train NLL=-1.5736 | Val NLL=-1.0695
+[Target-Only][796/5000] Train NLL=-1.5928 | Val NLL=-1.0731
+[Target-Only][797/5000] Train NLL=-1.5836 | Val NLL=-1.1073
+[Target-Only][798/5000] Train NLL=-1.5836 | Val NLL=-1.0137
+[Target-Only][799/5000] Train NLL=-1.6219 | Val NLL=-1.0353
+[Target-Only][800/5000] Train NLL=-1.5994 | Val NLL=-1.0349
+[Target-Only][801/5000] Train NLL=-1.6059 | Val NLL=-1.1168
+[Target-Only][802/5000] Train NLL=-1.5670 | Val NLL=-1.0399
+[Target-Only][803/5000] Train NLL=-1.5794 | Val NLL=-1.0061
+[Target-Only][804/5000] Train NLL=-1.5738 | Val NLL=-0.9655
+[Target-Only][805/5000] Train NLL=-1.5860 | Val NLL=-1.0318
+[Target-Only][806/5000] Train NLL=-1.6171 | Val NLL=-1.1092
+[Target-Only][807/5000] Train NLL=-1.6052 | Val NLL=-1.0117
+[Target-Only][808/5000] Train NLL=-1.5813 | Val NLL=-1.0292
+[Target-Only][809/5000] Train NLL=-1.5543 | Val NLL=-1.0266
+[Target-Only][810/5000] Train NLL=-1.6035 | Val NLL=-1.0416
+[Target-Only][811/5000] Train NLL=-1.6003 | Val NLL=-0.9886
+[Target-Only][812/5000] Train NLL=-1.5445 | Val NLL=-0.9433
+[Target-Only][813/5000] Train NLL=-1.5096 | Val NLL=-0.8842
+[Target-Only][814/5000] Train NLL=-1.5554 | Val NLL=-1.0492
+[Target-Only][815/5000] Train NLL=-1.5707 | Val NLL=-1.0354
+[Target-Only][816/5000] Train NLL=-1.5842 | Val NLL=-1.0043
+[Target-Only][817/5000] Train NLL=-1.5598 | Val NLL=-0.9213
+[Target-Only][818/5000] Train NLL=-1.5929 | Val NLL=-0.8503
+[Target-Only][819/5000] Train NLL=-1.5984 | Val NLL=-0.9430
+[Target-Only][820/5000] Train NLL=-1.5662 | Val NLL=-1.0113
+[Target-Only][821/5000] Train NLL=-1.6164 | Val NLL=-0.9286
+[Target-Only][822/5000] Train NLL=-1.6364 | Val NLL=-0.9238
+[Target-Only][823/5000] Train NLL=-1.6088 | Val NLL=-0.8350
+[Target-Only][824/5000] Train NLL=-1.6173 | Val NLL=-0.9556
+[Target-Only][825/5000] Train NLL=-1.5967 | Val NLL=-0.9442
+[Target-Only][826/5000] Train NLL=-1.5881 | Val NLL=-0.9783
+[Target-Only][827/5000] Train NLL=-1.5979 | Val NLL=-1.0064
+[Target-Only][828/5000] Train NLL=-1.6092 | Val NLL=-1.0157
+[Target-Only][829/5000] Train NLL=-1.5806 | Val NLL=-0.9551
+[Target-Only][830/5000] Train NLL=-1.6043 | Val NLL=-1.0550
+[Target-Only][831/5000] Train NLL=-1.5897 | Val NLL=-1.0440
+[Target-Only][832/5000] Train NLL=-1.5876 | Val NLL=-1.0671
+[Target-Only][833/5000] Train NLL=-1.6071 | Val NLL=-0.9668
+[Target-Only][834/5000] Train NLL=-1.5616 | Val NLL=-0.9273
+[Target-Only][835/5000] Train NLL=-1.5887 | Val NLL=-0.9767
+[Target-Only] Early stopping at epoch 835.
+
+[Target-Only] Finished. Best model at: /home/mario1578347613/eda-for-transfer-learning-1/src/results/two_stage_opamp_target_only.pth
+
+--- Running: unified_inverse_train for two_stage_opamp ---
+
+[CMD] In directory '/home/mario1578347613/eda-for-transfer-learning-1/src', running: python -m unified_inverse_train --opamp two_stage_opamp --restart
+Traceback (most recent call last):
+File "<frozen runpy>", line 198, in _run_module_as_main
+File "<frozen runpy>", line 88, in _run_code
+File "/home/mario1578347613/eda-for-transfer-learning-1/src/unified_inverse_train.py", line 212, in <module>
+main()
+~~~~^^
+File "/home/mario1578347613/eda-for-transfer-learning-1/src/unified_inverse_train.py", line 135, in main
+args = setup_args()
+File "/home/mario1578347613/eda-for-transfer-learning-1/src/unified_inverse_train.py", line 115, in setup_args
+sample_val = TASK_CONFIGS[next(iter(TASK_CONFIGS))][key]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'cmrr_loss_weight'
+[ERROR] Command failed with return code 1: python -m unified_inverse_train --opamp two_stage_opamp --restart
+
+[FATAL] Script 'unified_inverse_train' failed for task 'two_stage_opamp'.
+
+==================================================
+=== TRAINING PIPELINE FINISHED ===
+==================================================

@@ -59,26 +59,34 @@ INVERSE_OUTPUT_COLS = {
 # ---------------------------------------------------------------------
 
 def _load_forward_model(opamp_type: str, ckpt_path: Path) -> AlignHeteroMLP:
-    """
-    加载正向模型 (AlignHeteroMLP) 并切到 eval。
-    会用 data_loader 里的 scaler 推断输入输出维度。
-    """
     if not ckpt_path.exists():
         raise FileNotFoundError(f"正向模型权重文件未找到: {ckpt_path}")
 
     config = TASK_CONFIGS[opamp_type]
     all_data = get_data_and_scalers(opamp_type=opamp_type)
 
-    # X_source_scaled shape = (N, in_dim)
     input_dim = all_data['source'][0].shape[1]
-    # y_source_scaled shape = (N, out_dim)
     output_dim = all_data['source'][1].shape[1]
+
+    # ---- 兼容获取 hidden_dims ----
+    def _coerce_hidden_dims_from_config(cfg: dict):
+        hd = cfg.get("hidden_dims", None)
+        if isinstance(hd, str):
+            import ast
+            hd = ast.literal_eval(hd)
+        if isinstance(hd, (list, tuple)):
+            return list(hd)
+        # 旧写法回退：hidden_dim + num_layers
+        hidden_dim = cfg.get("hidden_dim", 256)
+        num_layers = cfg.get("num_layers", 3)
+        return [hidden_dim] * int(num_layers)
+
+    hidden_dims = _coerce_hidden_dims_from_config(config)
 
     model = AlignHeteroMLP(
         input_dim=input_dim,
         output_dim=output_dim,
-        hidden_dims=config['hidden_dims'],
-        num_layers=config['num_layers'],
+        hidden_dims=hidden_dims,                 # ✅ 只传 hidden_dims 列表
         dropout_rate=config['dropout_rate']
     ).to(DEVICE)
 
@@ -87,10 +95,8 @@ def _load_forward_model(opamp_type: str, ckpt_path: Path) -> AlignHeteroMLP:
     model.load_state_dict(model_state, strict=False)
     model.eval()
 
-    print(
-        f"成功加载正向模型: {ckpt_path.name} (Input: {input_dim}, Output: {output_dim})")
+    print(f"成功加载正向模型: {ckpt_path.name} (Input: {input_dim}, Output: {output_dim})")
     return model
-
 
 def _load_inverse_mdn_model(opamp_type: str, ckpt_path: Path) -> InverseMDN:
     """
