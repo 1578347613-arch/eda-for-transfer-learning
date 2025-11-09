@@ -1,4 +1,4 @@
-# src/generate_submission.py (v6 - fixed log restore & eval domain)
+# src/generate_submission.py (v7 - fixed log restore & eval domain + auto two_stage feature augment for predB)
 
 from inverse_opt import optimize_x_multi_start, load_model_from_ckpt as load_forward_model_for_opt
 from unified_inverse_train import InverseMDN
@@ -40,7 +40,6 @@ FORWARD_OUTPUT_COLS = [
 ]
 
 # 哪些列训练时做了 log1p，必须和 data_loader 完全一致
-# 这里直接绑定 config 里的 LOG_TRANSFORMED_COLS，避免手抄不一致
 Y_LOG_COLS = LOG_TRANSFORMED_COLS
 
 INVERSE_OUTPUT_COLS = {
@@ -123,16 +122,6 @@ def _load_inverse_mdn_model(opamp_type: str, ckpt_path: Path) -> InverseMDN:
 def _to_physical_y(y_std: np.ndarray, y_scaler, colnames):
     """
     把标准化空间 y_std 反标准化到物理单位，并对训练时做过 log1p 的列做 expm1 还原。
-
-    参数
-    ----
-    y_std      : (N, Dy) 标准化空间 (model 输出 or 标准化后的 y_true)
-    y_scaler   : sklearn.StandardScaler (fit 在 target-B 域)
-    colnames   : 与 y_std 对应的列名顺序
-
-    返回
-    ----
-    y_phys : (N, Dy) 物理域的绝对量纲
     """
     y_unstd = y_scaler.inverse_transform(y_std)  # 回到训练时的回归目标域(也许仍是log域)
     y_phys = y_unstd.copy()
@@ -140,6 +129,132 @@ def _to_physical_y(y_std: np.ndarray, y_scaler, colnames):
         if col in Y_LOG_COLS:
             y_phys[:, idx] = np.expm1(y_unstd[:, idx])
     return y_phys
+
+
+# ---------------------------------------------------------------------
+# two_stage_opamp 的在线特征增强（仅在 predB / features_B.csv 时使用）
+# ---------------------------------------------------------------------
+
+_BASE_INPUT_COLS_TWO_STAGE = [
+    "w1", "w2", "w3", "w4", "w5",
+    "l1", "l2", "l3", "l4", "l5",
+    "cc", "cr", "ibias",
+]
+_EPS = 1e-12
+
+
+def _safe_log(x: np.ndarray) -> np.ndarray:
+    return np.log(np.clip(x, _EPS, None))
+
+
+def _augment_two_stage_features_in_memory(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    基于原始13列 (w1..w5, l1..l5, cc, cr, ibias) 追加我们训练使用的增强特征列。
+    不修改输入 DataFrame（返回一个新副本）。
+    """
+    miss_base = [c for c in _BASE_INPUT_COLS_TWO_STAGE if c not in df.columns]
+    if miss_base:
+        raise ValueError(f"features_B.csv 缺少基础必需列（无法自动构造增强特征）: {miss_base}")
+
+    out = df.copy()
+
+    # --- 预计算 ---
+    w_cols = [f"w{i}" for i in range(1, 6)]
+    l_cols = [f"l{i}" for i in range(1, 6)]
+    W = out[w_cols].to_numpy()
+    L = out[l_cols].to_numpy()
+    w_sum = np.clip(W.sum(axis=1), _EPS, None)
+    l_sum = np.clip(L.sum(axis=1), _EPS, None)
+    out["w_sum"] = w_sum
+    out["l_sum"] = l_sum
+    out["log_w_sum"] = _safe_log(w_sum)
+    out["log_l_sum"] = _safe_log(l_sum)
+
+    # --- 偏置/补偿 log & 比值 ---
+    out["log_ibias"] = _safe_log(out["ibias"].to_numpy())
+    out["log_cc"]    = _safe_log(out["cc"].to_numpy())
+    out["log_cr"]    = _safe_log(out["cr"].to_numpy())
+    out["ibias_over_cc"] = out["ibias"] / np.clip(out["cc"], _EPS, None)
+    out["ibias_over_cr"] = out["ibias"] / np.clip(out["cr"], _EPS, None)
+    out["cr_over_cc"]    = out["cr"]    / np.clip(out["cc"], _EPS, None)
+    out["log_ibias_over_cc"] = out["log_ibias"] - out["log_cc"]
+    out["log_ibias_over_cr"] = out["log_ibias"] - out["log_cr"]
+    out["log_cr_over_cc"]    = out["log_cr"]    - out["log_cc"]
+
+    # --- 每支管子: W/L、归一化宽/长、面积/失配、log(W/L) ---
+    for i in range(1, 6):
+        wi = out[f"w{i}"].to_numpy()
+        li = out[f"l{i}"].to_numpy()
+        out[f"w{i}_over_l{i}"] = wi / np.clip(li, _EPS, None)
+        out[f"log_w{i}_over_l{i}"] = _safe_log(wi) - _safe_log(li)
+        out[f"w{i}_norm"] = wi / w_sum
+        out[f"l{i}_norm"] = li / l_sum
+        area_sqrt = np.sqrt(np.clip(wi * li, _EPS, None))
+        out[f"area{i}"] = area_sqrt
+        out[f"mismatch{i}"] = 1.0 / area_sqrt
+
+    # --- 每支管子: gm/ro/Av/UGF 的 log 代理 ---
+    log_ibias = out["log_ibias"].to_numpy()
+    log_cc    = out["log_cc"].to_numpy()
+    for i in range(1, 6):
+        wi = out[f"w{i}"].to_numpy()
+        li = out[f"l{i}"].to_numpy()
+        lw = _safe_log(wi)
+        ll = _safe_log(li)
+        log_gm_hat = 0.5 * (lw - ll + log_ibias)
+        log_ro_hat = ll - log_ibias
+        out[f"log_gm_hat_{i}"] = log_gm_hat
+        out[f"log_ro_hat_{i}"] = log_ro_hat
+        out[f"log_av_hat_{i}"] = log_gm_hat + log_ro_hat
+        out[f"log_ugf_hat_{i}"] = 0.5 * (lw - ll) + 0.5 * log_ibias - log_cc
+
+    # --- DCGAIN 相关 proxy（命名与训练脚本保持一致） ---
+    out["dcgain_stage1_proxy"] = out["log_av_hat_1"]
+    out["dcgain_stage2_proxy"] = out["log_av_hat_3"]
+    out["dcgain_total_proxy"]  = out["dcgain_stage1_proxy"] + out["dcgain_stage2_proxy"]
+    out["dcgain_all_devices_proxy"] = out[[f"log_av_hat_{i}" for i in range(1, 6)]].sum(axis=1)
+
+    # --- CMRR 相关（配对：12 / 34 / 45） ---
+    def _add_cmrr_pair(i, j):
+        ai = out[f"area{i}"]
+        aj = out[f"area{j}"]
+        mr = ai / aj.replace(0, np.nan)
+        out[f"cmrr_pair{i}{j}_area_ratio"] = mr.fillna(0.0)
+        out[f"cmrr_pair{i}{j}_log_area_ratio"] = _safe_log(ai.to_numpy()) - _safe_log(aj.to_numpy())
+        denom = (ai + aj) / 2.0
+        out[f"cmrr_pair{i}{j}_area_diff_norm"] = ((ai - aj).abs() / denom.replace(0, np.nan)).fillna(0.0)
+        mi = out[f"mismatch{i}"]
+        mj = out[f"mismatch{j}"]
+        out[f"cmrr_pair{i}{j}_mismatch_diff"] = (mi - mj).abs()
+
+    _add_cmrr_pair(1, 2)
+    _add_cmrr_pair(3, 4)
+    _add_cmrr_pair(4, 5)
+
+    return out
+
+
+def _ensure_two_stage_test_has_train_columns(opamp_type: str,
+                                             input_csv: Path,
+                                             test_df: pd.DataFrame,
+                                             train_feature_cols: list) -> pd.DataFrame:
+    """
+    仅在 two_stage_opamp + features_B.csv 时：
+    若 test_df 缺少训练用列，则用内存增强函数补齐列，再次校验。
+    其他场景保持原逻辑（缺就报错）。
+    """
+    missing = set(train_feature_cols) - set(test_df.columns)
+    if missing and (opamp_type == "two_stage_opamp") and (input_csv.name == "features_B.csv"):
+        print(f"[AUTO-AUG] 发现 features_B.csv 缺少训练特征列 {len(missing)} 个，"
+              f"自动在内存中补齐增强特征列…")
+        test_df = _augment_two_stage_features_in_memory(test_df)
+        missing2 = set(train_feature_cols) - set(test_df.columns)
+        if missing2:
+            raise ValueError(f"[AUTO-AUG失败] 补齐后仍缺特征列: {missing2}")
+    elif missing:
+        # 非 two_stage/predB 的场景，保持严格检查
+        raise ValueError(f"{input_csv.name} 缺少特征列: {missing}")
+    return test_df
 
 
 # ---------------------------------------------------------------------
@@ -175,9 +290,14 @@ def predict_forward_simple(
     train_feature_cols = list(all_data["raw_target"][0].columns)  # X(B) 原始列顺序
     test_df = pd.read_csv(input_csv)
 
-    missing = set(train_feature_cols) - set(test_df.columns)
-    if missing:
-        raise ValueError(f"{input_csv.name} 缺少特征列: {missing}")
+    # 新逻辑：two_stage + features_B.csv 时自动补齐增强特征列，其它情况维持原有严格校验
+    test_df = _ensure_two_stage_test_has_train_columns(
+        opamp_type=opamp_type,
+        input_csv=input_csv,
+        test_df=test_df,
+        train_feature_cols=train_feature_cols
+    )
+
     # 只按训练列顺序取列，丢弃多余列
     test_df = test_df[train_feature_cols].copy()
 
@@ -249,9 +369,15 @@ def predict_forward_ensemble(
     # 读取 test csv，并按训练列顺序重排
     train_feature_cols = list(all_data["raw_target"][0].columns)
     test_df = pd.read_csv(input_csv)
-    missing = set(train_feature_cols) - set(test_df.columns)
-    if missing:
-        raise ValueError(f"{input_csv.name} 缺少特征列: {missing}")
+
+    # 同样在 ensemble 路径下支持 predB 自动补列
+    test_df = _ensure_two_stage_test_has_train_columns(
+        opamp_type=opamp_type,
+        input_csv=input_csv,
+        test_df=test_df,
+        train_feature_cols=train_feature_cols
+    )
+
     test_df = test_df[train_feature_cols].copy()
 
     # 标准化
@@ -344,7 +470,6 @@ def predict_inverse_hybrid(
             y_target_df[col] = np.log1p(y_target_df[col])
 
     # 缩放到 y_scaler 域
-    # 传 DataFrame 给 scaler，避免 sklearn 的 feature-name warning
     y_target_scaled = y_scaler.transform(y_target_df)
 
     # MDN 推理 (无梯度)
@@ -419,7 +544,6 @@ def offline_eval_forward_simple(
     """
     用单模型 (align 或 target_only) 直出，
     在 target_* split 上评估 MSE/MAE/R2，全部在物理域。
-    这是我们对 A/B 线上“泛化部分”的影子检测（虽然不是隐藏集，但口径一致）。
     """
     data = get_data_and_scalers(opamp_type=opamp_type)
 
@@ -481,7 +605,7 @@ def offline_eval_forward_simple(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="为EDA比赛生成提交文件 (v6 - simple mode, unified log restore, offline eval)"
+        description="为EDA比赛生成提交文件 (v7 - simple/ensemble, unified log restore, offline eval, auto-augment two_stage features for predB)"
     )
 
     parser.add_argument(
@@ -545,7 +669,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 60)
-    print("开始生成提交文件 (v6)")
+    print("开始生成提交文件 (v7)")
     print(f"执行目录 (PWD): {Path.cwd()}")
     print(f"项目根目录 (推断): {PROJECT_ROOT}")
     print(f"SRC 目录 (推断):  {SRC_DIR}")
