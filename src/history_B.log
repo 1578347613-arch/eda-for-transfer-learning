@@ -335,3 +335,62 @@ Avg  (all dims)   MSE=6.726e+12  MAE=9.82e+05  R2=0.6927
         # 稍微加大 dc_gain 的权重，cmrr 暂时不加码
         'dcgain_loss_weight': 1.4,
         'cmrr_loss_weight': 0.6,
+Fine-tune Epoch [862/5000], Train Loss: -1.8310, Val NLL: -1.4813, LR_head: 3.80e-03
+Fine-tune Epoch [863/5000], Train Loss: -1.8448, Val NLL: -1.4165, LR_head: 3.80e-03
+Fine-tune Epoch [864/5000], Train Loss: -1.8432, Val NLL: -1.3940, LR_head: 3.80e-03
+Fine-tune Epoch [865/5000], Train Loss: -1.8341, Val NLL: -1.4296, LR_head: 3.80e-03
+Fine-tune Epoch [866/5000], Train Loss: -1.8508, Val NLL: -1.3969, LR_head: 3.80e-03
+Fine-tune Epoch [867/5000], Train Loss: -1.8485, Val NLL: -1.4681, LR_head: 3.80e-03
+Fine-tune Epoch [868/5000], Train Loss: -1.8824, Val NLL: -1.4696, LR_head: 3.80e-03
+Fine-tune Epoch [869/5000], Train Loss: -1.8503, Val NLL: -1.4581, LR_head: 3.80e-03
+Fine-tune Epoch [870/5000], Train Loss: -1.8425, Val NLL: -1.4223, LR_head: 3.80e-03
+Fine-tune Epoch [871/5000], Train Loss: -1.8641, Val NLL: -1.3997, LR_head: 3.80e-03
+Fine-tune Epoch [872/5000], Train Loss: -1.8374, Val NLL: -1.4331, LR_head: 3.80e-03
+Fine-tune Epoch [873/5000], Train Loss: -1.8124, Val NLL: -1.4073, LR_head: 3.80e-03
+Fine-tune Epoch [874/5000], Train Loss: -1.8507, Val NLL: -1.4270, LR_head: 3.80e-03
+Fine-tune Epoch [875/5000], Train Loss: -1.8932, Val NLL: -1.4073, LR_head: 3.80e-03
+验证损失连续 500 轮未改善，触发早停。
+--- [阶段二] 微调完成，最佳模型已保存至 results/two_stage_opamp_finetuned.pth ---
+
+--- [评估流程启动] ---
+
+--- [评估阶段] 开始计算指标 ---
+
+=== 目标域验证集指标（物理单位）===
+slewrate_pos    MSE=2.034e+13  MAE=2.634e+06  R2=0.9526
+dc_gain         MSE=1.61e+07  MAE=1095  R2=0.5867
+ugf             MSE=9.681e+12  MAE=1.881e+06  R2=0.9781
+phase_margin    MSE=51.09  MAE=4.92  R2=0.9555
+cmrr            MSE=8.297e+11  MAE=8.499e+04  R2=0.0421
+
+Avg  (all dims)   MSE=6.17e+12  MAE=9.201e+05  R2=0.7030
+        'RESTART_PRETRAIN': 1,
+        'PRETRAIN_SCHEDULER_CONFIGS': [  # 重复执行三次元优化
+            # --- 策略一：广泛探索 ---
+            {"T_0": 200, "T_mult": 1, "epochs_pretrain": 400},  # 第1次重启
+        ],
+        'lr_pretrain': 1e-3,
+        'epochs_finetune': 5000,
+        'patience_finetune': 500,
+        'lr_finetune': 3.8e-3,
+          # === 新增：finetune 学习率调度 ===
+    # 前 10% epoch 线性 warmup (0 -> base_lr)，后 90% cosine 衰减到 base_lr * 0.1
+        'finetune_warmup_ratio': 0.00,
+        'finetune_min_lr_factor': 0.0,
+
+        'batch_a': 128,
+        'batch_b': 64,
+        'ensemble_alpha': [0.7, 0.7, 0.3, 0.7, 0.85],
+        # 模型设置
+        'hidden_dims': [256, 256, 256, 256],
+        'num_layers': 4,
+        'dropout_rate': 0.2,
+
+        # 损失函数权重
+        'lambda_coral': 0.0,
+        'alpha_r2': 0.08,
+
+            # 输出顺序是 [slewrate_pos, dc_gain, ugf, phase_margin, cmrr]
+        # 稍微加大 dc_gain 的权重，cmrr 暂时不加码
+        'dcgain_loss_weight': 1.0,
+        'cmrr_loss_weight': 1.0,

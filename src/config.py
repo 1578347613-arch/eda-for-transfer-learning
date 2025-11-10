@@ -83,8 +83,8 @@ TASK_CONFIGS = {
         'lr_finetune': 3.8e-3,
           # === 新增：finetune 学习率调度 ===
     # 前 10% epoch 线性 warmup (0 -> base_lr)，后 90% cosine 衰减到 base_lr * 0.1
-        'finetune_warmup_ratio': 0.05,
-        'finetune_min_lr_factor': 0.5,
+        'finetune_warmup_ratio': 0.0,
+        'finetune_min_lr_factor': 0.0,
 
         'batch_a': 128,
         'batch_b': 64,
