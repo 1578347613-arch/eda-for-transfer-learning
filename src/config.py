@@ -83,8 +83,8 @@ TASK_CONFIGS = {
         'lr_finetune': 3.8e-3,
           # === 新增：finetune 学习率调度 ===
     # 前 10% epoch 线性 warmup (0 -> base_lr)，后 90% cosine 衰减到 base_lr * 0.1
-        'finetune_warmup_ratio': 0.0,
-        'finetune_min_lr_factor': 0.0,
+        'finetune_warmup_ratio': 0.05,
+        'finetune_min_lr_factor': 0.5,
 
         'batch_a': 128,
         'batch_b': 64,
@@ -95,13 +95,13 @@ TASK_CONFIGS = {
         'dropout_rate': 0.2,
 
         # 损失函数权重
-        'lambda_coral': 0.025,
-        'alpha_r2': 0,
+        'lambda_coral': 0.0,
+        'alpha_r2': 0.08,
 
             # 输出顺序是 [slewrate_pos, dc_gain, ugf, phase_margin, cmrr]
         # 稍微加大 dc_gain 的权重，cmrr 暂时不加码
-        'dcgain_loss_weight': 1.0,
-        'cmrr_loss_weight': 1.0,
+        'dcgain_loss_weight': 1.5,
+        'cmrr_loss_weight': 0.6,
         # 反向模型
         'epochs_pretrain': 1000,  # 正向已替换为scheduler,该参数不再需要
         'patience_pretrain': 200,  # 同上
