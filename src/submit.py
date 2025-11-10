@@ -82,11 +82,12 @@ def run_inference(opamp_type, model_path_str, output_file_str, test_file_str, hi
             y_pred_physical[:, i] = np.expm1(y_pred_unscaled[:, i])
 
     print(f"--- [submit.py] 正在保存结果 (逗号分隔) 至: {output_file_path.name} ---")
-    np.savetxt(
+    output_df = pd.DataFrame(y_pred_physical, columns=train_y_cols)
+    output_df.to_csv(
         output_file_path,
-        y_pred_physical,
-        fmt='%.10g',
-        delimiter=','
+        index=False,          # 不保存 pandas 的行索引
+        sep=',',              # 使用逗号分隔
+        float_format='%.10g'  # 保持与 np.savetxt 相同的浮点数精度
     )
     print(f"✅ [submit.py] 成功生成提交文件: {output_file_path.name}")
 
