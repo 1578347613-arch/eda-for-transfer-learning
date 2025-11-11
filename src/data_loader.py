@@ -23,6 +23,16 @@ def load_data(opamp_type: str = "5t_opamp"):
     X_target = pd.read_csv(target_features_path)
     y_target = pd.read_csv(target_targets_path)
 
+    DESIRED_ORDER = ['slewrate_pos', 'dc_gain', 'ugf', 'phase_margin', 'cmrr']
+    try:
+        y_source = y_source[DESIRED_ORDER]
+        y_target = y_target[DESIRED_ORDER]
+        print("已强行重排 y 的列顺序以匹配 evaluate.py。")
+    except KeyError:
+        print(f"!!! 警告 !!! y_source/y_target 中缺少 {DESIRED_ORDER} 中的某些列！")
+        # （如果缺少列，让它在后面崩溃，我们再来修）
+        pass
+
     return X_source, y_source, X_target, y_target
 
 

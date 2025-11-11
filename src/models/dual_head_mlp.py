@@ -1,9 +1,9 @@
-### `models/dual_head_mlp.py`（完整可用）
-
 # models/dual_head_mlp.py
+
 import torch
 import torch.nn as nn
-import config
+
+# --- 移除了所有对 config 的依赖 ---
 
 __all__ = [
     "DualHeadMLP",
@@ -25,17 +25,13 @@ class DualHeadMLP(nn.Module):
         self,
         input_dim: int,
         output_dim: int,
-        hidden_dim: int = None,
-        num_layers: int = None,
-        dropout_rate: float = None,
+        hidden_dim: int,    # 变为必需参数
+        num_layers: int,    # 变为必需参数
+        dropout_rate: float # 变为必需参数
     ):
         super().__init__()
-        if hidden_dim is None:
-            hidden_dim = getattr(config, "HIDDEN_DIM", 256)
-        if num_layers is None:
-            num_layers = getattr(config, "NUM_LAYERS", 4)
-        if dropout_rate is None:
-            dropout_rate = getattr(config, "DROPOUT_RATE", 0.1)
+        
+        # --- 移除了 if is None 和 getattr(config, ...) 的逻辑 ---
 
         layers = []
         # 输入层: input_dim -> hidden_dim
@@ -132,3 +128,4 @@ def l2sp_regularizer(model: nn.Module, pretrained_state: dict, scale: float = 1e
             reg = reg + (p - ref.to(device)).pow(2).sum()
 
     return reg * scale
+

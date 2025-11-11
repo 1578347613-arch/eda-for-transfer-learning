@@ -1,0 +1,6 @@
+{
+  "opamp": "two_stage_opamp",
+  "model_path": "/data/home/heyangao/lin_projects/all/src/results/mdn_two_stage_opamp.pth",
+  "x_scaler": "/data/home/heyangao/lin_projects/all/src/results/two_stage_opamp_x_scaler.gz",
+  "y_scaler": "/data/home/heyangao/lin_projects/all/src/results/two_stage_opamp_y_scaler.gz"
+}
