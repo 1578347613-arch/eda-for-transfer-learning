@@ -95,8 +95,8 @@ TASK_CONFIGS = {
         'dropout_rate': 0.2,
 
         # 损失函数权重
-        'lambda_coral': 0.0,
-        'alpha_r2': 0.08,
+        'lambda_coral': 0.025,
+        'alpha_r2': 0.0,
 
             # 输出顺序是 [slewrate_pos, dc_gain, ugf, phase_margin, cmrr]
         # 稍微加大 dc_gain 的权重，cmrr 暂时不加码
