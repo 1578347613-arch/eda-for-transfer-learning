@@ -72,9 +72,34 @@ python run_training.py
 #### 第3步：生成提交文件
 
 训练完成后，使用 `generate_submission.py` 来加载训练好的模型，对测试集进行预测，并生成最终的提交文件。
-
+A. 最干净的“单模型直出”+ 影子榜单
+目的：先排除温度/集成对分数的影响，验证训练评测与提交分能否对齐。
 ```bash
-python generate_submission.py
+python -m src.generate_submission \
+  --forward_mode simple \
+  --forward_model align \
+  --offline_eval \
+  --eval_split val
+```
+正向 A/B：用 *_finetuned.pth 单模型直出。
+反向 C/D：默认 hybrid 会执行；如果暂时只想验证 A/B，可加 --inverse_strategy mdn_only（脚本会跳过反向，只打印提示）。
+离线评测：在 target_val 上输出 A/B 的物理域指标。
+想对比另一个头（只用 target-only）：
+
+python -m src.generate_submission --forward_mode simple --forward_model target --offline_eval --eval_split val
+B. 回归原来的集成策略（对照实验）
+```bash
+python -m src.generate_submission \
+  --forward_mode ensemble \
+  --offline_eval --eval_split val
+```
+C. 指定输入/输出目录（可选）
+```bash
+python -m src.generate_submission \
+  --data_dir data/02_public_test_set \
+  --output_dir submission_v2 \
+  --forward_mode simple --forward_model align \
+  --offline_eval --eval_split all
 ```
 执行完毕后，你会在项目根目录的 `submission/` 文件夹下找到 `predA.csv`, `predB.csv`, `predC.csv`, `predD.csv` 四个结果文件。
 
